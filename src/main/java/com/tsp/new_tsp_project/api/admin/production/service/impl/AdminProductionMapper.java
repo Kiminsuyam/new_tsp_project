@@ -1,0 +1,53 @@
+package com.tsp.new_tsp_project.api.admin.production.service.impl;
+
+import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
+
+@Mapper
+public interface AdminProductionMapper {
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getProductionCnt
+	 * 2. ClassName  : AdminProductionMapper.java
+	 * 3. Comment    : 관리자 프로덕션 갯수 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param searchMap
+	 * @throws Exception
+	 */
+	Integer getProductionCnt(Map<String, Object> searchMap) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getProductionList
+	 * 2. ClassName  : AdminProductionMapper.java
+	 * 3. Comment    : 관리자 프로덕션 리스트 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param searchMap
+	 * @throws Exception
+	 */
+	List<AdminProductionDTO> getProductionList(Map<String, Object> searchMap) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getProductionInfo
+	 * 2. ClassName  : AdminProductionMapper.java
+	 * 3. Comment    : 관리자 프로덕션 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	Map<String, Object> getProductionInfo(AdminProductionDTO adminProductionDTO) throws Exception;
+}

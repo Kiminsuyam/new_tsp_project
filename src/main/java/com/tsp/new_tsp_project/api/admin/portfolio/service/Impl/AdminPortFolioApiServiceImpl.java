@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl;
 
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioService;
+import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@Service("AdminPortFolioService")
+@Service("AdminPortFolioApiService")
 @RequiredArgsConstructor
-public class AdminPortFolioServiceImpl implements AdminPortFolioService {
+public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 	private final AdminPortFolioMapper adminPortFolioMapper;
 	/**

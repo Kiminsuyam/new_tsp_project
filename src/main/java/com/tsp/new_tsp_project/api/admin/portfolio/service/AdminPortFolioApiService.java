@@ -1,13 +1,12 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service;
 
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public interface AdminPortFolioService {
+public interface AdminPortFolioApiService {
 
 	/**
 	 * <pre>

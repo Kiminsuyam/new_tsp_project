@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.controller;
 
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioService;
+import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.common.paging.Page;
@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Api(tags = "포트폴리오 관련 API")
 public class AdminPortFolioApi {
 
-	private final AdminPortFolioService adminPortFolioService;
+	private final AdminPortFolioApiService adminPortFolioApiService;
 	private final SearchCommon searchCommon;
 
 	/**
@@ -52,18 +49,18 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(value = "/lists")
+	@GetMapping(value = "/lists")
 	public ConcurrentHashMap getPortFolioList(Page page) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
 		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"");
 
-		Integer portFolioCnt = this.adminPortFolioService.getPortFolioCnt(searchMap);
+		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 
 		List<AdminPortFolioDTO> portFolioList = null;
 
 		if(portFolioCnt > 0) {
-			portFolioList = this.adminPortFolioService.getPortFolioList(searchMap);
+			portFolioList = this.adminPortFolioApiService.getPortFolioList(searchMap);
 		}
 
 		// 리스트 수
@@ -96,14 +93,14 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(value = "/{idx}")
+	@GetMapping(value = "/{idx}")
 	public ConcurrentHashMap getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap;
 
 		AdminPortFolioDTO adminPortFolioDTO = new AdminPortFolioDTO();
 		adminPortFolioDTO.setIdx(idx);
 
-		portFolioMap = this.adminPortFolioService.getPortFolioInfo(adminPortFolioDTO);
+		portFolioMap = this.adminPortFolioApiService.getPortFolioInfo(adminPortFolioDTO);
 
 		return portFolioMap;
 	}
@@ -136,7 +133,7 @@ public class AdminPortFolioApi {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminPortFolioService.insertPortFolio(adminPortFolioDTO) > 0) {
+		if(this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
