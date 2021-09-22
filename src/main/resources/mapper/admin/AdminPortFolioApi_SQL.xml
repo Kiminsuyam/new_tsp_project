@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.AdminPortFolioMapper">
+
+	<!-- 포트폴리오 수 조회 -->
+	<select id="getPortFolioCnt" parameterType="java.util.HashMap" resultType="Integer">
+		/*[AdminPortFolioApi_SQL.xml].[getPortFolioCnt] */
+		SELECT COUNT(*)
+		FROM tsp_portFolio
+		WHERE visible = 'Y'
+	</select>
+
+	<!-- 포트폴리오 리스트 출력 -->
+	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="adminPortFolioDto">
+		/*[AdminPortFolioApi_SQL.xml].[getPortFolioList] */
+		SELECT tp.idx,
+			   tp.category_cd,
+			   tp.category_nm,
+			   tp.title,
+			   tp.description
+		FROM tsp_portFolio tp
+		WHERE tp.visible = 'Y'
+		ORDER BY tp.idx ASC
+			LIMIT #{startPage}, #{size}
+	</select>
+
+</mapper>

@@ -137,7 +137,7 @@ public class AdminModelApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : getWomenModelEdit
-	 * 2. ClassName  : AdminUserApi.java
+	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 여자 모델 상세
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.

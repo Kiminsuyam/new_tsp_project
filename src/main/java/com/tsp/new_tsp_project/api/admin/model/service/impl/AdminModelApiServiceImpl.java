@@ -90,8 +90,10 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	public String addMenModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
-		String result = "Y";
+		String result = "N";
 
+		adminModelDTO.setCategoryCd("1");
+		adminModelDTO.setCategoryNm("men");
 		if("Y".equals(this.imageService.uploadImageFile(adminModelDTO, commonImageDTO, fileName))) {
 			result = "Y";
 		} else {
