@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Mapper
 public interface AdminPortFolioMapper {
@@ -36,4 +37,18 @@ public interface AdminPortFolioMapper {
 	 * @throws Exception
 	 */
 	List<AdminPortFolioDTO> getPortFolioList(Map<String, Object> searchMap) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getPortFolioInfo
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	Map<String, Object> getPortFolioInfo(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
 }

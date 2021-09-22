@@ -30,6 +30,7 @@ public class AdminPortFolioServiceImpl implements AdminPortFolioService {
 	public Integer getPortFolioCnt(ConcurrentHashMap<String, Object> searchMap) throws Exception {
 		return this.adminPortFolioMapper.getPortFolioCnt(searchMap);
 	}
+
 	/**
 	 * <pre>
 	 * 1. MethodName : getPortFolioList
@@ -44,5 +45,23 @@ public class AdminPortFolioServiceImpl implements AdminPortFolioService {
 	 */
 	public List<AdminPortFolioDTO> getPortFolioList(ConcurrentHashMap<String, Object> searchMap) throws Exception {
 		return this.adminPortFolioMapper.getPortFolioList(searchMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getPortFolioInfo
+	 * 2. ClassName  : AdminPortFolioServiceImpl.java
+	 * 3. Comment    : 관리자 포트폴리오 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	public ConcurrentHashMap getPortFolioInfo(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
+		ConcurrentHashMap portFolioMap = new ConcurrentHashMap();
+		portFolioMap.put("portFolioInfo", this.adminPortFolioMapper.getPortFolioInfo(adminPortFolioDTO));
+		return portFolioMap;
 	}
 }
