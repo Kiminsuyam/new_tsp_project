@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsp.new_tsp_project.api.admin.user.service.impl.AdminUserMapper">
+
+    <!-- 회원 리스트 출력 -->
+    <select id="getUserList" parameterType="java.util.Map" resultType="adminUserDto">
+        /*[AdminUserApi_SQL.xml].[getUserList] */
+        SELECT user_seq,
+               user_id,
+               password,
+               name as user_name,
+               user_type_cd
+        FROM app_user_info
+        ORDER BY user_seq ASC
+            LIMIT #{startPage}, #{size}
+    </select>
+
+    <select id="getUserId" resultType="securityUser">
+        /*[AdminUserApi_SQL.xml].[getUserId] */
+        SELECT user_id as id, password
+        FROM app_user_info
+        WHERE user_id = #{id}
+    </select>
+
+    <select id="adminLogin" parameterType="adminUserDto" resultType="String">
+        /*[AdminUserApi_SQL.xml].[adminLogin] */
+        SELECT PASSWORD
+        FROM app_user_info
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="selectAdminSeq" parameterType="String" resultType="String">
+        /*[AdminUserApi_SQL.xml].[selectAdminSeq] */
+        SELECT USER_SEQ as userSeq,
+               name
+        FROM app_user_info
+        WHERE user_token = #{userToken}
+    </select>
+
+    <insert id="insertUserToken" parameterType="adminUserDto">
+        /*[AdminUserApi_SQL.xml].[insertUserToken] */
+        UPDATE app_user_info SET user_token = #{userToken}
+        WHERE USER_ID = #{userId}
+    </insert>
+</mapper>

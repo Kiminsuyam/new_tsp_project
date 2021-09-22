@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsp.new_tsp_project.api.admin.model.service.impl.AdminModelMapper">
+
+    <!-- 회원 리스트 출력 -->
+    <select id="getMenModelList" parameterType="java.util.Map" resultType="adminModelDto">
+        /*[AdminModelApi_SQL.xml].[getMenModelList] */
+        SELECT idx,
+               men_name,
+               men_description,
+               visible
+        FROM tsp_model_men
+        ORDER BY idx ASC
+            LIMIT #{startPage}, #{size}
+    </select>
+
+    <select id="getModelInfo" parameterType="adminModelDto" resultType="java.util.HashMap">
+        /*[AdminModelApi_SQL.xml].[getMenModelList] */
+        SELECT idx,
+               men_name,
+               men_description,
+               visible
+        FROM tsp_model_men
+        WHERE visible = 'Y'
+        AND idx = #{idx}
+    </select>
+
+</mapper>

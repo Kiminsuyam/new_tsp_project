@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <typeAliases>
+        <!-- userDTO -->
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.user.service.AdminUserDTO" alias="adminUserDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO" alias="adminModelDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.jwt.SecurityUser" alias="securityUser"/>
+        <!-- apiVo -->
+    </typeAliases>
+
+</configuration>
