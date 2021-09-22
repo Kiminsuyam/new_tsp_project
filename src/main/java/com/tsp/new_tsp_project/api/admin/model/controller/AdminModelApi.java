@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.admin.model.controller;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -10,8 +11,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.rmi.ServerError;
 import java.util.List;
@@ -74,7 +77,7 @@ public class AdminModelApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : getMenModelEdit
-	 * 2. ClassName  : AdminUserApi.java
+	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 남자 모델 상세
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
@@ -100,6 +103,35 @@ public class AdminModelApi {
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 
 		return modelMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : addMenModel
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 남자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param fileName
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public String addMenModel(AdminModelDTO adminModelDTO,
+							  CommonImageDTO commonImageDTO,
+							  @RequestParam(name="fileName") MultipartFile[] fileName) throws Exception{
+
+		String result = this.adminModelApiService.addMenModel(adminModelDTO, commonImageDTO, fileName);
+
+		return result;
 	}
 
 	/**

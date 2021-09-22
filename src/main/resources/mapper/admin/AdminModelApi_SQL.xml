@@ -13,29 +13,41 @@
 	<!-- 모델 리스트 출력 -->
 	<select id="getModelList" parameterType="java.util.HashMap" resultType="adminModelDto">
 		/*[AdminModelApi_SQL.xml].[getModelList] */
-		SELECT idx,
-		       category_cd,
-		       category_nm,
-			   model_name,
-			   model_description,
-			   visible
-		FROM tsp_model
-		ORDER BY idx ASC
+		SELECT tm.idx,
+			   tm.category_cd,
+			   tm.category_nm,
+			   tm.model_kor_name,
+			   tm.model_eng_name,
+			   tm.model_description,
+			   tm.visible,
+			   tmo.height,
+			   tmo.3size,
+			   tmo.shoes
+		FROM tsp_model tm,
+			 tsp_model_opt tmo
+		WHERE tm.idx = tmo.model_idx
+		ORDER BY tm.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>
 
 	<select id="getModelInfo" parameterType="adminModelDto" resultType="java.util.HashMap">
 		/*[AdminModelApi_SQL.xml].[getModelInfo] */
-		SELECT idx,
-			   category_cd,
-			   category_nm,
-			   model_name,
-			   model_description,
-			   visible
-		FROM tsp_model
-		WHERE visible = 'Y'
-		  AND category_cd = #{categoryCd}
-		  AND idx = #{idx}
+		SELECT tm.idx,
+			   tm.category_cd,
+			   tm.category_nm,
+			   tm.model_kor_name,
+		       tm.model_eng_name,
+			   tm.model_description,
+			   tm.visible,
+		       tmo.height,
+		       tmo.3size,
+		       tmo.shoes
+		FROM tsp_model tm,
+		     tsp_model_opt tmo
+		WHERE tm.idx = tmo.model_idx
+		  AND tm.visible = 'Y'
+		  AND tm.category_cd = #{categoryCd}
+		  AND tm.idx = #{idx}
 	</select>
 
 </mapper>
