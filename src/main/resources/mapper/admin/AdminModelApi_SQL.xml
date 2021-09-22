@@ -21,7 +21,7 @@
 			   tm.model_description,
 			   tm.visible,
 			   tmo.height,
-			   tmo.3size,
+			   tmo.size3,
 			   tmo.shoes
 		FROM tsp_model tm,
 			 tsp_model_opt tmo
@@ -40,7 +40,7 @@
 			   tm.model_description,
 			   tm.visible,
 		       tmo.height,
-		       tmo.3size,
+		       tmo.size3,
 		       tmo.shoes
 		FROM tsp_model tm,
 		     tsp_model_opt tmo

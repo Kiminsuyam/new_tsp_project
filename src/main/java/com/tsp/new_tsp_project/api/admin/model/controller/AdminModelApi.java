@@ -50,7 +50,7 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getUserList(Page page) throws Exception {
+	public ConcurrentHashMap getModelList(Page page) throws Exception {
 		// 페이징 및 검색
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, "");
 
