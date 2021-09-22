@@ -68,6 +68,6 @@ public interface AdminModelApiService {
 	 * @throws Exception
 	 */
 	String addMenModel(AdminModelDTO adminModelDTO,
-							  CommonImageDTO commonImageDTO,
-							  MultipartFile[] fileName) throws Exception;
+					   CommonImageDTO commonImageDTO,
+					   MultipartFile[] fileName) throws Exception;
 }

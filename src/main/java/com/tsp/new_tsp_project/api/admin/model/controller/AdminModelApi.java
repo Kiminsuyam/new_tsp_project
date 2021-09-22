@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.admin.model.controller;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
+import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.common.paging.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
 import java.util.List;
 import java.util.Map;
@@ -127,7 +129,11 @@ public class AdminModelApi {
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public String addMenModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
+							  NewCommonDTO newCommonDTO,
+							  HttpServletRequest request,
 							  @RequestParam(name="fileName") MultipartFile[] fileName) throws Exception{
+
+		searchCommon.giveAuth(request, newCommonDTO);
 
 		String result = this.adminModelApiService.addMenModel(adminModelDTO, commonImageDTO, fileName);
 

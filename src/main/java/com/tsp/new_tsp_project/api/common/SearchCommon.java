@@ -1,17 +1,21 @@
 package com.tsp.new_tsp_project.api.common;
 
+import com.tsp.new_tsp_project.api.admin.user.service.impl.AdminUserMapper;
 import com.tsp.new_tsp_project.common.paging.Page;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SearchCommon {
+
+	private final AdminUserMapper adminUserMapper;
 
 	/**
 	 * <pre>
@@ -58,14 +62,14 @@ public class SearchCommon {
 	 * @return ConcurrentHashMap
 	 * @throws Exception
 	 */
-//	public void giveAuth(HttpServletRequest request, NewCommonDTO newCommonDTO) throws Exception {
-//		// creator, updater 공통 DTO
-//
-//		// JWT token 값 존재 시 유저 인증 값 부여
-//		if(request.getHeader("Authorization") != null) {
-//			String userSeq = adminLoginApiMapper.selectAdminSeq(StringUtil.getString(request.getHeader("Authorization"),""));
-//			newCommonDTO.setCreator(StringUtil.getInt(userSeq, 0));
-//			newCommonDTO.setUpdater(StringUtil.getInt(userSeq, 0));
-//		}
-//	}
+	public void giveAuth(HttpServletRequest request, NewCommonDTO newCommonDTO) throws Exception {
+		// creator, updater 공통 DTO
+
+		// JWT token 값 존재 시 유저 인증 값 부여
+		if(request.getHeader("Authorization") != null) {
+			String userSeq = adminUserMapper.selectAdminSeq(StringUtil.getString(request.getHeader("Authorization"),""));
+			newCommonDTO.setCreator(StringUtil.getInt(userSeq, 0));
+			newCommonDTO.setUpdater(StringUtil.getInt(userSeq, 0));
+		}
+	}
 }

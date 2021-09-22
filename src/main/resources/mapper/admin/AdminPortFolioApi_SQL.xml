@@ -18,8 +18,8 @@
 			   tp.category_nm,
 			   tp.title,
 			   tp.description,
-		       tp.hash_tag,
-		       tp.video_url
+			   tp.hash_tag,
+			   tp.video_url
 		FROM tsp_portFolio tp
 		WHERE tp.visible = 'Y'
 		ORDER BY tp.idx ASC
@@ -38,7 +38,32 @@
 			   tp.video_url
 		FROM tsp_portFolio tp
 		WHERE tp.visible = 'Y'
-		AND tp.idx = #{idx}
+		  AND tp.idx = #{idx}
 	</select>
 
+	<!-- 포트폴리오 등록 -->
+	<insert id="insertPortFolio" parameterType="adminPortFolioDto">
+		INSERT INTO tsp_portFolio(title,
+								  description,
+								  hash_tag,
+								  category_cd,
+								  category_nm,
+								  video_url,
+								  visible,
+								  creator,
+								  create_time,
+								  updater,
+								  update_time)
+		VALUES (#{title},
+				#{description},
+				#{hashTag},
+				#{categoryCd},
+				#{categoryNm},
+				#{videoUrl},
+				'Y',
+				'1',
+				now(),
+				'1',
+				now())
+	</insert>
 </mapper>

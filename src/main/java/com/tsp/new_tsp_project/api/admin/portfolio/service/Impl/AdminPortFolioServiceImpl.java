@@ -64,4 +64,20 @@ public class AdminPortFolioServiceImpl implements AdminPortFolioService {
 		portFolioMap.put("portFolioInfo", this.adminPortFolioMapper.getPortFolioInfo(adminPortFolioDTO));
 		return portFolioMap;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertPortFolio
+	 * 2. ClassName  : AdminPortFolioServiceImpl.java
+	 * 3. Comment    : 관리자 포트폴리오 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	public Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
+		return this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO);
+	}
 }

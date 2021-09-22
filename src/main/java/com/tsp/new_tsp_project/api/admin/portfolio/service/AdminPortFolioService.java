@@ -50,4 +50,18 @@ public interface AdminPortFolioService {
 	 * @throws Exception
 	 */
 	ConcurrentHashMap<String, Object> getPortFolioInfo(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertPortFolio
+	 * 2. ClassName  : AdminPortFolioService.java
+	 * 3. Comment    : 관리자 포트폴리오 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
 }
