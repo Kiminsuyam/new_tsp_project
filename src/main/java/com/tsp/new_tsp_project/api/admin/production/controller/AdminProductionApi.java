@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_project.api.admin.production.controller;
 
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
@@ -102,5 +101,69 @@ public class AdminProductionApi {
 		productionMap = this.adminProductionApiService.getProductionInfo(adminProductionDTO);
 
 		return productionMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertProduction
+	 * 2. ClassName  : AdminProductionApi.java
+	 * 3. Comment    : 관리자 프로덕션 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 등록", notes = "프로덕션을 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping
+	public String insertProduction(AdminProductionDTO adminProductionDTO) throws Exception {
+		String result = "Y";
+
+		if(this.adminProductionApiService.insertProduction(adminProductionDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateProduction
+	 * 2. ClassName  : AdminProductionApi.java
+	 * 3. Comment    : 관리자 프로덕션 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 수정", notes = "프로덕션을 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping("/{idx}")
+	public String updateProduction(@PathVariable("idx") Integer idx,
+								   AdminProductionDTO adminProductionDTO) throws Exception {
+		String result = "Y";
+
+		adminProductionDTO.setIdx(idx);
+		adminProductionDTO.setUpdater(1);
+		if(this.adminProductionApiService.updateProduction(adminProductionDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+
+		return result;
 	}
 }

@@ -70,4 +70,39 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 
 		return productionMap;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertProduction
+	 * 2. ClassName  : AdminProductionApiServiceImpl.java
+	 * 3. Comment    : 관리자 프로덕션 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	@Override
+	public Integer insertProduction(AdminProductionDTO adminProductionDTO) throws Exception {
+		adminProductionDTO.setVisible("Y");
+		return this.adminProductionMapper.insertProduction(adminProductionDTO);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateProduction
+	 * 2. ClassName  : AdminProductionApiServiceImpl.java
+	 * 3. Comment    : 관리자 프로덕션 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	@Override
+	public Integer updateProduction(AdminProductionDTO adminProductionDTO) throws Exception {
+		return this.adminProductionMapper.updateProduction(adminProductionDTO);
+	}
 }

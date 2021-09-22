@@ -49,4 +49,32 @@ public interface AdminProductionApiService {
 	 * @throws Exception
 	 */
 	ConcurrentHashMap<String, Object> getProductionInfo(AdminProductionDTO adminProductionDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertProduction
+	 * 2. ClassName  : AdminProductionApiService.java
+	 * 3. Comment    : 관리자 프로덕션 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	Integer insertProduction(AdminProductionDTO adminProductionDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateProduction
+	 * 2. ClassName  : AdminProductionApiService.java
+	 * 3. Comment    : 관리자 프로덕션 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	Integer updateProduction(AdminProductionDTO adminProductionDTO) throws Exception;
 }

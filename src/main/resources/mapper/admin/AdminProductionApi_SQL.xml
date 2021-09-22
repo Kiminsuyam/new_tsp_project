@@ -32,4 +32,34 @@
 		WHERE visible = 'Y'
 		AND idx = #{idx}
 	</select>
+
+	<!-- 프로덕션 등록 -->
+	<insert id="insertProduction" parameterType="adminProductionDto">
+		INSERT INTO tsp_production(title,
+								   description,
+								   visible,
+								   creator,
+								   create_time,
+								   updater,
+								   update_time)
+		VALUES (#{title},
+				#{description},
+				#{visible},
+				'1',
+				now(),
+				'1',
+				now())
+	</insert>
+
+	<!-- 프로덕션 수정 -->
+	<update id="updateProduction" parameterType="adminProductionDto">
+		UPDATE tsp_production
+		SET
+		<if test="title != null and title != ''">title = #{title},</if>
+		<if test="description != null and description != ''">description = #{description},</if>
+		<if test="visible != null and visible != ''">visible = #{visible},</if>
+		<if test="updater != null and updater != ''">updater = #{updater},</if>
+		update_time = NOW()
+		WHERE idx = #{idx}
+	</update>
 </mapper>
