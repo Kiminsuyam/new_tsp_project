@@ -2,27 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tsp.new_tsp_project.api.admin.model.service.impl.AdminModelMapper">
 
-    <!-- 회원 리스트 출력 -->
-    <select id="getMenModelList" parameterType="java.util.Map" resultType="adminModelDto">
-        /*[AdminModelApi_SQL.xml].[getMenModelList] */
-        SELECT idx,
-               men_name,
-               men_description,
-               visible
-        FROM tsp_model_men
-        ORDER BY idx ASC
-            LIMIT #{startPage}, #{size}
-    </select>
+	<!-- 모델 리스트 출력 -->
+	<select id="getModelList" parameterType="java.util.Map" resultType="adminModelDto">
+		/*[AdminModelApi_SQL.xml].[getMenModelList] */
+		SELECT idx,
+		       category_cd,
+		       category_nm,
+			   model_name,
+			   model_description,
+			   visible
+		FROM tsp_model
+		ORDER BY idx ASC
+			LIMIT #{startPage}, #{size}
+	</select>
 
-    <select id="getModelInfo" parameterType="adminModelDto" resultType="java.util.HashMap">
-        /*[AdminModelApi_SQL.xml].[getMenModelList] */
-        SELECT idx,
-               men_name,
-               men_description,
-               visible
-        FROM tsp_model_men
-        WHERE visible = 'Y'
-        AND idx = #{idx}
-    </select>
+	<select id="getModelInfo" parameterType="adminModelDto" resultType="java.util.HashMap">
+		/*[AdminModelApi_SQL.xml].[getMenModelList] */
+		SELECT idx,
+			   category_cd,
+			   category_nm,
+			   model_name,
+			   model_description,
+			   visible
+		FROM tsp_model
+		WHERE visible = 'Y'
+		  AND category_cd = #{categoryCd}
+		  AND idx = #{idx}
+	</select>
 
 </mapper>

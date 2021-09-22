@@ -47,18 +47,33 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public List<AdminModelDTO> getUserList(Page page) throws Exception {
+	public ConcurrentHashMap getUserList(Page page) throws Exception {
 		// 페이징 및 검색
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, "");
 
-		List<AdminModelDTO> modelList = this.adminModelApiService.getMenModelList(modelMap);
+		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);
 
-		return modelList;
+		List<AdminModelDTO> modelList = null;
+
+		if(modelListCnt > 0) {
+			modelList = this.adminModelApiService.getModelList(modelMap);
+		}
+
+		// 리스트 수
+		modelMap.put("pageSize", page.getSize());
+		// 전체 페이지 수
+		modelMap.put("perPageListCnt", Math.ceil((modelListCnt - 1) / page.getSize() + 1));
+		// 전체 아이템 수
+		modelMap.put("modelListTotalCnt", modelListCnt);
+
+		modelMap.put("modelList", modelList);
+
+		return modelMap;
 	}
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getModelEdit
+	 * 1. MethodName : getMenModelEdit
 	 * 2. ClassName  : AdminUserApi.java
 	 * 3. Comment    : 관리자 남자 모델 상세
 	 * 4. 작성자       : CHO
@@ -68,18 +83,50 @@ public class AdminModelApi {
 	 * @param idx
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
+	@ApiOperation(value = "남자 모델 상세 조회", notes = "남자 모델을 상세 조회한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = Map.class),
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@GetMapping("/{idx}")
-	public ConcurrentHashMap<String, Object> getModelEdit(@PathVariable("idx") Integer idx) throws Exception {
-		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+	@GetMapping("/men/{idx}")
+	public ConcurrentHashMap<String, Object> getMenModelEdit(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> modelMap;
 
 		AdminModelDTO adminModelDTO = new AdminModelDTO();
 		adminModelDTO.setIdx(idx);
+		adminModelDTO.setCategoryCd("1");
+
+		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
+
+		return modelMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getWomenModelEdit
+	 * 2. ClassName  : AdminUserApi.java
+	 * 3. Comment    : 관리자 여자 모델 상세
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "여자 모델 상세 조회", notes = "여자 모델을 상세 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping("/women/{idx}")
+	public ConcurrentHashMap getWomenModelEdit(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> modelMap;
+
+		AdminModelDTO adminModelDTO = new AdminModelDTO();
+		adminModelDTO.setIdx(idx);
+		adminModelDTO.setCategoryCd("2");
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 

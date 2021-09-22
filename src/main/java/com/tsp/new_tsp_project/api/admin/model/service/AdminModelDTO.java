@@ -14,6 +14,12 @@ public class AdminModelDTO {
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	Integer idx;
 
+	@ApiModelProperty(required = true, value = "category code", hidden = true)
+	String categoryCd;
+
+	@ApiModelProperty(required = true, value = "category name", hidden = true)
+	String categoryNm;
+
 	@ApiModelProperty(required = true, value = "men Name")
 	String modelName;
 
