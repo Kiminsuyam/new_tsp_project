@@ -2,20 +2,19 @@ package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
-import com.tsp.new_tsp_project.api.common.NewCommonDTO;
-import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service("AdminModelApiService")
+@Transactional
 @RequiredArgsConstructor
 public class AdminModelApiServiceImpl implements AdminModelApiService {
 

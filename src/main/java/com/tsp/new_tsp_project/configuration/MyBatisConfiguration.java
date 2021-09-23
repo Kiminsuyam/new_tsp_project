@@ -5,17 +5,24 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
+@Lazy
+@EnableTransactionManagement
 @ComponentScan(basePackages = "com.tsp")
 public class MyBatisConfiguration {
 
@@ -40,5 +47,10 @@ public class MyBatisConfiguration {
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
 		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+
+	@Bean(name = "transactionManager")
+	public PlatformTransactionManager transactionManager(@Qualifier("dataSource") DataSource dataSource) {
+		return new DataSourceTransactionManager(dataSource);
 	}
 }

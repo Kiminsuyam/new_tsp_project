@@ -3,13 +3,14 @@ package com.tsp.new_tsp_project.api.admin.production.service.impl;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service("AdminProductionApiService")
+@Transactional
 @RequiredArgsConstructor
 public class AdminProductionApiServiceImpl implements AdminProductionApiService {
 

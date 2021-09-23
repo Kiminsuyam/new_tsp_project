@@ -5,12 +5,14 @@ import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiServ
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service("AdminPortFolioApiService")
+@Transactional
 @RequiredArgsConstructor
 public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
