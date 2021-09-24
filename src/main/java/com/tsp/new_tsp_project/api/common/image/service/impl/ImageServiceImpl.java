@@ -42,9 +42,11 @@ public class ImageServiceImpl implements ImageService {
         // 현재 날짜 구하기
         String rtnStr = "";
         String pattern = "MMddHHmmssSSS";
+
         SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
+
         return rtnStr;
     }
 

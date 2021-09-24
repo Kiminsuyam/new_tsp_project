@@ -15,7 +15,13 @@
 		/*[AdminProductionApi_SQL.xml].[getProductionList] */
 		SELECT idx,
 			   title,
-			   description
+			   description,
+		       visible,
+		       (SELECT name FROM app_user_info WHERE user_seq = creator) AS adminName,
+		       creator,
+		       create_time AS createTime,
+		       updater,
+		       update_time AS updateTime
 		FROM tsp_production
 		WHERE visible = 'Y'
 		ORDER BY idx ASC
@@ -27,7 +33,13 @@
 		/*[AdminProductionApi_SQL.xml].[getProductionInfo] */
 		SELECT idx,
 			   title,
-			   description
+			   description,
+		       visible,
+		       (SELECT name FROM app_user_info WHERE user_seq = creator) AS adminName,
+		       creator,
+		       create_time AS createTime,
+		       updater,
+		       update_time AS updateTime
 		FROM tsp_production
 		WHERE visible = 'Y'
 		AND idx = #{idx}

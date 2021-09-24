@@ -80,6 +80,8 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 * @throws Exception
 	 */
 	public Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
+
+
 		return this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO);
 	}
 }

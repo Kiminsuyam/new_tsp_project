@@ -81,14 +81,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-
-/*        http.csrf().disable().authorizeRequests()
-                .antMatchers("/admin/auth/**")
-                .permitAll().anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);*/
     }
 
     @Bean

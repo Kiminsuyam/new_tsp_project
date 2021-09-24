@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
@@ -128,7 +129,8 @@ public class AdminPortFolioApi {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertPortFolio(HttpServletRequest request,
 								  NewCommonDTO newCommonDTO,
-							      AdminPortFolioDTO adminPortFolioDTO) throws Exception {
+								  AdminPortFolioDTO adminPortFolioDTO,
+								  @RequestParam(name="imageFiles") MultipartFile files) throws Exception {
 		String result = "N";
 
 		searchCommon.giveAuth(request, newCommonDTO);
