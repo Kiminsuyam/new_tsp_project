@@ -23,7 +23,7 @@
 		       updater,
 		       update_time AS updateTime,
 			   file_mask,
-			   file_path
+			   file_path,
 			   file_name
 		FROM tsp_production tp, tsp_image ti
 		WHERE tp.idx = ti.type_idx
@@ -36,7 +36,7 @@
 	<!-- 프로덕션 상세 조회 -->
 	<select id="getProductionInfo" parameterType="adminProductionDto" resultType="java.util.HashMap">
 		/*[AdminProductionApi_SQL.xml].[getProductionInfo] */
-		SELECT idx,
+		SELECT tp.idx,
 			   title,
 			   description,
 		       visible,
@@ -44,10 +44,15 @@
 		       creator,
 		       create_time AS createTime,
 		       updater,
-		       update_time AS updateTime
-		FROM tsp_production
-		WHERE visible = 'Y'
-		AND idx = #{idx}
+		       update_time AS updateTime,
+		       file_mask,
+		       file_path,
+		       file_name
+		FROM tsp_production tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+		AND ti.type_name = 'production'
+		AND visible = 'Y'
+		AND tp.idx = #{idx}
 	</select>
 
 	<!-- 프로덕션 등록 -->
