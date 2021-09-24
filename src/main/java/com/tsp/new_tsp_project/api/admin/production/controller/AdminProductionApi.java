@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.rmi.ServerError;
 import java.util.List;
@@ -122,7 +123,8 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping
-	public String insertProduction(AdminProductionDTO adminProductionDTO) throws Exception {
+	public String insertProduction(AdminProductionDTO adminProductionDTO,
+								   @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 		String result = "Y";
 
 		if(this.adminProductionApiService.insertProduction(adminProductionDTO) > 0) {

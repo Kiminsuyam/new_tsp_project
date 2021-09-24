@@ -130,7 +130,7 @@ public class AdminPortFolioApi {
 	public String insertPortFolio(HttpServletRequest request,
 								  NewCommonDTO newCommonDTO,
 								  AdminPortFolioDTO adminPortFolioDTO,
-								  @RequestParam(name="imageFiles") MultipartFile files) throws Exception {
+								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
 		searchCommon.giveAuth(request, newCommonDTO);
