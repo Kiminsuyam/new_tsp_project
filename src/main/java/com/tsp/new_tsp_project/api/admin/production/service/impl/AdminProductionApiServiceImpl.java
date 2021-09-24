@@ -2,19 +2,25 @@ package com.tsp.new_tsp_project.api.admin.production.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Service("AdminProductionApiService")
 @Transactional
 @RequiredArgsConstructor
 public class AdminProductionApiServiceImpl implements AdminProductionApiService {
 
 	private final AdminProductionMapper adminProductionMapper;
+	private final ImageService imageService;
 
 	/**
 	 * <pre>
@@ -85,9 +91,24 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 	 * @throws Exception
 	 */
 	@Override
-	public Integer insertProduction(AdminProductionDTO adminProductionDTO) throws Exception {
-		adminProductionDTO.setVisible("Y");
-		return this.adminProductionMapper.insertProduction(adminProductionDTO);
+	public Integer insertProduction(AdminProductionDTO adminProductionDTO,
+									CommonImageDTO commonImageDTO,
+									MultipartFile[] files) throws Exception {
+		int num = 0;
+
+		if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
+			log.info("modelIdx={}", adminProductionDTO.getIdx());
+			commonImageDTO.setTypeName("production");
+			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files))) {
+				num = 1;
+			} else {
+				num = 0;
+			}
+		} else {
+			num = 0;
+		}
+		return num;
 	}
 
 	/**

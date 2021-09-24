@@ -12,14 +12,17 @@ public class CommonImageDTO {
 	@ApiModelProperty(value = "파일 IDX", required = true, hidden = true)
 	private Integer idx;
 
-	@ApiModelProperty(value = "모델 IDX", required = true, hidden = true)
-	private Integer modelIdx;
+	@ApiModelProperty(value = "분야 IDX", required = true, hidden = true)
+	private Integer typeIdx;
+
+	@ApiModelProperty(value = "분야명", required = true, hidden = true)
+	private String typeName;
 
 	@ApiModelProperty(value = "파일 Number", required = true, hidden = true)
 	private Integer fileNum;
 
 	@ApiModelProperty(required = true, value = "파일명", hidden = true)
-	private String filename;
+	private String fileName;
 
 	@ApiModelProperty(value = "파일SIZE", hidden = true)
 	private Long fileSize;

@@ -13,7 +13,7 @@
 	<!-- 프로덕션 리스트 출력 -->
 	<select id="getProductionList" parameterType="java.util.HashMap" resultType="adminProductionDto">
 		/*[AdminProductionApi_SQL.xml].[getProductionList] */
-		SELECT idx,
+		SELECT tp.idx,
 			   title,
 			   description,
 		       visible,
@@ -21,10 +21,15 @@
 		       creator,
 		       create_time AS createTime,
 		       updater,
-		       update_time AS updateTime
-		FROM tsp_production
-		WHERE visible = 'Y'
-		ORDER BY idx ASC
+		       update_time AS updateTime,
+			   file_mask,
+			   file_path
+			   file_name
+		FROM tsp_production tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+		AND ti.type_name = 'production'
+		AND visible = 'Y'
+		ORDER BY tp.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>
 
@@ -46,7 +51,7 @@
 	</select>
 
 	<!-- 프로덕션 등록 -->
-	<insert id="insertProduction" parameterType="adminProductionDto">
+	<insert id="insertProduction" parameterType="adminProductionDto" useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO tsp_production(title,
 								   description,
 								   visible,

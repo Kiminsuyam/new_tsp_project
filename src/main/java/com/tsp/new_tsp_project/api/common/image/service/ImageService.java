@@ -18,13 +18,11 @@ public interface ImageService {
      * 5. 작성일       : 2021. 06. 02.
      * </pre>
      *
-     * @param adminModelDTO
      * @param commonImageDTO
      * @param files
      * @return
      * @throws Exception
      */
-    String uploadImageFile(AdminModelDTO adminModelDTO,
-                           CommonImageDTO commonImageDTO,
+    String uploadImageFile(CommonImageDTO commonImageDTO,
                            MultipartFile[] files) throws Exception;
 }

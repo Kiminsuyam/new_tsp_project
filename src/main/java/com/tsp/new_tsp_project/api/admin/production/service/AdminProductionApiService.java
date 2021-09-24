@@ -1,6 +1,8 @@
 package com.tsp.new_tsp_project.api.admin.production.service;
 
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,7 +64,9 @@ public interface AdminProductionApiService {
 	 * @param adminProductionDTO
 	 * @throws Exception
 	 */
-	Integer insertProduction(AdminProductionDTO adminProductionDTO) throws Exception;
+	Integer insertProduction(AdminProductionDTO adminProductionDTO,
+							 CommonImageDTO commonImageDTO,
+							 MultipartFile[] files) throws Exception;
 
 	/**
 	 * <pre>

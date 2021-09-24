@@ -59,14 +59,12 @@ public class ImageServiceImpl implements ImageService {
      * 5. 작성일       : 2021. 06. 02.
      * </pre>
      *
-     * @param adminModelDTO
 	 * @param commonImageDTO
      * @param files
      * @return
      * @throws Exception
      */
-    public String uploadImageFile(AdminModelDTO adminModelDTO,
-                                  CommonImageDTO commonImageDTO,
+    public String uploadImageFile(CommonImageDTO commonImageDTO,
                                   MultipartFile[] files) throws Exception {
 
         // 파일 확장자
@@ -104,8 +102,13 @@ public class ImageServiceImpl implements ImageService {
                     String filePath = uploadPath + fileMask;
                     file.transferTo(new File(filePath));
 
+                    log.info("fileName={}", file.getOriginalFilename());
+                    log.info("fileSize={}", fileSize);
+                    log.info("fileMask={}", fileMask);
+                    log.info("filePath={}", uploadPath+fileMask);
+                    log.info("modelIdx={}", commonImageDTO.getTypeIdx());
                     commonImageDTO.setFileNum(mainCnt);
-                    commonImageDTO.setFilename(file.getOriginalFilename());                   // 파일명
+                    commonImageDTO.setFileName(file.getOriginalFilename());                   // 파일명
                     commonImageDTO.setFileSize(fileSize);  // 파일Size
                     commonImageDTO.setFileMask(fileMask);                                        // 파일Mask
                     commonImageDTO.setFilePath(uploadPath + fileMask);

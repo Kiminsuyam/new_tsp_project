@@ -4,15 +4,17 @@
 
 	<insert id="addImageFile" parameterType="commonImageDto">
 		/* [CommonImage_SQL.xml].[addImageFile] */
-		INSERT INTO tsp_model_image
-		( model_idx
+		INSERT INTO tsp_image
+		( type_idx
+		, type_name
 		, file_num
 		, file_name
 		, file_size
 		, file_mask
 		, file_path
 		, reg_date)
-		VALUES ( #{modelIdx}
+		VALUES ( #{typeIdx}
+		       , #{typeName}
 			   , #{fileNum}
 			   , #{fileName}
 			   , #{fileSize}

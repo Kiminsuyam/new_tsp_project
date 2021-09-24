@@ -3,6 +3,7 @@ package com.tsp.new_tsp_project.api.admin.production.controller;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,12 +124,13 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public String insertProduction(AdminProductionDTO adminProductionDTO,
-								   @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
-		String result = "Y";
+								   CommonImageDTO commonImageDTO,
+								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
+		String result = "N";
 
-		if(this.adminProductionApiService.insertProduction(adminProductionDTO) > 0) {
+		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
