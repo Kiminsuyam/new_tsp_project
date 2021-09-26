@@ -14,8 +14,11 @@
         <typeAlias type="com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO" alias="adminPortFolioDto"/>
         <!-- productionDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO" alias="adminProductionDto"/>
+        <!-- supportDTO -->
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.support.service.AdminSupportDTO" alias="adminSupportDto"/>
         <!-- imageDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.common.image.CommonImageDTO" alias="commonImageDto"/>
+        <!-- securityUser -->
         <typeAlias type="com.tsp.new_tsp_project.api.jwt.SecurityUser" alias="securityUser"/>
         <!-- apiVo -->
     </typeAliases>
