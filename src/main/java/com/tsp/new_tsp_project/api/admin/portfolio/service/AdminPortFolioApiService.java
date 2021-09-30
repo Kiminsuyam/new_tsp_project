@@ -1,6 +1,8 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service;
 
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +62,29 @@ public interface AdminPortFolioApiService {
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
+	 * @param commonImageDTO
+	 * @param files
 	 * @throws Exception
 	 */
-	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
+	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
+							CommonImageDTO commonImageDTO,
+							MultipartFile[] files) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updatePortFolie
+	 * 2. ClassName  : AdminPortFolioService.java
+	 * 3. Comment    : 관리자 포트폴리오 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @param commonImageDTO
+	 * @param files
+	 * @throws Exception
+	 */
+	Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
+							CommonImageDTO commonImageDTO,
+							MultipartFile[] files) throws Exception;
 }

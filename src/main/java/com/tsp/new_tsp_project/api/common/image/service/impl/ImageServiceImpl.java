@@ -65,7 +65,8 @@ public class ImageServiceImpl implements ImageService {
      * @throws Exception
      */
     public String uploadImageFile(CommonImageDTO commonImageDTO,
-                                  MultipartFile[] files) throws Exception {
+                                  MultipartFile[] files,
+                                  String flag) throws Exception {
 
         // 파일 확장자
         String ext = "";
@@ -77,6 +78,10 @@ public class ImageServiceImpl implements ImageService {
         long fileSize = 0;
 
         int mainCnt = 0;
+
+        if("update".equals(flag)) {
+            imageMapper.deleteImageFile(commonImageDTO);
+        }
 
         File dir = new File(uploadPath);
         if (dir.exists() == false) {

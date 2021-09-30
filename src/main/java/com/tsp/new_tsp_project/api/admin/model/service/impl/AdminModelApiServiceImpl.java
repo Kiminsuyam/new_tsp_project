@@ -95,7 +95,9 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		adminModelDTO.setCategoryCd("1");
 		adminModelDTO.setCategoryNm("men");
-		if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName))) {
+
+		String flag = "insert";
+		if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, flag))) {
 			result = "Y";
 		} else {
 			result = "N";

@@ -11,7 +11,7 @@
 	</select>
 
 	<!-- 포트폴리오 리스트 출력 -->
-	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="adminPortFolioDto">
+	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioList] */
 		SELECT tp.idx,
 			   tp.category_cd,
@@ -19,10 +19,14 @@
 			   tp.title,
 			   tp.description,
 			   tp.hash_tag,
-			   tp.video_url
-		FROM tsp_portFolio tp
-		WHERE tp.visible = 'Y'
-		ORDER BY tp.idx ASC
+			   tp.video_url,
+			   file_mask,
+			   file_path,
+			   file_name
+		FROM tsp_portFolio tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+		  AND ti.type_name = 'portFolio'
+		  AND tp.visible = 'Y'
 			LIMIT #{startPage}, #{size}
 	</select>
 
@@ -35,14 +39,19 @@
 			   tp.title,
 			   tp.description,
 			   tp.hash_tag,
-			   tp.video_url
-		FROM tsp_portFolio tp
-		WHERE tp.visible = 'Y'
+			   tp.video_url,
+			   file_mask,
+			   file_path,
+			   file_name
+		FROM tsp_portFolio tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+		  AND ti.type_name = 'portFolio'
+		  AND tp.visible = 'Y'
 		  AND tp.idx = #{idx}
 	</select>
 
 	<!-- 포트폴리오 등록 -->
-	<insert id="insertPortFolio" parameterType="adminPortFolioDto">
+	<insert id="insertPortFolio" parameterType="adminPortFolioDto" useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO tsp_portFolio(title,
 								  description,
 								  hash_tag,
@@ -66,4 +75,20 @@
 				'1',
 				now())
 	</insert>
+
+	<!-- 프로덕션 수정 -->
+	<update id="updateProduction" parameterType="adminProductionDto">
+		UPDATE tsp_production
+		SET
+		<if test="title != null and title != ''">title = #{title},</if>
+		<if test="videoUrl != null and videoUrl != ''">video_url = #{videoUrl},</if>
+		<if test="hashTag != null and hashTag != ''">hash_tag = #{hashTag},</if>
+		<if test="categoryCd != null and categoryCd != ''">category_cd = #{categoryCd},</if>
+		<if test="categoryNm != null and categoryNm != ''">category_nm = #{categoryNm},</if>
+		<if test="description != null and description != ''">description = #{description},</if>
+		<if test="visible != null and visible != ''">visible = #{visible},</if>
+		<if test="updater != null and updater != ''">updater = #{updater},</if>
+		update_time = NOW()
+		WHERE idx = #{idx}
+	</update>
 </mapper>

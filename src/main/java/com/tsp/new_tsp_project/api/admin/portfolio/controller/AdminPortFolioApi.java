@@ -4,6 +4,7 @@ import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -115,9 +116,9 @@ public class AdminPortFolioApi {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param request
-	 * @param newCommonDTO
 	 * @param adminPortFolioDTO
+	 * @param commonImageDTO
+	 * @param files
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "포트폴리오 등록", notes = "포트폴리오를 등록한다.")
@@ -127,19 +128,51 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String insertPortFolio(HttpServletRequest request,
-								  NewCommonDTO newCommonDTO,
-								  AdminPortFolioDTO adminPortFolioDTO,
+	public String insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
+								  CommonImageDTO commonImageDTO,
 								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
-		searchCommon.giveAuth(request, newCommonDTO);
-
-		if(this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO) > 0) {
+		if(this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
 		}
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updatePortFolio
+	 * 2. ClassName  : AdminPortFolio.java
+	 * 3. Comment    : 관리자 포트폴리오 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @param commonImageDTO
+	 * @param files
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 수정", notes = "포트폴리오를 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
+								  CommonImageDTO commonImageDTO,
+								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+		String result = "N";
+
+		if(this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+
 		return result;
 	}
 }

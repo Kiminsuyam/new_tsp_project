@@ -23,4 +23,9 @@
 			   , now())
 	</insert>
 
+	<delete id="deleteImageFile" parameterType="commonImageDto">
+		/* [CommonImage_SQL.xml].[deleteImageFile] */
+		DELETE FROM tsp_image WHERE type_idx = #{typeIdx}
+	</delete>
+
 </mapper>

@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_project.api.common.image.service;
 
-import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,5 +23,6 @@ public interface ImageService {
      * @throws Exception
      */
     String uploadImageFile(CommonImageDTO commonImageDTO,
-                           MultipartFile[] files) throws Exception;
+                           MultipartFile[] files,
+                           String flag) throws Exception;
 }

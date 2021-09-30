@@ -67,4 +67,17 @@ public interface AdminPortFolioMapper {
 	 */
 	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
 
+	/**
+	 * <pre>
+	 * 1. MethodName : updatePortFolio
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
 }

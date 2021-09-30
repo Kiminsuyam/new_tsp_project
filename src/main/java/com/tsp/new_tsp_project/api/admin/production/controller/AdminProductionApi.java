@@ -124,12 +124,13 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertProduction(AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
+		log.info("imageFiles={}", files);
 		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
@@ -156,14 +157,17 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping("/{idx}")
+	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String updateProduction(@PathVariable("idx") Integer idx,
-								   AdminProductionDTO adminProductionDTO) throws Exception {
+								   AdminProductionDTO adminProductionDTO,
+								   CommonImageDTO commonImageDTO,
+								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "Y";
 
+		log.info("imageFiles={}", files);
 		adminProductionDTO.setIdx(idx);
 		adminProductionDTO.setUpdater(1);
-		if(this.adminProductionApiService.updateProduction(adminProductionDTO) > 0) {
+		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

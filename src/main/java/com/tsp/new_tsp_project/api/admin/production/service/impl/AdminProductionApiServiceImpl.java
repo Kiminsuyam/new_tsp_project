@@ -96,11 +96,11 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 									MultipartFile[] files) throws Exception {
 		int num = 0;
 
+		String flag = "insert";
 		if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
-			log.info("modelIdx={}", adminProductionDTO.getIdx());
 			commonImageDTO.setTypeName("production");
 			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
-			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files))) {
+			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
 				num = 1;
 			} else {
 				num = 0;
@@ -124,7 +124,23 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 	 * @throws Exception
 	 */
 	@Override
-	public Integer updateProduction(AdminProductionDTO adminProductionDTO) throws Exception {
-		return this.adminProductionMapper.updateProduction(adminProductionDTO);
+	public Integer updateProduction(AdminProductionDTO adminProductionDTO,
+									CommonImageDTO commonImageDTO,
+									MultipartFile[] files) throws Exception {
+		int num = 0;
+
+		String flag = "update";
+		if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {
+			commonImageDTO.setTypeName("production");
+			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+				num = 1;
+			} else {
+				num = 0;
+			}
+		} else {
+			num = 0;
+		}
+		return num;
 	}
 }

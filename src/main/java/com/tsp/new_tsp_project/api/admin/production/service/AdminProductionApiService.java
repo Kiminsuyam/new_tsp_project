@@ -80,5 +80,7 @@ public interface AdminProductionApiService {
 	 * @param adminProductionDTO
 	 * @throws Exception
 	 */
-	Integer updateProduction(AdminProductionDTO adminProductionDTO) throws Exception;
+	Integer updateProduction(AdminProductionDTO adminProductionDTO,
+							 CommonImageDTO commonImageDTO,
+							 MultipartFile[] files) throws Exception;
 }
