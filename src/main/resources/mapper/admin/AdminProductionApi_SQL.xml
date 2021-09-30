@@ -26,7 +26,8 @@
 		       update_time AS updateTime,
 			   file_mask,
 			   file_path,
-			   file_name
+			   file_name,
+			   concat('@/assets/images/upload/',file_name) AS new_file_name
 		FROM tsp_production tp, tsp_image ti
 		WHERE tp.idx = ti.type_idx
 		AND ti.type_name = 'production'
