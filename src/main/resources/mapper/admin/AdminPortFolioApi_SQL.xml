@@ -6,8 +6,10 @@
 	<select id="getPortFolioCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioCnt] */
 		SELECT COUNT(*)
-		FROM tsp_portFolio
-		WHERE visible = 'Y'
+		FROM tsp_portFolio tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+		AND ti.type_name = 'portFolio'
+		AND visible = 'Y'
 	</select>
 
 	<!-- 포트폴리오 리스트 출력 -->

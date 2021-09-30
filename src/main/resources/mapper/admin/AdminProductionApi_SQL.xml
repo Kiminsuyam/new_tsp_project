@@ -6,8 +6,10 @@
 	<select id="getProductionCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminProductionApi_SQL.xml].[getProductionCnt] */
 		SELECT COUNT(*)
-		FROM tsp_production
-		WHERE visible = 'Y'
+		FROM tsp_production tp, tsp_image ti
+		WHERE tp.idx = ti.type_idx
+	    AND ti.type_name = 'production'
+	    AND visible = 'Y'
 	</select>
 
 	<!-- 프로덕션 리스트 출력 -->
