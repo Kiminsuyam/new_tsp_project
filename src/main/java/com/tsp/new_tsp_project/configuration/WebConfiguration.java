@@ -32,18 +32,18 @@ public class WebConfiguration implements WebMvcConfigurer {
 				.maxAge(3600);
 	}
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(loginCheckInterceptor)
-				.order(1)
-				.excludePathPatterns("/api/auth/admin-login")
-				.excludePathPatterns(
-						"/v2/api-docs",
-						"/swagger-resources/**",
-						"/swagger-ui.html",
-						"/webjars/**"
-				);
-	}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(loginCheckInterceptor)
+//				.order(1)
+//				.excludePathPatterns("/api/auth/admin-login")
+//				.excludePathPatterns(
+//						"/v2/api-docs",
+//						"/swagger-resources/**",
+//						"/swagger-ui.html",
+//						"/webjars/**"
+//				);
+//	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

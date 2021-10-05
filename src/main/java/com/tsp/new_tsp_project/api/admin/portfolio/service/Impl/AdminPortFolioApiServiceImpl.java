@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -92,27 +94,31 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 		String flag = "insert";
 
-		if("0".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("광고");
-		} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("패션쇼");
-		} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("패션필름");
-		} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("뮤직비디오");
-		}
-		if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
-			commonImageDTO.setTypeName("portFolio");
-			commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
-			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
-				num = 1;
-			} else {
-				num = 0;
+		try {
+			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("광고");
+			} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("패션쇼");
+			} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("패션필름");
+			} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("뮤직비디오");
 			}
-		} else {
-			num = 0;
+			if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
+				commonImageDTO.setTypeName("portFolio");
+				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+					num = 1;
+				} else {
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+				}
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
+			}
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
 		}
-		return num;
 	}
 
 	/**
@@ -135,25 +141,29 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 		String flag = "update";
 
-		if("0".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("광고");
-		} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("패션쇼");
-		} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("패션필름");
-		} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
-			adminPortFolioDTO.setCategoryNm("뮤직비디오");
-		}
-		if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {
-			commonImageDTO.setTypeName("portFolio");
-			commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
-			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
-				num = 1;
-			} else {
-				num = 0;
+		try {
+			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("광고");
+			} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("패션쇼");
+			} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("패션필름");
+			} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
+				adminPortFolioDTO.setCategoryNm("뮤직비디오");
 			}
-		} else {
-			num = 0;
+			if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {
+				commonImageDTO.setTypeName("portFolio");
+				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+					num = 1;
+				} else {
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+				}
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
+			}	
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
 		}
 		return num;
 	}

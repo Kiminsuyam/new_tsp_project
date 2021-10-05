@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiSe
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -97,18 +99,23 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 		int num = 0;
 
 		String flag = "insert";
-		if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
-			commonImageDTO.setTypeName("production");
-			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
-			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
-				num = 1;
+
+		try {
+			if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
+				commonImageDTO.setTypeName("production");
+				commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+					num = 1;
+				} else {
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+				}
 			} else {
-				num = 0;
+				throw new TspException(ApiExceptionType.ERROR_PRODUCTION);
 			}
-		} else {
-			num = 0;
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_PRODUCTION);
 		}
-		return num;
 	}
 
 	/**
@@ -131,18 +138,22 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 
 		String flag = "update";
 
-		if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {
-			commonImageDTO.setTypeName("production");
-			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
-			if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
-				num = 1;
+		try {
+			if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {
+				commonImageDTO.setTypeName("production");
+				commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+					num = 1;
+				} else {
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+				}
 			} else {
-				num = 0;
+				throw new TspException(ApiExceptionType.ERROR_PRODUCTION);
 			}
-		} else {
-			num = 0;
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_PRODUCTION);
 		}
-		return num;
 	}
 
 	/**
