@@ -130,7 +130,6 @@ public class AdminProductionApi {
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
-		log.info("imageFiles={}", files);
 		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
@@ -164,9 +163,9 @@ public class AdminProductionApi {
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "Y";
 
-		log.info("imageFiles={}", files);
 		adminProductionDTO.setIdx(idx);
 		adminProductionDTO.setUpdater(1);
+
 		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {

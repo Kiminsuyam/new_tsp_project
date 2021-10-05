@@ -130,6 +130,7 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 		int num = 0;
 
 		String flag = "update";
+
 		if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {
 			commonImageDTO.setTypeName("production");
 			commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());

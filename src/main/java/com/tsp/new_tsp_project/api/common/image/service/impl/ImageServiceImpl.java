@@ -79,16 +79,15 @@ public class ImageServiceImpl implements ImageService {
 
         int mainCnt = 0;
 
-        if("update".equals(flag)) {
-            imageMapper.deleteImageFile(commonImageDTO);
-        }
-
         File dir = new File(uploadPath);
         if (dir.exists() == false) {
             dir.mkdirs();
         }
 
         if(files != null) {
+            if("update".equals(flag)) {
+                imageMapper.deleteImageFile(commonImageDTO);
+            }
             for (MultipartFile file : files) {
                 try {
                     ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
@@ -106,6 +105,8 @@ public class ImageServiceImpl implements ImageService {
 
                     String filePath = uploadPath + fileMask;
                     file.transferTo(new File(filePath));
+
+                    Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
                     log.info("fileName={}", file.getOriginalFilename());
                     log.info("fileSize={}", fileSize);

@@ -24,10 +24,10 @@
 		       create_time AS createTime,
 		       updater,
 		       update_time AS updateTime,
-			   file_mask,
+			   concat('/upload/',file_mask) AS file_mask,
 			   file_path,
 			   file_name,
-			   concat('@/assets/images/upload/',file_name) AS new_file_name
+			   concat('/upload/',file_name) AS new_file_name
 		FROM tsp_production tp, tsp_image ti
 		WHERE tp.idx = ti.type_idx
 		AND ti.type_name = 'production'
@@ -48,7 +48,7 @@
 		       create_time AS createTime,
 		       updater,
 		       update_time AS updateTime,
-		       file_mask,
+			   concat('/upload/',file_mask) AS file_mask,
 		       file_path,
 		       file_name
 		FROM tsp_production tp, tsp_image ti
