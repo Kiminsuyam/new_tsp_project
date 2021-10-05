@@ -174,4 +174,38 @@ public class AdminProductionApi {
 
 		return result;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteProduction
+	 * 2. ClassName  : AdminProductionApi.java
+	 * 3. Comment    : 관리자 프로덕션 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 05
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 삭제", notes = "프로덕션을 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PutMapping(value = "/{idx}")
+	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
+		String result = "Y";
+
+		AdminProductionDTO adminProductionDTO = new AdminProductionDTO();
+		adminProductionDTO.setVisible("N");
+		adminProductionDTO.setIdx(idx);
+
+		if(this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
+	}
 }

@@ -87,4 +87,12 @@
 		update_time = NOW()
 		WHERE idx = #{idx}
 	</update>
+
+	<!-- 프로덕션 삭제 -->
+	<delete id="deleteProduction" parameterType="adminProductionDto">
+		UPDATE tsp_production
+		SET visible = #{visible},
+		update_time = NOW()
+		WHERE idx = #{idx}
+	</delete>
 </mapper>

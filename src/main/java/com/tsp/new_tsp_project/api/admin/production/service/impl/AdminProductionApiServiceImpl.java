@@ -144,4 +144,21 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 		}
 		return num;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteProduction
+	 * 2. ClassName  : AdminProductionApiServiceImpl.java
+	 * 3. Comment    : 관리자 프로덕션 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 05
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	@Override
+	public Integer deleteProduction(AdminProductionDTO adminProductionDTO) throws Exception {
+		return this.adminProductionMapper.deleteProduction(adminProductionDTO);
+	}
 }

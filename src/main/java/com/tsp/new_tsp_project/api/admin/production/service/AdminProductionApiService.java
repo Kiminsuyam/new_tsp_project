@@ -83,4 +83,18 @@ public interface AdminProductionApiService {
 	Integer updateProduction(AdminProductionDTO adminProductionDTO,
 							 CommonImageDTO commonImageDTO,
 							 MultipartFile[] files) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteProduction
+	 * 2. ClassName  : AdminProductionApiService.java
+	 * 3. Comment    : 관리자 프로덕션 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionDTO
+	 * @throws Exception
+	 */
+	Integer deleteProduction(AdminProductionDTO adminProductionDTO) throws Exception;
 }
