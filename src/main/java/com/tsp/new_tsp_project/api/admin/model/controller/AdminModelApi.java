@@ -18,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +110,7 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : addMenModel
+	 * 1. MethodName : insertMenModel
 	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 남자 모델 등록
 	 * 4. 작성자       : CHO
@@ -126,16 +127,16 @@ public class AdminModelApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-	public String addMenModel(AdminModelDTO adminModelDTO,
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public Integer insertMenModel(@Valid AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="fileName") MultipartFile[] fileName) throws Exception{
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		String result = this.adminModelApiService.addMenModel(adminModelDTO, commonImageDTO, fileName);
+		Integer result = this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName);
 
 		return result;
 	}

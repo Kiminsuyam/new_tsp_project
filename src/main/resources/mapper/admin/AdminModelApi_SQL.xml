@@ -50,4 +50,45 @@
 		  AND tm.idx = #{idx}
 	</select>
 
+	<insert id="insertModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO tsp_model(category_cd,
+							  category_nm,
+							  model_kor_name,
+		                      model_eng_name,
+		                      model_description,
+		                      visible,
+							  creator,
+							  create_time,
+							  updater,
+							  update_time)
+		VALUES (#{categoryCd},
+				#{categoryNm},
+				#{modelKorName},
+				#{modelEngName},
+		        #{modelDescription},
+		        #{visible},
+		        '1',
+		        now(),
+		        '1',
+		        now())
+	</insert>
+
+	<insert id="insertModelOpt" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO tsp_model_opt(model_idx,
+							  	  height,
+								  size3,
+		                          shoes,
+		                          creator,
+		                          create_time,
+		                          updater,
+		                          update_time)
+		VALUES (#{modelIdx},
+				#{height},
+				#{size3},
+				#{shoes},
+				'1',
+				now(),
+				'1',
+				now())
+	</insert>
 </mapper>

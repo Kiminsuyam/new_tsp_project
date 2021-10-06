@@ -10,7 +10,8 @@ public enum ApiExceptionType implements BaseExceptionType {
 	NOT_EXIST_IMAGE(1003, 500, "이미지 등록 에러"),
 	ERROR_PRODUCTION(1004, 500, "프로덕션 등록 에러"),
 	ERROR_PORTFOLIO(1005, 500, "포트폴리오 등록 에러"),
-	NOT_NULL(1006, 500, "필수값 누락");
+	ERROR_MODEL(1007, 500, "모델 등록 에러"),
+	NOT_NULL(1006, 400, "필수값 누락");
 
 	private int errorCode;
 	private int httpStatus;

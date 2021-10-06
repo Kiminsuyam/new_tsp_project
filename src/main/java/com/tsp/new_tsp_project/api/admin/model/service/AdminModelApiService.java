@@ -55,7 +55,7 @@ public interface AdminModelApiService {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : addMenModel
+	 * 1. MethodName : insertModel
 	 * 2. ClassName  : AdminModelApiService.java
 	 * 3. Comment    : 관리자 남자 모델 등록
 	 * 4. 작성자       : CHO
@@ -67,7 +67,7 @@ public interface AdminModelApiService {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	String addMenModel(AdminModelDTO adminModelDTO,
+	Integer insertModel(AdminModelDTO adminModelDTO,
 					   CommonImageDTO commonImageDTO,
 					   MultipartFile[] fileName) throws Exception;
 }

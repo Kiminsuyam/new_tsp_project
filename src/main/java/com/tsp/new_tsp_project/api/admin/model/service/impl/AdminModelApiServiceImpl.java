@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,20 +90,34 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public String addMenModel(AdminModelDTO adminModelDTO,
+	public Integer insertModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
-		String result = "N";
+		Integer num = 0;
 
 		adminModelDTO.setCategoryCd("1");
 		adminModelDTO.setCategoryNm("men");
 
 		String flag = "insert";
-		if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, flag))) {
-			result = "Y";
-		} else {
-			result = "N";
+
+		try {
+			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
+				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
+				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
+					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, flag))) {
+						num = 1;
+					} else {
+						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+					}
+				} else {
+					throw new TspException(ApiExceptionType.ERROR_MODEL);
+				}
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_MODEL);
+			}
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_MODEL);
 		}
-		return result;
 	}
 }

@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 import java.util.List;
 import java.util.Map;
@@ -49,4 +50,32 @@ public interface AdminModelMapper {
 	 * @throws Exception
 	 */
 	Map<String, Object> getModelInfo(AdminModelDTO adminModelDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertModel
+	 * 2. ClassName  : AdminModelMapper.java
+	 * 3. Comment    : 관리자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	Integer insertModel(AdminModelDTO adminModelDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertModelOpt
+	 * 2. ClassName  : AdminModelMapper.java
+	 * 3. Comment    : 관리자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	Integer insertModelOpt(AdminModelDTO adminModelDTO) throws Exception;
 }

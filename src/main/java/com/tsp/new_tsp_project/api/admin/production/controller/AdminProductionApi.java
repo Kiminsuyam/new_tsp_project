@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -130,7 +131,7 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping()
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertProduction(@Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {

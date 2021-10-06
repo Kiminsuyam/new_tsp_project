@@ -1,12 +1,14 @@
 package com.tsp.new_tsp_project.api.admin.model.service;
 
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,6 +17,9 @@ public class AdminModelDTO extends NewCommonDTO {
 
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	Integer idx;
+
+	@ApiModelProperty(required = true, value = "model idx", hidden = true)
+	Integer modelIdx;
 
 	@ApiModelProperty(required = true, value = "category code", hidden = true)
 	String categoryCd;
@@ -45,6 +50,8 @@ public class AdminModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "model shoes")
 	Integer shoes;
 
-	@ApiModelProperty(required = true, value = "visible", hidden = true)
+	@ApiModelProperty(required = true, value = "visible")
 	String visible;
+
+	private List<CommonImageDTO> commonImageDTOList;
 }
