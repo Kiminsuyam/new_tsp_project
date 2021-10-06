@@ -55,7 +55,7 @@ public interface AdminModelMapper {
 	 * <pre>
 	 * 1. MethodName : insertModel
 	 * 2. ClassName  : AdminModelMapper.java
-	 * 3. Comment    : 관리자 모델 등록
+	 * 3. Comment    : 관리자 남자 모델 등록
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 10. 06
 	 * </pre>
@@ -64,6 +64,20 @@ public interface AdminModelMapper {
 	 * @throws Exception
 	 */
 	Integer insertModel(AdminModelDTO adminModelDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelMapper.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	Integer updateMenModel(AdminModelDTO adminModelDTO) throws Exception;
 
 	/**
 	 * <pre>

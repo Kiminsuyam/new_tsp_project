@@ -79,6 +79,72 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
+	 * 1. MethodName : insertMenModel
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 남자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param fileName
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public Integer insertMenModel(@Valid AdminModelDTO adminModelDTO,
+								  CommonImageDTO commonImageDTO,
+								  NewCommonDTO newCommonDTO,
+								  HttpServletRequest request,
+								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+
+		searchCommon.giveAuth(request, newCommonDTO);
+
+		Integer result = this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName);
+
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param fileName
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public Integer updateMenModel(@Valid AdminModelDTO adminModelDTO,
+								  CommonImageDTO commonImageDTO,
+								  NewCommonDTO newCommonDTO,
+								  HttpServletRequest request,
+								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+
+		searchCommon.giveAuth(request, newCommonDTO);
+
+		Integer result = this.adminModelApiService.updateMenModel(adminModelDTO, commonImageDTO, fileName);
+
+		return result;
+	}
+
+	/**
+	 * <pre>
 	 * 1. MethodName : getMenModelEdit
 	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 남자 모델 상세
@@ -110,33 +176,35 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : insertMenModel
+	 * 1. MethodName : insertWomenModel
 	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 남자 모델 등록
+	 * 3. Comment    : 관리자 여자 모델 등록
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 08.
+	 * 5. 작성일       : 2021. 10. 06
 	 * </pre>
 	 *
 	 * @param fileName
 	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param newCommonDTO
+	 * @param request
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
+	@ApiOperation(value = "여자 모델 등록", notes = "여자 모델을 등록한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Integer insertMenModel(@Valid AdminModelDTO adminModelDTO,
-							  CommonImageDTO commonImageDTO,
-							  NewCommonDTO newCommonDTO,
-							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
-
+	@PostMapping(value = "/women", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public Integer insertWomenModel(@Valid AdminModelDTO adminModelDTO,
+									CommonImageDTO commonImageDTO,
+									NewCommonDTO newCommonDTO,
+									HttpServletRequest request,
+									@RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception {
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		Integer result = this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName);
+		Integer result = this.adminModelApiService.insertWomenModel(adminModelDTO, commonImageDTO, fileName);
 
 		return result;
 	}

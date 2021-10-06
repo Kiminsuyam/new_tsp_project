@@ -78,7 +78,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : addMenModel
+	 * 1. MethodName : insertModel
 	 * 2. ClassName  : AdminModelApiServiceImpl.java
 	 * 3. Comment    : 관리자 남자 모델 등록
 	 * 4. 작성자       : CHO
@@ -98,13 +98,98 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 		adminModelDTO.setCategoryCd("1");
 		adminModelDTO.setCategoryNm("men");
 
-		String flag = "insert";
+		try {
+			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
+				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
+				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
+					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
+						num = 1;
+					} else {
+						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+					}
+				} else {
+					throw new TspException(ApiExceptionType.ERROR_MODEL);
+				}
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_MODEL);
+			}
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_MODEL);
+		}
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelApiServiceImpl.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param fileName
+	 * @throws Exception
+	 */
+	public Integer updateMenModel(AdminModelDTO adminModelDTO,
+							   CommonImageDTO commonImageDTO,
+							   MultipartFile[] fileName) throws Exception {
+		Integer num = 0;
+
+		adminModelDTO.setCategoryCd("1");
+		adminModelDTO.setCategoryNm("men");
+
+		try {
+			if(this.adminModelMapper.updateMenModel(adminModelDTO) > 0) {
+				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
+				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
+					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
+						num = 1;
+					} else {
+						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
+					}
+				} else {
+					throw new TspException(ApiExceptionType.ERROR_MODEL);
+				}
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_MODEL);
+			}
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_MODEL);
+		}
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertWomenModel
+	 * 2. ClassName  : AdminModelApiServiceImpl.java
+	 * 3. Comment    : 관리자 여자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param fileName
+	 * @throws Exception
+	 */
+
+	public Integer insertWomenModel(AdminModelDTO adminModelDTO,
+							   CommonImageDTO commonImageDTO,
+							   MultipartFile[] fileName) throws Exception {
+		Integer num = 0;
+
+		adminModelDTO.setCategoryCd("2");
+		adminModelDTO.setCategoryNm("women");
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
 				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
 				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
-					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, flag))) {
+					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
 						num = 1;
 					} else {
 						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);

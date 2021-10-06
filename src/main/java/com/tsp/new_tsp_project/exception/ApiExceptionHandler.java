@@ -70,7 +70,7 @@ public class ApiExceptionHandler {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	static class Error {
-		private int code;
+		private String code;
 		private int status;
 		private String message;
 
