@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotNull;
 
 @Getter
 @Setter
@@ -14,12 +15,14 @@ public class AdminPortFolioDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	Integer idx;
 
+	@NotNull(message = "제목은 필수입니다.")
 	@ApiModelProperty(required = true, value = "title")
 	String title;
 
 	@ApiModelProperty(required = true, value = "hashTag")
 	String hashTag;
 
+	@NotNull(message = "카테고리 선택은 필수입니다.")
 	@ApiModelProperty(required = true, value = "categoryCd")
 	String categoryCd;
 
@@ -29,6 +32,7 @@ public class AdminPortFolioDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "videoUrl")
 	String videoUrl;
 
+	@NotNull(message = "상세 내용 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "description")
 	String description;
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotNull;
 
 @Getter
 @Setter
@@ -20,18 +21,23 @@ public class AdminModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "category name", hidden = true)
 	String categoryNm;
 
+	@NotNull(message = "모델 이름 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "men Kor Name")
 	String modelKorName;
 
+	@NotNull(message = "모델 영문 이름 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "men Eng Name")
 	String modelEngName;
 
+	@NotNull(message = "모델 상세 내용 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "model Description")
 	String modelDescription;
 
+	@NotNull(message = "모델 키 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "model height")
 	Integer height;
 
+	@NotNull(message = "모델 사이즈 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "model 3size")
 	String size3;
 

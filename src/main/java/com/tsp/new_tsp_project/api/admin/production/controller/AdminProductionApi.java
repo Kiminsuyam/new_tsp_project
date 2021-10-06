@@ -5,6 +5,8 @@ import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,6 +14,9 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,17 +130,17 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String insertProduction(AdminProductionDTO adminProductionDTO,
+	public String insertProduction(@Validated AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-		String result = "N";
+			String result = "N";
 
-		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
-			result = "Y";
-		} else {
-			result = "N";
-		}
-		return result;
+			if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+				result = "Y";
+			} else {
+				result = "N";
+			}
+			return result;
 	}
 
 	/**
@@ -158,21 +163,28 @@ public class AdminProductionApi {
 	})
 	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String updateProduction(@PathVariable("idx") Integer idx,
-								   AdminProductionDTO adminProductionDTO,
+								   @Validated AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-		String result = "Y";
+								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files,
+								   BindingResult bindingResult) throws Exception {
 
-		adminProductionDTO.setIdx(idx);
-		adminProductionDTO.setUpdater(1);
-
-		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
-			result = "Y";
+		if(bindingResult.hasErrors()) {
+			bindingResult.getFieldError().getDefaultMessage();
+			throw new TspException(ApiExceptionType.NOT_NULL);
 		} else {
-			result = "N";
-		}
+			String result = "Y";
 
-		return result;
+			adminProductionDTO.setIdx(idx);
+			adminProductionDTO.setUpdater(1);
+
+			if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+				result = "Y";
+			} else {
+				result = "N";
+			}
+
+			return result;
+		}
 	}
 
 	/**
@@ -193,7 +205,7 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PutMapping(value = "/{idx}")
+	@DeleteMapping(value = "/{idx}")
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "Y";
 
