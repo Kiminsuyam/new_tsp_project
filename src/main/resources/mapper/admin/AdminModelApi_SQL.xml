@@ -50,7 +50,7 @@
 		  AND tm.idx = #{idx}
 	</select>
 
-	<insert id="insertModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
+	<insert id="insertMenModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO tsp_model(category_cd,
 							  category_nm,
 							  model_kor_name,

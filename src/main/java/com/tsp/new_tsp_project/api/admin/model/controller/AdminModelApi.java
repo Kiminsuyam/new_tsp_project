@@ -105,40 +105,7 @@ public class AdminModelApi {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		Integer result = this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName);
-
-		return result;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : updateMenModel
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 남자 모델 수정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 08.
-	 * </pre>
-	 *
-	 * @param fileName
-	 * @param adminModelDTO
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Integer updateMenModel(@Valid AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  NewCommonDTO newCommonDTO,
-								  HttpServletRequest request,
-								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
-
-		searchCommon.giveAuth(request, newCommonDTO);
-
-		Integer result = this.adminModelApiService.updateMenModel(adminModelDTO, commonImageDTO, fileName);
+		Integer result = this.adminModelApiService.insertMenModel(adminModelDTO, commonImageDTO, fileName);
 
 		return result;
 	}
