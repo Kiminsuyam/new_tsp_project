@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.List;
 import java.util.Map;
@@ -129,18 +130,18 @@ public class AdminProductionApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String insertProduction(@Validated AdminProductionDTO adminProductionDTO,
+	@PostMapping()
+	public String insertProduction(@Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-			String result = "N";
+		String result = "N";
 
-			if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
-				result = "Y";
-			} else {
-				result = "N";
-			}
-			return result;
+		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
 	}
 
 	/**
@@ -163,28 +164,22 @@ public class AdminProductionApi {
 	})
 	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String updateProduction(@PathVariable("idx") Integer idx,
-								   @Validated AdminProductionDTO adminProductionDTO,
+								   @Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files,
 								   BindingResult bindingResult) throws Exception {
+		String result = "Y";
 
-		if(bindingResult.hasErrors()) {
-			bindingResult.getFieldError().getDefaultMessage();
-			throw new TspException(ApiExceptionType.NOT_NULL);
+		adminProductionDTO.setIdx(idx);
+		adminProductionDTO.setUpdater(1);
+
+		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+			result = "Y";
 		} else {
-			String result = "Y";
-
-			adminProductionDTO.setIdx(idx);
-			adminProductionDTO.setUpdater(1);
-
-			if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
-				result = "Y";
-			} else {
-				result = "N";
-			}
-
-			return result;
+			result = "N";
 		}
+
+		return result;
 	}
 
 	/**
