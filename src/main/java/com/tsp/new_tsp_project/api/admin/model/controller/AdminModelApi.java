@@ -175,6 +175,7 @@ public class AdminModelApi {
 	})
 	@GetMapping("/men/{idx}")
 	public ConcurrentHashMap<String, Object> getMenModelEdit(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;
 
 		AdminModelDTO adminModelDTO = new AdminModelDTO();
@@ -183,7 +184,9 @@ public class AdminModelApi {
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 
-		return modelMap;
+		resultMap.put("modelMap", modelMap);
+
+		return resultMap;
 	}
 
 	/**
