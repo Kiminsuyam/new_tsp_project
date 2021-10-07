@@ -63,7 +63,6 @@
 		     tsp_model_opt tmo
 		WHERE tm.idx = tmo.model_idx
 		  AND tm.visible = 'Y'
-		  AND tm.category_cd = #{categoryCd}
 		  AND tm.idx = #{idx}
 	</select>
 
