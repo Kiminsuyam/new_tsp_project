@@ -75,6 +75,24 @@ public interface AdminModelApiService {
 
 	/**
 	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelApiService.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param fileName
+	 * @throws Exception
+	 */
+	Integer updateMenModel(AdminModelDTO adminModelDTO,
+						   CommonImageDTO commonImageDTO,
+						   MultipartFile[] fileName) throws Exception;
+
+	/**
+	 * <pre>
 	 * 1. MethodName : insertWomenModel
 	 * 2. ClassName  : AdminModelApiService.java
 	 * 3. Comment    : 관리자 여자 모델 등록
@@ -90,4 +108,22 @@ public interface AdminModelApiService {
 	Integer insertWomenModel(AdminModelDTO adminModelDTO,
 							 CommonImageDTO commonImageDTO,
 							 MultipartFile[] fileName) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelApiService.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param fileName
+	 * @throws Exception
+	 */
+	Integer updateWomenModel(AdminModelDTO adminModelDTO,
+						   CommonImageDTO commonImageDTO,
+						   MultipartFile[] fileName) throws Exception;
 }
