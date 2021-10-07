@@ -80,6 +80,7 @@
 		FROM tsp_image
 		WHERE type_name = 'model'
 		AND type_idx = #{typeIdx}
+		AND image_type LIKE CONCAT('%',#{imageType},'%')
 		ORDER BY file_num ASC
 	</select>
 

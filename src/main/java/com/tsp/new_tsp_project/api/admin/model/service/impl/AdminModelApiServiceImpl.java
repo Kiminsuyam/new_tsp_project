@@ -80,7 +80,10 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 		commonImageDTO.setTypeName("model");
 
 		modelMap.put("modelInfo", this.adminModelMapper.getModelInfo(adminModelDTO));
-		modelMap.put("modelImageList", this.adminModelMapper.getImageList(commonImageDTO));
+		commonImageDTO.setImageType("main");
+		modelMap.put("modelMainImageList", this.adminModelMapper.getImageList(commonImageDTO));
+		commonImageDTO.setImageType("sub");
+		modelMap.put("modelSubImageList", this.adminModelMapper.getImageList(commonImageDTO));
 
 		return modelMap;
 	}
