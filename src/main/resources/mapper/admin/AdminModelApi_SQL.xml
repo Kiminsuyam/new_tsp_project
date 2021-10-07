@@ -75,7 +75,7 @@
 		       file_size,
 			   concat('/upload/',file_mask) AS file_mask,
 		       file_path,
-		       image_type
+		       image_type,
 		       reg_date
 		FROM tsp_image
 		WHERE type_name = 'model'
