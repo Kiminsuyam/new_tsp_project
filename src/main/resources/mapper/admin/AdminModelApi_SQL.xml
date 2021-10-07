@@ -30,13 +30,15 @@
 		SELECT tm.idx,
 			   tm.category_cd,
 			   tm.category_nm,
+		       tm.category_age,
 			   tm.model_kor_name,
 			   tm.model_eng_name,
 			   tm.model_description,
 			   tm.visible,
 			   tmo.height,
 			   tmo.size3,
-			   tmo.shoes
+			   tmo.shoes,
+		       tm.create_time
 		FROM tsp_model tm,
 			 tsp_model_opt tmo
 		WHERE tm.idx = tmo.model_idx
@@ -49,6 +51,7 @@
 		SELECT tm.idx,
 			   tm.category_cd,
 			   tm.category_nm,
+		       tm.category_age,
 			   tm.model_kor_name,
 		       tm.model_eng_name,
 			   tm.model_description,
@@ -73,6 +76,7 @@
 		       file_size,
 			   concat('/upload/',file_mask) AS file_mask,
 		       file_path,
+		       image_type
 		       reg_date
 		FROM tsp_image
 		WHERE type_name = 'model'
@@ -83,6 +87,7 @@
 	<insert id="insertModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO tsp_model(category_cd,
 							  category_nm,
+		                      category_age,
 							  model_kor_name,
 		                      model_eng_name,
 		                      model_description,
@@ -93,6 +98,7 @@
 							  update_time)
 		VALUES (#{categoryCd},
 				#{categoryNm},
+		        #{categoryAge},
 				#{modelKorName},
 				#{modelEngName},
 		        #{modelDescription},

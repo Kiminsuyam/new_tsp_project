@@ -1,20 +1,24 @@
 package com.tsp.new_tsp_project.exception;
 
-import java.util.List;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
+import java.util.Map;
+
+@Getter
 public class ErrorResponse {
 
-	public ErrorResponse(String message, List<String> details) {
+	public ErrorResponse(HttpStatus status, Map<String, Object> error) {
 		super();
-		this.message = message;
-		this.details = details;
+		this.status = status;
+		this.error = error;
 	}
 
 	//General error message about nature of error
-	private String message;
+	private HttpStatus status;
 
 	//Specific errors in API request processing
-	private List<String> details;
+	private Map<String, Object> error;
 
 	//Getter and setters
 }

@@ -33,6 +33,9 @@ public class CommonImageDTO {
 	@ApiModelProperty(value = "파일경로", hidden = true)
 	private String filePath;
 
+	@ApiModelProperty(value = "메인 이미지 구분", hidden = true)
+	private String imageType;
+
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
 }

@@ -12,6 +12,7 @@
 		, file_size
 		, file_mask
 		, file_path
+		, image_type
 		, reg_date)
 		VALUES ( #{typeIdx}
 		       , #{typeName}
@@ -20,6 +21,7 @@
 			   , #{fileSize}
 			   , #{fileMask}
 			   , #{filePath}
+			   , #{imageType}
 			   , now())
 	</insert>
 

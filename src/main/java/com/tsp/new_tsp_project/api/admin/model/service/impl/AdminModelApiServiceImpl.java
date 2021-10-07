@@ -4,7 +4,6 @@ import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
-import com.tsp.new_tsp_project.api.common.image.service.impl.ImageMapper;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 	private final AdminModelMapper adminModelMapper;
-	private final ImageMapper imageMapper;
 	private final ImageService imageService;
 
 	/**
@@ -106,8 +104,16 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
 
-		adminModelDTO.setCategoryCd("1");
-		adminModelDTO.setCategoryNm("men");
+		if("man".equals(adminModelDTO.getCategoryCd())) {
+			adminModelDTO.setCategoryCd("1");
+			adminModelDTO.setCategoryNm("man");
+		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
+			adminModelDTO.setCategoryCd("2");
+			adminModelDTO.setCategoryNm("woman");
+		} else {
+			adminModelDTO.setCategoryCd("3");
+			adminModelDTO.setCategoryNm("senior");
+		}
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
@@ -118,20 +124,16 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
 						num = 1;
 					} else {
-						log.info("insertImageFail");
 						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
 					}
 				} else {
-					log.info("insertModelOptFail");
 					throw new TspException(ApiExceptionType.ERROR_MODEL);
 				}
 			} else {
-				log.info("insertModelFail");
 				throw new TspException(ApiExceptionType.ERROR_MODEL);
 			}
 			return num;
 		} catch (Exception e) {
-			log.info("error");
 			throw new TspException(ApiExceptionType.ERROR_MODEL);
 		}
 	}

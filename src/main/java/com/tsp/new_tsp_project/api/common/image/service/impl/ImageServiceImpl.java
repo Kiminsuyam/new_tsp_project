@@ -102,6 +102,12 @@ public class ImageServiceImpl implements ImageService {
                         }
                     }
 
+                    if(mainCnt == 0) {
+                        commonImageDTO.setImageType("main");
+                    } else {
+                        commonImageDTO.setImageType("sub"+mainCnt);
+                    }
+
                     String filePath = uploadPath + fileMask;
                     file.transferTo(new File(filePath));
 
