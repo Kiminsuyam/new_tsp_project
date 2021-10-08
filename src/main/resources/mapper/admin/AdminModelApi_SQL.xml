@@ -64,6 +64,7 @@
 		     tsp_model_opt tmo
 		WHERE tm.idx = tmo.model_idx
 		  AND tm.visible = 'Y'
+		  AND tm.category_cd = #{categoryCd}
 		  AND tm.idx = #{idx}
 	</select>
 
@@ -122,6 +123,7 @@
 		<if test="updater != null and updater != ''">updater = #{updater},</if>
 		update_time = NOW()
 		WHERE idx = #{idx}
+		AND category_cd = #{categoryCd}
 	</update>
 
 	<insert id="insertModelOpt" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
@@ -154,6 +156,7 @@
 		<if test="updater != null and updater != ''">updater = #{updater},</if>
 		update_time = NOW()
 		WHERE idx = #{idx}
+		AND category_cd = #{categoryCd}
 	</update>
 
 	<!-- 모델 삭제 -->

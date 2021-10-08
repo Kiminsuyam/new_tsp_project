@@ -93,7 +93,7 @@ public class AdminModelApi {
 	 * @param adminModelDTO
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "남자 모델 등록", notes = "남자 모델을 등록한다.")
+	@ApiOperation(value = "모델 등록", notes = "모델을 등록한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -132,14 +132,15 @@ public class AdminModelApi {
 	 * @param adminModelDTO
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "남자 모델 수정", notes = "남자 모델을 수정한다.")
+	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@PostMapping(value = "/men/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Integer updateMenModel(@PathVariable(value = "idx") Integer idx,
+								  @PathVariable(value = "categoryCd") Integer categoryCd,
 			                      @Valid AdminModelDTO adminModelDTO,
 								  CommonImageDTO commonImageDTO,
 								  NewCommonDTO newCommonDTO,
@@ -150,6 +151,7 @@ public class AdminModelApi {
 
 		adminModelDTO.setIdx(idx);
 		adminModelDTO.setModelIdx(idx);
+		adminModelDTO.setCategoryCd(categoryCd);
 
 		Integer result = this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName);
 
@@ -168,20 +170,21 @@ public class AdminModelApi {
 	 * @param idx
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "남자 모델 상세 조회", notes = "남자 모델을 상세 조회한다.")
+	@ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = Map.class),
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@GetMapping("/men/{idx}")
-	public ConcurrentHashMap<String, Object> getMenModelEdit(@PathVariable("idx") Integer idx) throws Exception {
+	@GetMapping("/{categoryCd}/{idx}")
+	public ConcurrentHashMap<String, Object> getMenModelEdit(@PathVariable("categoryCd") Integer categoryCd,
+															 @PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;
 
 		AdminModelDTO adminModelDTO = new AdminModelDTO();
 		adminModelDTO.setIdx(idx);
-		adminModelDTO.setCategoryCd("1");
+		adminModelDTO.setCategoryCd(categoryCd);
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 

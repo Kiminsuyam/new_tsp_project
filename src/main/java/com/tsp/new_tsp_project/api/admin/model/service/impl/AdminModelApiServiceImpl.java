@@ -105,13 +105,13 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 		Integer num = 0;
 
 		if("man".equals(adminModelDTO.getCategoryCd())) {
-			adminModelDTO.setCategoryCd("1");
+			adminModelDTO.setCategoryCd(1);
 			adminModelDTO.setCategoryNm("man");
 		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
-			adminModelDTO.setCategoryCd("2");
+			adminModelDTO.setCategoryCd(2);
 			adminModelDTO.setCategoryNm("woman");
 		} else {
-			adminModelDTO.setCategoryCd("3");
+			adminModelDTO.setCategoryCd(3);
 			adminModelDTO.setCategoryNm("senior");
 		}
 
@@ -158,13 +158,13 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 		Integer num = 0;
 
 		if("man".equals(adminModelDTO.getCategoryCd())) {
-			adminModelDTO.setCategoryCd("1");
+			adminModelDTO.setCategoryCd(1);
 			adminModelDTO.setCategoryNm("man");
 		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
-			adminModelDTO.setCategoryCd("2");
+			adminModelDTO.setCategoryCd(2);
 			adminModelDTO.setCategoryNm("woman");
 		} else {
-			adminModelDTO.setCategoryCd("3");
+			adminModelDTO.setCategoryCd(3);
 			adminModelDTO.setCategoryNm("senior");
 		}
 
@@ -201,8 +201,6 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * </pre>
 	 *
 	 * @param adminModelDTO
-	 * @param commonImageDTO
-	 * @param fileName
 	 * @throws Exception
 	 */
 	public Integer deleteModel(AdminModelDTO adminModelDTO) throws Exception {

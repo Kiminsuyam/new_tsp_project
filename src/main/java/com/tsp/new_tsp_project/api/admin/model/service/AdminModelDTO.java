@@ -25,7 +25,7 @@ public class AdminModelDTO extends NewCommonDTO {
 	Integer modelIdx;
 
 	@ApiModelProperty(required = true, value = "category code")
-	String categoryCd;
+	Integer categoryCd;
 
 	@ApiModelProperty(required = true, value = "category name", hidden = true)
 	String categoryNm;
