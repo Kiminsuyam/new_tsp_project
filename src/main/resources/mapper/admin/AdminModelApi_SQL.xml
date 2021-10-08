@@ -42,6 +42,7 @@
 		FROM tsp_model tm,
 			 tsp_model_opt tmo
 		WHERE tm.idx = tmo.model_idx
+		AND tm.visible = 'Y'
 		ORDER BY tm.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>
