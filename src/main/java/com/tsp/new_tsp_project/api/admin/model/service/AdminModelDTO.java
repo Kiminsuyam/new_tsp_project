@@ -24,13 +24,13 @@ public class AdminModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "model idx", hidden = true)
 	Integer modelIdx;
 
-	@ApiModelProperty(required = true, value = "category code", hidden = true)
+	@ApiModelProperty(required = true, value = "category code")
 	String categoryCd;
 
 	@ApiModelProperty(required = true, value = "category name", hidden = true)
 	String categoryNm;
 
-	@ApiModelProperty(required = true, value = "category age", hidden = true)
+	@ApiModelProperty(required = true, value = "category age")
 	String categoryAge;
 
 	@NotNull(message = "모델 국문 이름 입력은 필수입니다.")

@@ -172,6 +172,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
 				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
 				commonImageDTO.setTypeName("model");
+				commonImageDTO.setTypeIdx(adminModelDTO.getModelIdx());
 				if(this.adminModelMapper.updateModelOpt(adminModelDTO) > 0) {
 					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
 						num = 1;
