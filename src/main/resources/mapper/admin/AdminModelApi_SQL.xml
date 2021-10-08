@@ -67,6 +67,7 @@
 	</select>
 
 	<select id="getImageList" parameterType="java.util.HashMap" resultType="commonImageDto">
+		/*[AdminModelApi_SQL.xml].[getImageList] */
 		SELECT idx,
 		       type_idx,
 		       type_name,
@@ -84,6 +85,7 @@
 	</select>
 
 	<insert id="insertModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
+		/*[AdminModelApi_SQL.xml].[insertModel] */
 		INSERT INTO tsp_model(category_cd,
 							  category_nm,
 		                      category_age,
@@ -109,6 +111,7 @@
 	</insert>
 
 	<update id="updateModel" parameterType="adminModelDto">
+		/*[AdminModelApi_SQL.xml].[updateModel] */
 		UPDATE tsp_model
 		SET
 		<if test="modelKorName != null and modelKorName != ''">model_kor_name = #{modelKorName},</if>
@@ -121,6 +124,7 @@
 	</update>
 
 	<insert id="insertModelOpt" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
+		/*[AdminModelApi_SQL.xml].[insertModelOpt] */
 		INSERT INTO tsp_model_opt(model_idx,
 							  	  height,
 								  size3,
@@ -140,6 +144,7 @@
 	</insert>
 
 	<update id="updateModelOpt" parameterType="adminModelDto">
+		/*[AdminModelApi_SQL.xml].[updateModelOpt] */
 		UPDATE tsp_model_opt
 		SET
 		<if test="height != null and height != ''">height = #{height},</if>
@@ -149,4 +154,13 @@
 		update_time = NOW()
 		WHERE idx = #{idx}
 	</update>
+
+	<!-- 모델 삭제 -->
+	<delete id="deleteModel" parameterType="adminModelDto">
+		/*[AdminModelApi_SQL.xml].[deleteModel] */
+		UPDATE tsp_model
+		SET visible = #{visible},
+			update_time = NOW()
+		WHERE idx = #{idx}
+	</delete>
 </mapper>

@@ -121,4 +121,18 @@ public interface AdminModelMapper {
 	 * @throws Exception
 	 */
 	Integer updateModelOpt(AdminModelDTO adminModelDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModel
+	 * 2. ClassName  : AdminModelMapper.java
+	 * 3. Comment    : 관리자 모델 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @throws Exception
+	 */
+	Integer deleteModel(AdminModelDTO adminModelDTO) throws Exception;
 }

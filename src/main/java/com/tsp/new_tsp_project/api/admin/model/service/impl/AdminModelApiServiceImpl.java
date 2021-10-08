@@ -190,4 +190,22 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 			throw new TspException(ApiExceptionType.ERROR_MODEL);
 		}
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModel
+	 * 2. ClassName  : AdminModelApiServiceImpl.java
+	 * 3. Comment    : 관리자 모델 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param fileName
+	 * @throws Exception
+	 */
+	public Integer deleteModel(AdminModelDTO adminModelDTO) throws Exception {
+		return this.adminModelMapper.deleteModel(adminModelDTO);
+	}
 }

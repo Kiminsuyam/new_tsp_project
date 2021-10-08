@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.admin.model.controller;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
+import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
@@ -187,5 +188,39 @@ public class AdminModelApi {
 		resultMap.put("modelMap", modelMap);
 
 		return resultMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModel
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 모델 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "모델 삭제", notes = "모델을 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping("/{idx}")
+	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
+		String result = "Y";
+
+		AdminModelDTO adminModelDTO = new AdminModelDTO();
+		adminModelDTO.setVisible("N");
+		adminModelDTO.setIdx(idx);
+
+		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
 	}
 }
