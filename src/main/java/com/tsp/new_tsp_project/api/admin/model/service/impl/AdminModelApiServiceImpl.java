@@ -80,10 +80,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 		commonImageDTO.setTypeName("model");
 
 		modelMap.put("modelInfo", this.adminModelMapper.getModelInfo(adminModelDTO));
-		commonImageDTO.setImageType("main");
-		modelMap.put("modelMainImageList", this.adminModelMapper.getImageList(commonImageDTO));
-		commonImageDTO.setImageType("sub");
-		modelMap.put("modelSubImageList", this.adminModelMapper.getImageList(commonImageDTO));
+		modelMap.put("modelImageList", this.adminModelMapper.getImageList(commonImageDTO));
 
 		return modelMap;
 	}
@@ -102,7 +99,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public Integer insertMenModel(AdminModelDTO adminModelDTO,
+	public Integer insertModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
@@ -155,103 +152,26 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public Integer updateMenModel(AdminModelDTO adminModelDTO,
+	public Integer updateModel(AdminModelDTO adminModelDTO,
 								  CommonImageDTO commonImageDTO,
 								  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
 
-		adminModelDTO.setCategoryCd("1");
-		adminModelDTO.setCategoryNm("men");
+		if("man".equals(adminModelDTO.getCategoryCd())) {
+			adminModelDTO.setCategoryCd("1");
+			adminModelDTO.setCategoryNm("man");
+		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
+			adminModelDTO.setCategoryCd("2");
+			adminModelDTO.setCategoryNm("woman");
+		} else {
+			adminModelDTO.setCategoryCd("3");
+			adminModelDTO.setCategoryNm("senior");
+		}
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
 				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
-				if(this.adminModelMapper.updateModelOpt(adminModelDTO) > 0) {
-					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
-						num = 1;
-					} else {
-						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
-					}
-				} else {
-					throw new TspException(ApiExceptionType.ERROR_MODEL);
-				}
-			} else {
-				throw new TspException(ApiExceptionType.ERROR_MODEL);
-			}
-			return num;
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.ERROR_MODEL);
-		}
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : insertWomenModel
-	 * 2. ClassName  : AdminModelApiServiceImpl.java
-	 * 3. Comment    : 관리자 여자 모델 등록
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
-	 * </pre>
-	 *
-	 * @param adminModelDTO
-	 * @param commonImageDTO
-	 * @param fileName
-	 * @throws Exception
-	 */
-	public Integer insertWomenModel(AdminModelDTO adminModelDTO,
-							   CommonImageDTO commonImageDTO,
-							   MultipartFile[] fileName) throws Exception {
-		Integer num = 0;
-
-		adminModelDTO.setCategoryCd("2");
-		adminModelDTO.setCategoryNm("women");
-
-		try {
-			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
-				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
-				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
-					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
-						num = 1;
-					} else {
-						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
-					}
-				} else {
-					throw new TspException(ApiExceptionType.ERROR_MODEL);
-				}
-			} else {
-				throw new TspException(ApiExceptionType.ERROR_MODEL);
-			}
-			return num;
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.ERROR_MODEL);
-		}
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : updateWomenModel
-	 * 2. ClassName  : AdminModelApiServiceImpl.java
-	 * 3. Comment    : 관리자 남자 모델 수정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
-	 * </pre>
-	 *
-	 * @param adminModelDTO
-	 * @param commonImageDTO
-	 * @param fileName
-	 * @throws Exception
-	 */
-	public Integer updateWomenModel(AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  MultipartFile[] fileName) throws Exception {
-		Integer num = 0;
-
-		adminModelDTO.setCategoryCd("2");
-		adminModelDTO.setCategoryNm("women");
-
-		try {
-			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
-				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
+				commonImageDTO.setTypeName("model");
 				if(this.adminModelMapper.updateModelOpt(adminModelDTO) > 0) {
 					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
 						num = 1;

@@ -109,7 +109,7 @@ public class AdminModelApi {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelApiService.insertMenModel(adminModelDTO, commonImageDTO, fileName) > 0){
+		if(this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName) > 0){
 			result = "Y";
 		} else {
 			result = "N";
@@ -145,12 +145,12 @@ public class AdminModelApi {
 								  HttpServletRequest request,
 								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
-		searchCommon.giveAuth(request, newCommonDTO);
+//		searchCommon.giveAuth(request, newCommonDTO);
 
 		adminModelDTO.setIdx(idx);
 		adminModelDTO.setModelIdx(idx);
 
-		Integer result = this.adminModelApiService.updateMenModel(adminModelDTO, commonImageDTO, fileName);
+		Integer result = this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName);
 
 		return result;
 	}
@@ -187,108 +187,5 @@ public class AdminModelApi {
 		resultMap.put("modelMap", modelMap);
 
 		return resultMap;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : insertWomenModel
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 여자 모델 등록
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
-	 * </pre>
-	 *
-	 * @param fileName
-	 * @param adminModelDTO
-	 * @param commonImageDTO
-	 * @param newCommonDTO
-	 * @param request
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "여자 모델 등록", notes = "여자 모델을 등록한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@PostMapping(value = "/women", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Integer insertWomenModel(@Valid AdminModelDTO adminModelDTO,
-									CommonImageDTO commonImageDTO,
-									NewCommonDTO newCommonDTO,
-									HttpServletRequest request,
-									@RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception {
-		searchCommon.giveAuth(request, newCommonDTO);
-
-		Integer result = this.adminModelApiService.insertWomenModel(adminModelDTO, commonImageDTO, fileName);
-
-		return result;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : getWomenModelEdit
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 여자 모델 상세
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 08.
-	 * </pre>
-	 *
-	 * @param idx
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "여자 모델 상세 조회", notes = "여자 모델을 상세 조회한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@GetMapping("/women/{idx}")
-	public ConcurrentHashMap getWomenModelEdit(@PathVariable("idx") Integer idx) throws Exception {
-		ConcurrentHashMap<String, Object> modelMap;
-
-		AdminModelDTO adminModelDTO = new AdminModelDTO();
-		adminModelDTO.setIdx(idx);
-		adminModelDTO.setCategoryCd("2");
-
-		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
-
-		return modelMap;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : updateWomenModel
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 여자 모델 수정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06.
-	 * </pre>
-	 *
-	 * @param fileName
-	 * @param adminModelDTO
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "여자 모델 수정", notes = "여자 모델을 수정한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@PostMapping(value = "/women/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Integer updateWomenModel(@PathVariable(value = "idx") Integer idx,
-								  @Valid AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  NewCommonDTO newCommonDTO,
-								  HttpServletRequest request,
-								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
-
-		searchCommon.giveAuth(request, newCommonDTO);
-
-		adminModelDTO.setIdx(idx);
-		adminModelDTO.setModelIdx(idx);
-
-		Integer result = this.adminModelApiService.updateWomenModel(adminModelDTO, commonImageDTO, fileName);
-
-		return result;
 	}
 }

@@ -47,7 +47,7 @@ public class AdminModelDTO extends NewCommonDTO {
 
 	@ApiModelProperty(required = true, value = "model height")
 	@NotNull(message = "모델 키 입력은 필수입니다.")
-//	@Pattern(regexp="\\\\d{1,3}", message = "숫자만 입력 가능합니다.")
+	@Pattern(regexp="\\\\d{1,3}", message = "숫자만 입력 가능합니다.")
 //	@Length(min=1, max=4, message = "1자 이상 4자미만으로 작성해야 합니다.")
 	String height;
 
