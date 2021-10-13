@@ -1,22 +1,16 @@
 package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelJpaDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.CommonImageJpaDTO;
-import com.tsp.new_tsp_project.api.common.image.service.ImageService;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.io.File;
 import java.sql.Timestamp;
@@ -62,11 +56,35 @@ public class ModelRepository {
 		return rtnStr;
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : findModelsCount
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 리스트 갯수 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 * @throws Exception
+	 */
 	public Integer findModelsCount(Map<String, Object> modelMap) throws Exception {
 		return em.createQuery("select m from AdminModelJpaDTO m", AdminModelJpaDTO.class)
 				.getResultList().size();
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : findAll
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 리스트 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 * @throws Exception
+	 */
 	public List<AdminModelJpaDTO> findAll(Map<String, Object> modelMap) throws Exception{
 		return em.createQuery("select m from AdminModelJpaDTO m", AdminModelJpaDTO.class)
 				.setFirstResult(StringUtil.getInt(modelMap.get("startPage"),0))
@@ -74,6 +92,18 @@ public class ModelRepository {
 				.getResultList();
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : findOneModel
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param adminModelJpaDTO
+	 * @throws Exception
+	 */
 	public Map<String, Object> findOneModel(AdminModelJpaDTO adminModelJpaDTO) throws Exception {
 		TypedQuery<AdminModelJpaDTO> query = em.createQuery("select m from AdminModelJpaDTO m where m.idx = :idx", AdminModelJpaDTO.class);
 		query.setParameter("idx", adminModelJpaDTO.getIdx());
@@ -86,6 +116,20 @@ public class ModelRepository {
 
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : insertModel
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelJpaDTO
+	 * @param commonImageJpaDTO
+	 * @param files
+	 * @throws Exception
+	 */
 	@Modifying
 	@Transactional
 	public Integer insertModel(AdminModelJpaDTO adminModelJpaDTO,
@@ -106,6 +150,62 @@ public class ModelRepository {
 
 		commonImageJpaDTO.setTypeName("model");
 		commonImageJpaDTO.setTypeIdx(adminModelJpaDTO.getIdx());
+
+		uploadImageFile(commonImageJpaDTO, files);
+
+		return adminModelJpaDTO.getIdx();
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateModel
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminModelJpaDTO
+	 * @param commonImageJpaDTO
+	 * @param files
+	 * @throws Exception
+	 */
+	@Modifying
+	@Transactional
+	public Integer updateModel(AdminModelJpaDTO adminModelJpaDTO, CommonImageJpaDTO commonImageJpaDTO, MultipartFile[] files) throws Exception {
+//		if("1".equals(StringUtil.getString(adminModelJpaDTO.getCategoryCd(),""))) {
+//			adminModelJpaDTO.setCategoryCd(1);
+//			adminModelJpaDTO.setCategoryNm("man");
+//		} else  if("2".equals(StringUtil.getString(adminModelJpaDTO.getCategoryCd(),""))) {
+//			adminModelJpaDTO.setCategoryCd(2);
+//			adminModelJpaDTO.setCategoryNm("woman");
+//		} else {
+//			adminModelJpaDTO.setCategoryCd(3);
+//			adminModelJpaDTO.setCategoryNm("senior");
+//		}
+
+		em.createQuery("update AdminModelJpaDTO m set m.modelKorName = : modelKorName, m.modelEngName = : modelEngName," +
+						"m.modelDescription = : modelDescription, m.height = : height, m.shoes = : shoes, m.categoryAge = : categoryAge " +
+						"where m.idx = : idx")
+				.setParameter("modelKorName", adminModelJpaDTO.getModelKorName())
+				.setParameter("modelEngName", adminModelJpaDTO.getModelEngName())
+				.setParameter("modelDescription", adminModelJpaDTO.getModelDescription())
+				.setParameter("height", adminModelJpaDTO.getHeight())
+				.setParameter("shoes", adminModelJpaDTO.getShoes())
+				.setParameter("categoryAge", adminModelJpaDTO.getCategoryAge())
+				.setParameter("idx", adminModelJpaDTO.getIdx());
+
+		commonImageJpaDTO.setTypeName("model");
+		commonImageJpaDTO.setTypeIdx(adminModelJpaDTO.getIdx());
+
+		uploadImageFile(commonImageJpaDTO, files);
+
+		return adminModelJpaDTO.getIdx();
+	}
+
+	public void uploadImageFile(CommonImageJpaDTO commonImageJpaDTO,
+								MultipartFile[] files) throws Exception {
+
 		// 파일 확장자
 		String ext = "";
 		// 파일명
@@ -125,7 +225,7 @@ public class ModelRepository {
 		if(files != null) {
 			em.createQuery("update CommonImageJpaDTO m set m.visible = : visible where m.typeIdx = : typeIdx and m.typeName = : typeName")
 					.setParameter("visible", "Y")
-					.setParameter("typeIdx", adminModelJpaDTO.getIdx())
+					.setParameter("typeIdx", commonImageJpaDTO.getTypeIdx())
 					.setParameter("typeName", "model").executeUpdate();
 
 
@@ -178,6 +278,6 @@ public class ModelRepository {
 				}
 			}
 		}
-		return adminModelJpaDTO.getIdx();
+
 	}
 }

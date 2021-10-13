@@ -22,6 +22,7 @@
 		SELECT COUNT(*)
 		FROM tsp_model
 		WHERE visible = 'Y'
+		AND category_cd = #{categoryCd}
 	</select>
 
 	<!-- 모델 리스트 출력 -->
@@ -41,6 +42,7 @@
 		       tm.create_time
 		FROM tsp_model tm
 		WHERE tm.visible = 'Y'
+		AND category_cd = #{categoryCd}
 		ORDER BY tm.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>

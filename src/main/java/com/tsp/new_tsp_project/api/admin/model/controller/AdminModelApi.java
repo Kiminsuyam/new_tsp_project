@@ -55,10 +55,11 @@ public class AdminModelApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getModelList(Page page) throws Exception {
+	@GetMapping(value = "/lists/{categoryCd}")
+	public ConcurrentHashMap getModelList(Page page, @PathVariable("categoryCd") Integer categoryCd) throws Exception {
 		// 페이징 및 검색
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, "");
+		modelMap.put("categoryCd", categoryCd);
 
 		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);
 

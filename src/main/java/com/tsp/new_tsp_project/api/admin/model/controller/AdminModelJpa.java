@@ -136,4 +136,41 @@ public class AdminModelJpa {
 
 		return result;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateMenModel
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param fileName
+	 * @param adminModelJpaDTO
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public Integer updateMenModel(@PathVariable(value = "idx") Integer idx,
+								  @PathVariable(value = "categoryCd") Integer categoryCd,
+								  @Valid AdminModelJpaDTO adminModelJpaDTO,
+								  CommonImageJpaDTO commonImageJpaDTO,
+								  NewCommonDTO newCommonDTO,
+								  HttpServletRequest request,
+								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+
+//		searchCommon.giveAuth(request, newCommonDTO);
+
+		adminModelJpaDTO.builder().idx(idx).categoryCd(categoryCd).build();
+
+		Integer result = this.adminModelService.updateModel(adminModelJpaDTO, commonImageJpaDTO, fileName);
+
+		return result;
+	}
 }
