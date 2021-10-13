@@ -35,14 +35,12 @@
 			   tm.model_eng_name,
 			   tm.model_description,
 			   tm.visible,
-			   tmo.height,
-			   tmo.size3,
-			   tmo.shoes,
+			   tm.height,
+			   tm.size3,
+			   tm.shoes,
 		       tm.create_time
-		FROM tsp_model tm,
-			 tsp_model_opt tmo
-		WHERE tm.idx = tmo.model_idx
-		AND tm.visible = 'Y'
+		FROM tsp_model tm
+		WHERE tm.visible = 'Y'
 		ORDER BY tm.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>
@@ -57,13 +55,11 @@
 		       tm.model_eng_name,
 			   tm.model_description,
 			   tm.visible,
-		       tmo.height,
-		       tmo.size3,
-		       tmo.shoes
-		FROM tsp_model tm,
-		     tsp_model_opt tmo
-		WHERE tm.idx = tmo.model_idx
-		  AND tm.visible = 'Y'
+		       tm.height,
+		       tm.size3,
+		       tm.shoes
+		FROM tsp_model tm
+		  WHERE tm.visible = 'Y'
 		  AND tm.category_cd = #{categoryCd}
 		  AND tm.idx = #{idx}
 	</select>
@@ -93,6 +89,9 @@
 		                      category_age,
 							  model_kor_name,
 		                      model_eng_name,
+							  height,
+		                      shoes,
+		                      size3,
 		                      model_description,
 		                      visible,
 							  creator,
@@ -104,6 +103,9 @@
 		        #{categoryAge},
 				#{modelKorName},
 				#{modelEngName},
+		        #{height},
+		        #{shoes},
+		        #{size3},
 		        #{modelDescription},
 		        #{visible},
 		        '1',
@@ -120,6 +122,9 @@
 		<if test="modelEngName != null and modelEngName != ''">model_eng_name = #{modelEngName},</if>
 		<if test="modelDescription != null and modelDescription != ''">model_description = #{modelDescription},</if>
 		<if test="categoryAge != null and categoryAge != ''">category_age = #{categoryAge},</if>
+		<if test="height != null and height != ''">height = #{height},</if>
+		<if test="size3 != null and size3 != ''">size3 = #{size3},</if>
+		<if test="shoes != null and shoes != ''">shoes = #{shoes},</if>
 		<if test="updater != null and updater != ''">updater = #{updater},</if>
 		update_time = NOW()
 		WHERE idx = #{idx}
@@ -145,19 +150,6 @@
 				'1',
 				now())
 	</insert>
-
-	<update id="updateModelOpt" parameterType="adminModelDto">
-		/*[AdminModelApi_SQL.xml].[updateModelOpt] */
-		UPDATE tsp_model_opt
-		SET
-		<if test="height != null and height != ''">height = #{height},</if>
-		<if test="size3 != null and size3 != ''">size3 = #{size3},</if>
-		<if test="shoes != null and shoes != ''">shoes = #{shoes},</if>
-		<if test="updater != null and updater != ''">updater = #{updater},</if>
-		update_time = NOW()
-		WHERE idx = #{idx}
-		AND category_cd = #{categoryCd}
-	</update>
 
 	<!-- 모델 삭제 -->
 	<delete id="deleteModel" parameterType="adminModelDto">

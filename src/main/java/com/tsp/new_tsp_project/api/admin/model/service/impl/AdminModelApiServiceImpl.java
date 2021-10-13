@@ -117,17 +117,12 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
-				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
-				if(this.adminModelMapper.insertModelOpt(adminModelDTO) > 0) {
-					commonImageDTO.setTypeName("model");
-					commonImageDTO.setTypeIdx(adminModelDTO.getModelIdx());
-					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
-						num = 1;
-					} else {
-						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
-					}
+				commonImageDTO.setTypeName("model");
+				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
+					num = 1;
 				} else {
-					throw new TspException(ApiExceptionType.ERROR_MODEL);
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
 				}
 			} else {
 				throw new TspException(ApiExceptionType.ERROR_MODEL);
@@ -170,17 +165,12 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
-				adminModelDTO.setModelIdx(adminModelDTO.getIdx());
 				commonImageDTO.setTypeName("model");
-				commonImageDTO.setTypeIdx(adminModelDTO.getModelIdx());
-				if(this.adminModelMapper.updateModelOpt(adminModelDTO) > 0) {
-					if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
-						num = 1;
-					} else {
-						throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
-					}
+				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
+					num = 1;
 				} else {
-					throw new TspException(ApiExceptionType.ERROR_MODEL);
+					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
 				}
 			} else {
 				throw new TspException(ApiExceptionType.ERROR_MODEL);

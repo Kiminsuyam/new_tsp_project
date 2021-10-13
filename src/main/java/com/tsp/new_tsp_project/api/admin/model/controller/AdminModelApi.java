@@ -149,9 +149,7 @@ public class AdminModelApi {
 
 //		searchCommon.giveAuth(request, newCommonDTO);
 
-		adminModelDTO.setIdx(idx);
-		adminModelDTO.setModelIdx(idx);
-		adminModelDTO.setCategoryCd(categoryCd);
+		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
 
 		Integer result = this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName);
 
@@ -182,9 +180,9 @@ public class AdminModelApi {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;
 
-		AdminModelDTO adminModelDTO = new AdminModelDTO();
-		adminModelDTO.setIdx(idx);
-		adminModelDTO.setCategoryCd(categoryCd);
+		AdminModelDTO adminModelDTO = AdminModelDTO.builder()
+										.idx(idx)
+										.categoryCd(categoryCd).build();
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 
