@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class AdminModelJpaDTO extends NewCommonJpaDTO {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idx")
 	Integer idx;
 
@@ -26,6 +26,9 @@ public class AdminModelJpaDTO extends NewCommonJpaDTO {
 
 	@Column(name = "category_nm")
 	String categoryNm;
+
+	@Column(name = "category_age")
+	String categoryAge;
 
 	@Column(name = "model_kor_name")
 	String modelKorName;
