@@ -36,6 +36,9 @@ public class CommonImageDTO {
 	@ApiModelProperty(value = "메인 이미지 구분", hidden = true)
 	private String imageType;
 
+	@ApiModelProperty(value = "이미지 사용 여부", hidden = true)
+	private String visible;
+
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
 }

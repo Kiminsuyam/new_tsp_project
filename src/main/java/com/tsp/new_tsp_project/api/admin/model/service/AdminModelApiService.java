@@ -93,6 +93,20 @@ public interface AdminModelApiService {
 
 	/**
 	 * <pre>
+	 * 1. MethodName : deleteModelImage
+	 * 2. ClassName  : AdminModelApiService.java
+	 * 3. Comment    : 관리자 모델 이미지 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param commonImageDTO
+	 * @throws Exception
+	 */
+	Integer deleteModelImage(CommonImageDTO commonImageDTO) throws Exception;
+
+	/**
+	 * <pre>
 	 * 1. MethodName : deleteModel
 	 * 2. ClassName  : AdminModelApiService.java
 	 * 3. Comment    : 관리자 모델 삭제

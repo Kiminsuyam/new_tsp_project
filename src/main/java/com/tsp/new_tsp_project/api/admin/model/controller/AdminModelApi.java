@@ -141,7 +141,7 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Integer updateMenModel(@PathVariable(value = "idx") Integer idx,
+	public String updateMenModel(@PathVariable(value = "idx") Integer idx,
 								  @PathVariable(value = "categoryCd") Integer categoryCd,
 			                      @Valid AdminModelDTO adminModelDTO,
 								  CommonImageDTO commonImageDTO,
@@ -153,7 +153,13 @@ public class AdminModelApi {
 
 		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
 
-		Integer result = this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName);
+		String result = "N";
+
+		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName) > 0){
+			result = "Y";
+		} else {
+			result = "N";
+		}
 
 		return result;
 	}
@@ -192,6 +198,42 @@ public class AdminModelApi {
 
 		return resultMap;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModelImage
+	 * 2. ClassName  : AdminModelApi.java
+	 * 3. Comment    : 관리자 모델 첨부파일 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "모델 이미지 삭제", notes = "모델 이미지를 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping("/image/{idx}")
+	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
+		String result = "Y";
+
+		CommonImageDTO commonImageDTO = new CommonImageDTO();
+		commonImageDTO.setIdx(idx);
+
+		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
+	}
+
+
+
 
 	/**
 	 * <pre>

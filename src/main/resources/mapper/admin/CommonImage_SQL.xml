@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tsp.new_tsp_project.api.common.image.service.impl.ImageMapper">
 
+	<select id="selectSubCnt" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT MAX(file_num)+1
+        FROM tsp_image
+		WHERE type_idx = #{typeIdx}
+	</select>
+
 	<insert id="addImageFile" parameterType="commonImageDto">
 		/* [CommonImage_SQL.xml].[addImageFile] */
 		INSERT INTO tsp_image

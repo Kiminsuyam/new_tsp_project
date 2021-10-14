@@ -104,7 +104,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
-		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd(),"");
+		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd());
 
 		if("1".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(1);
@@ -153,7 +153,8 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 								  CommonImageDTO commonImageDTO,
 								  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
-		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd(),"");
+
+		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd());
 
 		if("1".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(1);
@@ -183,6 +184,22 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 			throw new TspException(ApiExceptionType.ERROR_MODEL);
 		}
 	}
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModelImage
+	 * 2. ClassName  : AdminModelApiServiceImpl.java
+	 * 3. Comment    : 관리자 모델 이미지 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param commonImageDTO
+	 * @throws Exception
+	 */
+	public Integer deleteModelImage(CommonImageDTO commonImageDTO) throws Exception {
+		return this.adminModelMapper.deleteModelImage(commonImageDTO);
+	}
+
 
 	/**
 	 * <pre>

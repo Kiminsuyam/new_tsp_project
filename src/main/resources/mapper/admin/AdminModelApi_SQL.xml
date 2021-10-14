@@ -80,6 +80,7 @@
 		       reg_date
 		FROM tsp_image
 		WHERE type_name = 'model'
+		AND visible = 'Y'
 		AND type_idx = #{typeIdx}
 		ORDER BY file_num ASC
 	</select>
@@ -154,11 +155,21 @@
 	</insert>
 
 	<!-- 모델 삭제 -->
-	<delete id="deleteModel" parameterType="adminModelDto">
+	<update id="deleteModelImage" parameterType="commonImageDto">
+		/*[AdminModelApi_SQL.xml].[deleteModelImage] */
+		UPDATE tsp_image
+		SET visible = 'N',
+			reg_date = NOW()
+		WHERE idx = #{idx}
+		AND type_name = 'model'
+	</update>
+
+	<!-- 모델 삭제 -->
+	<update id="deleteModel" parameterType="adminModelDto">
 		/*[AdminModelApi_SQL.xml].[deleteModel] */
 		UPDATE tsp_model
 		SET visible = #{visible},
 			update_time = NOW()
 		WHERE idx = #{idx}
-	</delete>
+	</update>
 </mapper>

@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.rmi.ServerError;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,7 +66,7 @@ public class AdminProductionApi {
 
 		Integer productionCnt = this.adminProductionApiService.getProductionCnt(searchMap);
 
-		List<AdminProductionDTO> productionList = null;
+		List<AdminProductionDTO> productionList = new ArrayList<>();
 
 		if(productionCnt > 0) {
 			productionList = this.adminProductionApiService.getProductionList(searchMap);

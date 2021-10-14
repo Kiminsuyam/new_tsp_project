@@ -6,10 +6,10 @@
 	<select id="getProductionCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminProductionApi_SQL.xml].[getProductionCnt] */
 		SELECT COUNT(*)
-		FROM tsp_production tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
-	    AND ti.type_name = 'production'
-	    AND visible = 'Y'
+		FROM tsp_production tp LEFT OUTER JOIN tsp_image ti
+		ON tp.idx = ti.type_idx
+	    WHERE ti.type_name = 'production'
+	    AND tp.visible = 'Y'
 	</select>
 
 	<!-- 프로덕션 리스트 출력 -->
@@ -18,7 +18,7 @@
 		SELECT tp.idx,
 			   title,
 			   description,
-		       visible,
+		       tp.visible,
 		       (SELECT name FROM app_user_info WHERE user_seq = creator) AS adminName,
 		       creator,
 		       create_time AS createTime,
@@ -28,10 +28,10 @@
 			   file_path,
 			   file_name,
 			   concat('/upload/',file_name) AS new_file_name
-		FROM tsp_production tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
-		AND ti.type_name = 'production'
-		AND visible = 'Y'
+		FROM tsp_production tp LEFT OUTER JOIN tsp_image ti
+		ON tp.idx = ti.type_idx
+		WHERE ti.type_name = 'production'
+		AND tp.visible = 'Y'
 		ORDER BY tp.idx ASC
 			LIMIT #{startPage}, #{size}
 	</select>
@@ -42,7 +42,7 @@
 		SELECT tp.idx,
 			   title,
 			   description,
-		       visible,
+		       tp.visible,
 		       (SELECT name FROM app_user_info WHERE user_seq = creator) AS adminName,
 		       creator,
 		       create_time AS createTime,
@@ -51,10 +51,10 @@
 			   concat('/upload/',file_mask) AS file_mask,
 		       file_path,
 		       file_name
-		FROM tsp_production tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
-		AND ti.type_name = 'production'
-		AND visible = 'Y'
+		FROM tsp_production tp LEFT OUTER JOIN tsp_image ti
+		ON tp.idx = ti.type_idx
+		WHERE ti.type_name = 'production'
+		AND tp.visible = 'Y'
 		AND tp.idx = #{idx}
 	</select>
 
