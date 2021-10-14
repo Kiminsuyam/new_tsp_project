@@ -4,6 +4,7 @@ import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
+import com.tsp.new_tsp_project.common.utils.StringUtil;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -103,11 +104,12 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
+		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd(),"");
 
-		if("man".equals(adminModelDTO.getCategoryCd())) {
+		if("1".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(1);
 			adminModelDTO.setCategoryNm("man");
-		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
+		} else if("2".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(2);
 			adminModelDTO.setCategoryNm("woman");
 		} else {
@@ -151,11 +153,12 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 								  CommonImageDTO commonImageDTO,
 								  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
+		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd(),"");
 
-		if("man".equals(adminModelDTO.getCategoryCd())) {
+		if("1".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(1);
 			adminModelDTO.setCategoryNm("man");
-		} else  if("woman".equals(adminModelDTO.getCategoryCd())) {
+		} else if("2".equals(categoryCd)) {
 			adminModelDTO.setCategoryCd(2);
 			adminModelDTO.setCategoryNm("woman");
 		} else {
