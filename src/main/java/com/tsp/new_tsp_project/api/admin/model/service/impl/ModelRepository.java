@@ -1,11 +1,18 @@
 package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
+import com.querydsl.jpa.impl.JPAInsertClause;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelJpaDTO;
+import com.tsp.new_tsp_project.api.admin.model.service.QAdminModelJpaDTO;
 import com.tsp.new_tsp_project.api.common.image.service.CommonImageJpaDTO;
+import com.tsp.new_tsp_project.api.common.image.service.QCommonImageJpaDTO;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +29,7 @@ import java.util.Map;
 
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class ModelRepository {
 
 	/**
@@ -32,6 +40,8 @@ public class ModelRepository {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	private JPAQueryFactory jpaQueryFactory;
 
 	/**
 	 * <pre>
@@ -184,16 +194,39 @@ public class ModelRepository {
 //			adminModelJpaDTO.setCategoryNm("senior");
 //		}
 
-		em.createQuery("update AdminModelJpaDTO m set m.modelKorName = : modelKorName, m.modelEngName = : modelEngName," +
-						"m.modelDescription = : modelDescription, m.height = : height, m.shoes = : shoes, m.categoryAge = : categoryAge " +
-						"where m.idx = : idx")
-				.setParameter("modelKorName", adminModelJpaDTO.getModelKorName())
-				.setParameter("modelEngName", adminModelJpaDTO.getModelEngName())
-				.setParameter("modelDescription", adminModelJpaDTO.getModelDescription())
-				.setParameter("height", adminModelJpaDTO.getHeight())
-				.setParameter("shoes", adminModelJpaDTO.getShoes())
-				.setParameter("categoryAge", adminModelJpaDTO.getCategoryAge())
-				.setParameter("idx", adminModelJpaDTO.getIdx());
+//		em.createQuery("update AdminModelJpaDTO m set m.modelKorName = : modelKorName, m.modelEngName = : modelEngName," +
+//						"m.modelDescription = : modelDescription, m.height = : height, m.shoes = : shoes, m.categoryAge = : categoryAge " +
+//						"where m.idx = : idx")
+//				.setParameter("modelKorName", adminModelJpaDTO.getModelKorName())
+//				.setParameter("modelEngName", adminModelJpaDTO.getModelEngName())
+//				.setParameter("modelDescription", adminModelJpaDTO.getModelDescription())
+//				.setParameter("height", adminModelJpaDTO.getHeight())
+//				.setParameter("shoes", adminModelJpaDTO.getShoes())
+//				.setParameter("categoryAge", adminModelJpaDTO.getCategoryAge())
+//				.setParameter("idx", adminModelJpaDTO.getIdx());
+
+		QAdminModelJpaDTO qAdminModelJpaDTO = QAdminModelJpaDTO.adminModelJpaDTO;
+
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelJpaDTO);
+
+		log.info("modelKorName={}", adminModelJpaDTO.getModelKorName());
+		log.info("modelEngName={}", adminModelJpaDTO.getModelEngName());
+		log.info("modelDescription={}", adminModelJpaDTO.getModelDescription());
+		log.info("height={}", adminModelJpaDTO.getHeight());
+		log.info("shoes={}", adminModelJpaDTO.getShoes());
+		log.info("modelKorName={}", adminModelJpaDTO.getCategoryAge());
+		log.info("modelKorName={}", adminModelJpaDTO.getIdx());
+//
+		update.set(qAdminModelJpaDTO.modelKorName, adminModelJpaDTO.getModelKorName())
+				.set(qAdminModelJpaDTO.modelEngName, adminModelJpaDTO.getModelEngName())
+				.set(qAdminModelJpaDTO.modelDescription, adminModelJpaDTO.getModelDescription())
+				.set(qAdminModelJpaDTO.height, adminModelJpaDTO.getHeight())
+				.set(qAdminModelJpaDTO.size3, adminModelJpaDTO.getSize3())
+				.set(qAdminModelJpaDTO.shoes, adminModelJpaDTO.getShoes())
+				.set(qAdminModelJpaDTO.categoryAge, adminModelJpaDTO.getCategoryAge())
+						.where(qAdminModelJpaDTO.idx.eq(adminModelJpaDTO.getIdx())).execute();
+
+
 
 		commonImageJpaDTO.setTypeName("model");
 		commonImageJpaDTO.setTypeIdx(adminModelJpaDTO.getIdx());
@@ -223,11 +256,14 @@ public class ModelRepository {
 		}
 
 		if(files != null) {
-			em.createQuery("update CommonImageJpaDTO m set m.visible = : visible where m.typeIdx = : typeIdx and m.typeName = : typeName")
-					.setParameter("visible", "Y")
+			Integer result = em.createQuery("update CommonImageJpaDTO m set m.visible = : visible where m.typeIdx = : typeIdx and m.typeName = : typeName")
+					.setParameter("visible", "N")
 					.setParameter("typeIdx", commonImageJpaDTO.getTypeIdx())
 					.setParameter("typeName", "model").executeUpdate();
 
+			if(result > 0) {
+				em.detach(commonImageJpaDTO);
+			}
 
 			for (MultipartFile file : files) {
 				try {
@@ -260,13 +296,23 @@ public class ModelRepository {
 					log.info("fileMask={}", fileMask);
 					log.info("filePath={}", uploadPath+fileMask);
 					log.info("modelIdx={}", commonImageJpaDTO.getTypeIdx());
+					log.info("typeName={}", commonImageJpaDTO.getTypeName());
 					commonImageJpaDTO.setFileNum(mainCnt);
 					commonImageJpaDTO.setFileName(file.getOriginalFilename());                   // 파일명
 					commonImageJpaDTO.setFileSize(fileSize);  // 파일Size
 					commonImageJpaDTO.setFileMask(fileMask);                                        // 파일Mask
+					commonImageJpaDTO.setVisible("Y");
 					commonImageJpaDTO.setFilePath(uploadPath + fileMask);
 
-					em.persist(commonImageJpaDTO);
+					QCommonImageJpaDTO qCommonImageJpaDTO = QCommonImageJpaDTO.commonImageJpaDTO;
+					JPAInsertClause jpaInsertClause = new JPAInsertClause(em, qCommonImageJpaDTO);
+
+					jpaInsertClause.columns(qCommonImageJpaDTO.typeIdx, qCommonImageJpaDTO.typeName, qCommonImageJpaDTO.fileNum, qCommonImageJpaDTO.fileName,
+									qCommonImageJpaDTO.fileSize, qCommonImageJpaDTO.fileMask, qCommonImageJpaDTO.imageType, qCommonImageJpaDTO.visible)
+							.values(commonImageJpaDTO.getTypeIdx(), commonImageJpaDTO.getTypeName(), commonImageJpaDTO.getFileNum(),
+									commonImageJpaDTO.getFileName(), commonImageJpaDTO.getFileSize(), commonImageJpaDTO.getFileMask(),
+									commonImageJpaDTO.getImageType(), commonImageJpaDTO.getVisible()).execute();
+//					em.persist(commonImageJpaDTO);
 					mainCnt++;
 					// 이미지 정보 insert
 //					if(imageMapper.addImageFile(commonImageDTO)>0) {
@@ -274,6 +320,7 @@ public class ModelRepository {
 //					}
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					throw new Exception();
 				}
 			}

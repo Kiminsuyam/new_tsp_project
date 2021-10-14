@@ -54,7 +54,7 @@ public class CommonImageJpaDTO {
 	@ApiModelProperty(value = "사용 여부", hidden = true)
 	private String visible;
 
-	@Column(name = "reg_date", insertable = false)
+	@Column(name = "reg_date", insertable = false, updatable = false)
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
 }

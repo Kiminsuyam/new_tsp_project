@@ -24,7 +24,7 @@ public class AdminModelJpaDTO extends NewCommonJpaDTO {
 	@Column(name = "category_cd")
 	Integer categoryCd;
 
-	@Column(name = "category_nm")
+	@Column(name = "category_nm", updatable = false, insertable = false)
 	String categoryNm;
 
 	@Column(name = "category_age")
