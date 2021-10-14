@@ -96,10 +96,18 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public List<AdminModelJpaDTO> findAll(Map<String, Object> modelMap) throws Exception{
-		return em.createQuery("select m from AdminModelJpaDTO m", AdminModelJpaDTO.class)
-				.setFirstResult(StringUtil.getInt(modelMap.get("startPage"),0))
-				.setMaxResults(StringUtil.getInt(modelMap.get("size"),0))
-				.getResultList();
+//		return em.createQuery("select m from AdminModelJpaDTO m", AdminModelJpaDTO.class)
+//				.setFirstResult(StringUtil.getInt(modelMap.get("startPage"),0))
+//				.setMaxResults(StringUtil.getInt(modelMap.get("size"),0))
+//				.getResultList();
+
+		JPAQueryFactory query = new JPAQueryFactory(em);
+		QAdminModelJpaDTO m = QAdminModelJpaDTO.adminModelJpaDTO;
+
+		return query.selectFrom(m)
+				.offset(StringUtil.getInt(modelMap.get("startPage"),0))
+				.limit(StringUtil.getInt(modelMap.get("size"),0)).fetch();
+
 	}
 
 	/**
@@ -115,12 +123,14 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public Map<String, Object> findOneModel(AdminModelJpaDTO adminModelJpaDTO) throws Exception {
-		TypedQuery<AdminModelJpaDTO> query = em.createQuery("select m from AdminModelJpaDTO m where m.idx = :idx", AdminModelJpaDTO.class);
-		query.setParameter("idx", adminModelJpaDTO.getIdx());
+//		TypedQuery<AdminModelJpaDTO> query = em.createQuery("select m from AdminModelJpaDTO m where m.idx = :idx", AdminModelJpaDTO.class);
+
+		JPAQueryFactory query = new JPAQueryFactory(em);
+		QAdminModelJpaDTO m = QAdminModelJpaDTO.adminModelJpaDTO;
 
 		Map<String, Object> modelMap = new HashMap<>();
 
-		modelMap.put("modelInfo", query.getSingleResult());
+		modelMap.put("modelInfo", query.selectFrom(m).where(m.idx.eq(adminModelJpaDTO.getIdx())).fetch());
 
 		return modelMap;
 
@@ -307,11 +317,14 @@ public class ModelRepository {
 					QCommonImageJpaDTO qCommonImageJpaDTO = QCommonImageJpaDTO.commonImageJpaDTO;
 					JPAInsertClause jpaInsertClause = new JPAInsertClause(em, qCommonImageJpaDTO);
 
-					jpaInsertClause.columns(qCommonImageJpaDTO.typeIdx, qCommonImageJpaDTO.typeName, qCommonImageJpaDTO.fileNum, qCommonImageJpaDTO.fileName,
-									qCommonImageJpaDTO.fileSize, qCommonImageJpaDTO.fileMask, qCommonImageJpaDTO.imageType, qCommonImageJpaDTO.visible)
-							.values(commonImageJpaDTO.getTypeIdx(), commonImageJpaDTO.getTypeName(), commonImageJpaDTO.getFileNum(),
-									commonImageJpaDTO.getFileName(), commonImageJpaDTO.getFileSize(), commonImageJpaDTO.getFileMask(),
-									commonImageJpaDTO.getImageType(), commonImageJpaDTO.getVisible()).execute();
+					jpaInsertClause.set(qCommonImageJpaDTO.typeIdx, commonImageJpaDTO.getTypeIdx())
+									.set(qCommonImageJpaDTO.typeName, commonImageJpaDTO.getTypeName())
+									.set(qCommonImageJpaDTO.fileNum, commonImageJpaDTO.getFileNum())
+									.set(qCommonImageJpaDTO.fileName, commonImageJpaDTO.getFileName())
+									.set(qCommonImageJpaDTO.fileSize, commonImageJpaDTO.getFileSize())
+									.set(qCommonImageJpaDTO.fileMask, commonImageJpaDTO.getFileMask())
+									.set(qCommonImageJpaDTO.imageType, commonImageJpaDTO.getImageType())
+									.set(qCommonImageJpaDTO.visible, commonImageJpaDTO.getVisible()).execute();
 //					em.persist(commonImageJpaDTO);
 					mainCnt++;
 					// 이미지 정보 insert

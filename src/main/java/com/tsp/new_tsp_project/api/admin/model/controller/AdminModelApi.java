@@ -23,6 +23,7 @@ import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,7 +64,7 @@ public class AdminModelApi {
 
 		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);
 
-		List<AdminModelDTO> modelList = null;
+		List<AdminModelDTO> modelList = new ArrayList<>();
 
 		if(modelListCnt > 0) {
 			modelList = this.adminModelApiService.getModelList(modelMap);
