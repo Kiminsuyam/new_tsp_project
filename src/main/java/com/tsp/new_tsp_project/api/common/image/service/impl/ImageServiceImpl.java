@@ -85,7 +85,9 @@ public class ImageServiceImpl implements ImageService {
 
         if(files != null) {
             if("update".equals(flag)) {
-                imageMapper.deleteImageFile(commonImageDTO);
+                if(!"model".equals(commonImageDTO.getTypeName())) {
+                    imageMapper.deleteImageFile(commonImageDTO);
+                }
             }
             for (MultipartFile file : files) {
                 try {
@@ -102,10 +104,17 @@ public class ImageServiceImpl implements ImageService {
                         }
                     }
 
-                    if(mainCnt == 0) {
-                        commonImageDTO.setImageType("main");
+                    if("insert".equals(flag)) {
+                        if(mainCnt == 0) {
+                            commonImageDTO.setImageType("main");
+                        } else {
+                            commonImageDTO.setImageType("sub"+mainCnt);
+                        }
                     } else {
-                        commonImageDTO.setImageType("sub"+mainCnt);
+                        if("model".equals(commonImageDTO.getTypeName())) {
+                            commonImageDTO.setImageType("sub"+imageMapper.selectSubCnt(commonImageDTO));
+                            commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
+                        }
                     }
 
                     String filePath = uploadPath + fileMask;
@@ -118,7 +127,7 @@ public class ImageServiceImpl implements ImageService {
                     log.info("fileMask={}", fileMask);
                     log.info("filePath={}", uploadPath+fileMask);
                     log.info("modelIdx={}", commonImageDTO.getTypeIdx());
-                    commonImageDTO.setFileNum(mainCnt);
+                    commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
                     commonImageDTO.setFileName(file.getOriginalFilename());                   // 파일명
                     commonImageDTO.setFileSize(fileSize);  // 파일Size
                     commonImageDTO.setFileMask(fileMask);                                        // 파일Mask
@@ -130,6 +139,7 @@ public class ImageServiceImpl implements ImageService {
                     }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     throw new Exception();
                 }
             }
