@@ -112,8 +112,12 @@ public class ImageServiceImpl implements ImageService {
                         }
                     } else {
                         if("model".equals(commonImageDTO.getTypeName())) {
-                            commonImageDTO.setImageType("sub"+imageMapper.selectSubCnt(commonImageDTO));
-                            commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
+                            if(imageMapper.selectSubCnt(commonImageDTO) == 1) {
+                                commonImageDTO.setImageType("main");
+                            } else {
+                                commonImageDTO.setImageType("sub"+imageMapper.selectSubCnt(commonImageDTO));
+                                commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
+                            }
                         }
                     }
 

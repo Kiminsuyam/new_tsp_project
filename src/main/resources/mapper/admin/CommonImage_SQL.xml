@@ -3,7 +3,7 @@
 <mapper namespace="com.tsp.new_tsp_project.api.common.image.service.impl.ImageMapper">
 
 	<select id="selectSubCnt" parameterType="java.util.HashMap" resultType="Integer">
-		SELECT MAX(file_num)+1
+		SELECT MAX(IFNULL(file_num,0))+1
         FROM tsp_image
 		WHERE type_idx = #{typeIdx}
 	</select>
