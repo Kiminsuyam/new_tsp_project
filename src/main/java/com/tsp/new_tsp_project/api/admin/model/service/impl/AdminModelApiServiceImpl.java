@@ -104,18 +104,6 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
-		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd());
-
-		if("1".equals(categoryCd)) {
-			adminModelDTO.setCategoryCd(1);
-			adminModelDTO.setCategoryNm("man");
-		} else if("2".equals(categoryCd)) {
-			adminModelDTO.setCategoryCd(2);
-			adminModelDTO.setCategoryNm("woman");
-		} else {
-			adminModelDTO.setCategoryCd(3);
-			adminModelDTO.setCategoryNm("senior");
-		}
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
@@ -153,19 +141,6 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 								  CommonImageDTO commonImageDTO,
 								  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
-
-		String categoryCd = StringUtil.getString(adminModelDTO.getCategoryCd());
-
-		if("1".equals(categoryCd)) {
-			adminModelDTO.setCategoryCd(1);
-			adminModelDTO.setCategoryNm("man");
-		} else if("2".equals(categoryCd)) {
-			adminModelDTO.setCategoryCd(2);
-			adminModelDTO.setCategoryNm("woman");
-		} else {
-			adminModelDTO.setCategoryCd(3);
-			adminModelDTO.setCategoryNm("senior");
-		}
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {

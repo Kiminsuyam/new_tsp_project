@@ -2,7 +2,6 @@ package com.tsp.new_tsp_project.api.admin.model.controller;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
-import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
@@ -14,7 +13,6 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -102,11 +100,11 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String insertMenModel(@Valid AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  NewCommonDTO newCommonDTO,
-								  HttpServletRequest request,
-								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+	public String insertMenModel(AdminModelDTO adminModelDTO,
+								 CommonImageDTO commonImageDTO,
+								 NewCommonDTO newCommonDTO,
+								 HttpServletRequest request,
+								 @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
 		String result = "N";
 
@@ -151,6 +149,14 @@ public class AdminModelApi {
 
 //		searchCommon.giveAuth(request, newCommonDTO);
 
+		String categoryNm = "";
+		if(categoryCd == 1) {
+			categoryNm = "man";
+		} else if(categoryCd == 2) {
+			categoryNm = "woman";
+		} else {
+			categoryNm = "senior";
+		}
 		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
 
 		String result = "N";
@@ -232,9 +238,6 @@ public class AdminModelApi {
 		return result;
 	}
 
-
-
-
 	/**
 	 * <pre>
 	 * 1. MethodName : deleteModel
@@ -258,8 +261,7 @@ public class AdminModelApi {
 		String result = "Y";
 
 		AdminModelDTO adminModelDTO = new AdminModelDTO();
-		adminModelDTO.setVisible("N");
-		adminModelDTO.setIdx(idx);
+		adminModelDTO.builder().visible("N").idx(idx);
 
 		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
 			result = "Y";

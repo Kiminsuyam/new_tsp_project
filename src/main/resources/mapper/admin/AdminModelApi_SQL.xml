@@ -28,9 +28,11 @@
 	<!-- 모델 리스트 출력 -->
 	<select id="getModelList" parameterType="java.util.HashMap" resultType="adminModelDto">
 		/*[AdminModelApi_SQL.xml].[getModelList] */
-		SELECT tm.idx,
+		SELECT
+			   @ROWNUM := @ROWNUM + 1 AS RNUM,
+		       tm.idx,
 			   tm.category_cd,
-			   tm.category_nm,
+		       tc.category_nm,
 		       tm.category_age,
 			   tm.model_kor_name,
 			   tm.model_eng_name,
@@ -40,10 +42,11 @@
 			   tm.size3,
 			   tm.shoes,
 		       tm.create_time
-		FROM tsp_model tm
-		WHERE tm.visible = 'Y'
-		AND category_cd = #{categoryCd}
-		ORDER BY tm.idx ASC
+		FROM tsp_model tm, tsp_cmm_code tc, ( SELECT @ROWNUM := 0) temp
+		WHERE tm.category_cd =  tc.category_cd
+		AND tm.visible = 'Y'
+		AND tc.category_cd = #{categoryCd}
+		ORDER BY RNUM DESC
 			LIMIT #{startPage}, #{size}
 	</select>
 
@@ -51,7 +54,7 @@
 		/*[AdminModelApi_SQL.xml].[getModelInfo] */
 		SELECT tm.idx,
 			   tm.category_cd,
-			   tm.category_nm,
+			   tc.category_nm,
 		       tm.category_age,
 			   tm.model_kor_name,
 		       tm.model_eng_name,
@@ -60,8 +63,9 @@
 		       tm.height,
 		       tm.size3,
 		       tm.shoes
-		FROM tsp_model tm
-		  WHERE tm.visible = 'Y'
+		FROM tsp_model tm, tsp_cmm_code tc
+		  WHERE tm.category_cd = tc.category_cd
+		  AND tm.visible = 'Y'
 		  AND tm.category_cd = #{categoryCd}
 		  AND tm.idx = #{idx}
 	</select>
@@ -88,7 +92,6 @@
 	<insert id="insertModel" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
 		/*[AdminModelApi_SQL.xml].[insertModel] */
 		INSERT INTO tsp_model(category_cd,
-							  category_nm,
 		                      category_age,
 							  model_kor_name,
 		                      model_eng_name,
@@ -102,7 +105,6 @@
 							  updater,
 							  update_time)
 		VALUES (#{categoryCd},
-				#{categoryNm},
 		        #{categoryAge},
 				#{modelKorName},
 				#{modelEngName},
@@ -133,26 +135,6 @@
 		WHERE idx = #{idx}
 		AND category_cd = #{categoryCd}
 	</update>
-
-	<insert id="insertModelOpt" parameterType="adminModelDto" useGeneratedKeys="true" keyProperty="idx">
-		/*[AdminModelApi_SQL.xml].[insertModelOpt] */
-		INSERT INTO tsp_model_opt(model_idx,
-							  	  height,
-								  size3,
-		                          shoes,
-		                          creator,
-		                          create_time,
-		                          updater,
-		                          update_time)
-		VALUES (#{modelIdx},
-				#{height},
-				#{size3},
-				#{shoes},
-				'1',
-				now(),
-				'1',
-				now())
-	</insert>
 
 	<!-- 모델 삭제 -->
 	<update id="deleteModelImage" parameterType="commonImageDto">

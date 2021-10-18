@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.common.image.service.impl;
 
 import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
+import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,8 +116,8 @@ public class ImageServiceImpl implements ImageService {
                             if(imageMapper.selectSubCnt(commonImageDTO) == 1) {
                                 commonImageDTO.setImageType("main");
                             } else {
-                                commonImageDTO.setImageType("sub"+imageMapper.selectSubCnt(commonImageDTO));
-                                commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
+                                commonImageDTO.setImageType("sub"+StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
+                                commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
                             }
                         }
                     }
@@ -131,7 +132,7 @@ public class ImageServiceImpl implements ImageService {
                     log.info("fileMask={}", fileMask);
                     log.info("filePath={}", uploadPath+fileMask);
                     log.info("modelIdx={}", commonImageDTO.getTypeIdx());
-                    commonImageDTO.setFileNum(imageMapper.selectSubCnt(commonImageDTO));
+                    commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
                     commonImageDTO.setFileName(file.getOriginalFilename());                   // 파일명
                     commonImageDTO.setFileSize(fileSize);  // 파일Size
                     commonImageDTO.setFileMask(fileMask);                                        // 파일Mask

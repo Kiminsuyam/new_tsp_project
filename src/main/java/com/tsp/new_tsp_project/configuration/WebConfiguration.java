@@ -28,7 +28,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 //				.allowedOrigins("http://ec2-13-124-84-154.ap-northeast-2.compute.amazonaws.com/")
-				.allowedOrigins("http://localhost:8080")
+				.allowedOrigins("http://localhost:8080/")
 				.allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
 				.allowedHeaders("*")
 				.maxAge(3600);
