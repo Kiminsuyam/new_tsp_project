@@ -23,20 +23,18 @@
 		FROM tsp_model
 		WHERE visible = 'Y'
 		AND category_cd = #{categoryCd}
-		<if test='searchKeyword != null and searchKeyword != ""'>
-			<choose>
-				<when test='searchType == "0"'>
-					AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%')
-					OR model_description LIKE CONCAT ('%', #{searchKeyword},'%'))
-				</when>
-				<when test='searchType == "1"'>
-					AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%'))
-				</when>
-				<otherwise>
-					AND model_description LIKE CONCAT ('%', #{searchKeyword},'%')
-				</otherwise>
-			</choose>
-		</if>
+		<choose>
+			<when test='searchType == "0"'>
+				AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+				OR model_description LIKE CONCAT ('%', #{searchKeyword},'%'))
+			</when>
+			<when test='searchType == "1"'>
+				AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%'))
+			</when>
+			<otherwise>
+				AND model_description LIKE CONCAT ('%', #{searchKeyword},'%')
+			</otherwise>
+		</choose>
 	</select>
 
 	<!-- 모델 리스트 출력 -->
@@ -60,20 +58,18 @@
 		WHERE tm.category_cd =  tc.category_cd
 		AND tm.visible = 'Y'
 		AND tc.category_cd = #{categoryCd}
-		<if test='searchKeyword != null and searchKeyword != ""'>
-			<choose>
-				<when test='searchType == "0"'>
-					AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%')
-					OR model_description LIKE CONCAT ('%', #{searchKeyword},'%'))
-				</when>
-				<when test='searchType == "1"'>
-					AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%'))
-				</when>
-				<otherwise>
-					AND model_description LIKE CONCAT ('%', #{searchKeyword},'%')
-				</otherwise>
-			</choose>
-		</if>
+		<choose>
+			<when test='searchType == "0"'>
+				AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+				OR model_description LIKE CONCAT ('%', #{searchKeyword},'%'))
+			</when>
+			<when test='searchType == "1"'>
+				AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%'))
+			</when>
+			<otherwise>
+				AND model_description LIKE CONCAT ('%', #{searchKeyword},'%')
+			</otherwise>
+		</choose>
 		ORDER BY RNUM DESC
 			LIMIT #{startPage}, #{size}
 	</select>

@@ -55,7 +55,7 @@ public class AdminPortFolioApi {
 	public ConcurrentHashMap getPortFolioList(Page page, String searchType, String searchKeyword) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchType, searchKeyword);
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchKeyword, searchType);
 
 		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 

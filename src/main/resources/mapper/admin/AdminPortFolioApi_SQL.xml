@@ -8,20 +8,18 @@
 		SELECT COUNT(*)
 		FROM tsp_portFolio tp
 		WHERE tp.visible = 'Y'
-		<if test='searchKeyword != null and searchKeyword != ""'>
-			<choose>
-				<when test='searchType == "0"'>
-					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-					OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
-				</when>
-				<when test='searchType == "1"'>
-					AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-				</when>
-				<otherwise>
-					AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
-				</otherwise>
-			</choose>
-		</if>
+		<choose>
+			<when test='searchType == "0"'>
+				AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+				OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
+			</when>
+			<when test='searchType == "1"'>
+				AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+			</when>
+			<otherwise>
+				AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
+			</otherwise>
+		</choose>
 	</select>
 
 	<!-- 포트폴리오 리스트 출력 -->
@@ -36,20 +34,18 @@
 			   tp.video_url
 		FROM tsp_portFolio tp
 		WHERE tp.visible = 'Y'
-		<if test='searchKeyword != null and searchKeyword != ""'>
-			<choose>
-				<when test='searchType == "0"'>
-					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-					OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
-				</when>
-				<when test='searchType == "1"'>
-					AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-				</when>
-				<otherwise>
-					AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
-				</otherwise>
-			</choose>
-		</if>
+		<choose>
+			<when test='searchType == "0"'>
+				AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+				OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
+			</when>
+			<when test='searchType == "1"'>
+				AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+			</when>
+			<otherwise>
+				AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
+			</otherwise>
+		</choose>
 			LIMIT #{startPage}, #{size}
 	</select>
 
