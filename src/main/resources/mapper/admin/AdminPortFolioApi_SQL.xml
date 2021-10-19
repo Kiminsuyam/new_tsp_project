@@ -6,8 +6,8 @@
 	<select id="getPortFolioCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioCnt] */
 		SELECT COUNT(*)
-		FROM tsp_portFolio tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
+		FROM tsp_portFolio tp LEFT OUTER JOIN tsp_image ti
+		ON tp.idx = ti.type_idx
 		AND ti.type_name = 'portFolio'
 		AND tp.visible = 'Y'
 	</select>
@@ -25,8 +25,8 @@
 			   file_mask,
 			   file_path,
 			   file_name
-		FROM tsp_portFolio tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
+		FROM tsp_portFolio tp LEFT OUTER JOIN tsp_image ti
+		ON tp.idx = ti.type_idx
 		  AND ti.type_name = 'portFolio'
 		  AND tp.visible = 'Y'
 			LIMIT #{startPage}, #{size}
@@ -41,14 +41,9 @@
 			   tp.title,
 			   tp.description,
 			   tp.hash_tag,
-			   tp.video_url,
-			   file_mask,
-			   file_path,
-			   file_name
-		FROM tsp_portFolio tp, tsp_image ti
-		WHERE tp.idx = ti.type_idx
-		  AND ti.type_name = 'portFolio'
-		  AND tp.visible = 'Y'
+			   tp.video_url
+		FROM tsp_portFolio tp
+		  WHERE tp.visible = 'Y'
 		  AND tp.idx = #{idx}
 	</select>
 
@@ -93,4 +88,23 @@
 		update_time = NOW()
 		WHERE idx = #{idx}
 	</update>
+
+	<select id="getImageList" parameterType="java.util.HashMap" resultType="commonImageDto">
+		/*[AdminModelApi_SQL.xml].[getImageList] */
+		SELECT idx,
+			   type_idx,
+			   type_name,
+			   file_num,
+			   file_name,
+			   file_size,
+			   concat('/upload/',file_mask) AS file_mask,
+			   file_path,
+			   image_type,
+			   reg_date
+		FROM tsp_image
+		WHERE type_name = 'portFolio'
+		  AND visible = 'Y'
+		  AND type_idx = #{typeIdx}
+		ORDER BY file_num ASC
+	</select>
 </mapper>

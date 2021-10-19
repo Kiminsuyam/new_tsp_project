@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl;
 
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
@@ -80,4 +81,18 @@ public interface AdminPortFolioMapper {
 	 * @throws Exception
 	 */
 	Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getImageList
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 이미지 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param commonImageDTO
+	 * @throws Exception
+	 */
+	List<CommonImageDTO> getImageList(CommonImageDTO commonImageDTO) throws Exception;
 }

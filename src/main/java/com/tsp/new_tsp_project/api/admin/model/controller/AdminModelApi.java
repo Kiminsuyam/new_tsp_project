@@ -124,7 +124,7 @@ public class AdminModelApi {
 	 * <pre>
 	 * 1. MethodName : updateMenModel
 	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 10. 06.
 	 * </pre>
@@ -175,7 +175,7 @@ public class AdminModelApi {
 	 * <pre>
 	 * 1. MethodName : getMenModelEdit
 	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 남자 모델 상세
+	 * 3. Comment    : 관리자 모델 상세
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>

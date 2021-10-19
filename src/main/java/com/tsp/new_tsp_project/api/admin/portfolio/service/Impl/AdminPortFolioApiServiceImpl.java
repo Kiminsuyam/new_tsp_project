@@ -70,7 +70,13 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 */
 	public ConcurrentHashMap getPortFolioInfo(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
 		ConcurrentHashMap portFolioMap = new ConcurrentHashMap();
+
+		CommonImageDTO commonImageDTO = new CommonImageDTO();
+		commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
+		commonImageDTO.setTypeName("portFolio");
+
 		portFolioMap.put("portFolioInfo", this.adminPortFolioMapper.getPortFolioInfo(adminPortFolioDTO));
+		portFolioMap.put("portFolioImageList", this.adminPortFolioMapper.getImageList(commonImageDTO));
 		return portFolioMap;
 	}
 
