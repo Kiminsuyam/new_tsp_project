@@ -6,14 +6,26 @@
 	<select id="getPortFolioCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioCnt] */
 		SELECT COUNT(*)
-		FROM tsp_portFolio tp LEFT OUTER JOIN tsp_image ti
-		ON tp.idx = ti.type_idx
-		AND ti.type_name = 'portFolio'
-		AND tp.visible = 'Y'
+		FROM tsp_portFolio tp
+		WHERE tp.visible = 'Y'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+				<when test='searchType == "0"'>
+					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+					OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
+				</when>
+				<when test='searchType == "1"'>
+					AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+				</when>
+				<otherwise>
+					AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
+				</otherwise>
+			</choose>
+		</if>
 	</select>
 
 	<!-- 포트폴리오 리스트 출력 -->
-	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="adminModelDto">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioList] */
 		SELECT tp.idx,
 			   tp.category_cd,
@@ -21,14 +33,23 @@
 			   tp.title,
 			   tp.description,
 			   tp.hash_tag,
-			   tp.video_url,
-			   file_mask,
-			   file_path,
-			   file_name
-		FROM tsp_portFolio tp LEFT OUTER JOIN tsp_image ti
-		ON tp.idx = ti.type_idx
-		  AND ti.type_name = 'portFolio'
-		  AND tp.visible = 'Y'
+			   tp.video_url
+		FROM tsp_portFolio tp
+		WHERE tp.visible = 'Y'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+				<when test='searchType == "0"'>
+					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+					OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
+				</when>
+				<when test='searchType == "1"'>
+					AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+				</when>
+				<otherwise>
+					AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
+				</otherwise>
+			</choose>
+		</if>
 			LIMIT #{startPage}, #{size}
 	</select>
 
@@ -74,8 +95,8 @@
 	</insert>
 
 	<!-- 프로덕션 수정 -->
-	<update id="updateProduction" parameterType="adminProductionDto">
-		UPDATE tsp_production
+	<update id="updatePortFolio" parameterType="adminPortFolioDto">
+		UPDATE tsp_portFolio
 		SET
 		<if test="title != null and title != ''">title = #{title},</if>
 		<if test="videoUrl != null and videoUrl != ''">video_url = #{videoUrl},</if>
@@ -107,4 +128,12 @@
 		  AND type_idx = #{typeIdx}
 		ORDER BY file_num ASC
 	</select>
+
+	<!-- 포트폴리오 삭제 -->
+	<update id="deletePortFolio" parameterType="adminPortFolioDto">
+		UPDATE tsp_portFolio
+		SET visible = 'N',
+		update_time = NOW()
+		WHERE idx = #{idx}
+	</update>
 </mapper>

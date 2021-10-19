@@ -52,10 +52,10 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getPortFolioList(Page page, HttpServletRequest request) throws Exception {
+	public ConcurrentHashMap getPortFolioList(Page page, String searchType, String searchKeyword) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"","");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchType, searchKeyword);
 
 		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 
@@ -99,8 +99,7 @@ public class AdminPortFolioApi {
 	public ConcurrentHashMap getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap;
 
-		AdminPortFolioDTO adminPortFolioDTO = new AdminPortFolioDTO();
-		adminPortFolioDTO.setIdx(idx);
+		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder().idx(idx).build();
 
 		portFolioMap = this.adminPortFolioApiService.getPortFolioInfo(adminPortFolioDTO);
 
@@ -175,4 +174,38 @@ public class AdminPortFolioApi {
 
 		return result;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : AdminPortFolio.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 삭제", notes = "포트폴리오를 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping(value = "/{idx}")
+	public String deletePortFolio(@PathVariable(value = "idx") Integer idx) throws Exception {
+		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder().idx(idx).build();
+
+		String result = "N";
+
+		if(this.adminPortFolioApiService.deletePortFolio(adminPortFolioDTO) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+
+		return result;
+	}
+
 }

@@ -3,13 +3,15 @@ package com.tsp.new_tsp_project.api.admin.portfolio.service;
 import com.tsp.new_tsp_project.api.common.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class AdminPortFolioDTO extends NewCommonDTO {
 

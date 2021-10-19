@@ -174,4 +174,20 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 		}
 		return num;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : AdminPortFolioServiceImpl.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	public Integer deletePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
+		return this.adminPortFolioMapper.deletePortFolio(adminPortFolioDTO);
+	}
 }

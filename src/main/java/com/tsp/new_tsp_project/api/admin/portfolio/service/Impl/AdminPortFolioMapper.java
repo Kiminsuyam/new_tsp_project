@@ -95,4 +95,18 @@ public interface AdminPortFolioMapper {
 	 * @throws Exception
 	 */
 	List<CommonImageDTO> getImageList(CommonImageDTO commonImageDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioDTO
+	 * @throws Exception
+	 */
+	Integer deletePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
 }

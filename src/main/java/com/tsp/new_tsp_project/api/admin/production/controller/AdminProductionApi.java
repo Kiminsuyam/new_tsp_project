@@ -59,11 +59,11 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getProductionList(Page page, HttpServletRequest request) throws Exception {
+	public ConcurrentHashMap getProductionList(Page page, String searchType, String searchKeyword) throws Exception {
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"","");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchType, searchKeyword);
 
 		Integer productionCnt = this.adminProductionApiService.getProductionCnt(searchMap);
 
@@ -107,8 +107,7 @@ public class AdminProductionApi {
 	public ConcurrentHashMap getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> productionMap;
 
-		AdminProductionDTO adminProductionDTO = new AdminProductionDTO();
-		adminProductionDTO.setIdx(idx);
+		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().idx(idx).build();
 
 		productionMap = this.adminProductionApiService.getProductionInfo(adminProductionDTO);
 
@@ -171,10 +170,9 @@ public class AdminProductionApi {
 								   CommonImageDTO commonImageDTO,
 								   @RequestParam(value="imageFiles", required=false) List<MultipartFile> files,
 								   BindingResult bindingResult) throws Exception {
-		String result = "Y";
+		String result = "N";
 
-		adminProductionDTO.setIdx(idx);
-		adminProductionDTO.setUpdater(1);
+		adminProductionDTO.builder().idx(idx).build();
 
 		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
@@ -205,11 +203,9 @@ public class AdminProductionApi {
 	})
 	@DeleteMapping(value = "/{idx}")
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
-		String result = "Y";
+		String result = "N";
 
-		AdminProductionDTO adminProductionDTO = new AdminProductionDTO();
-		adminProductionDTO.setVisible("N");
-		adminProductionDTO.setIdx(idx);
+		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().visible("N").idx(idx).build();
 
 		if(this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
 			result = "Y";
