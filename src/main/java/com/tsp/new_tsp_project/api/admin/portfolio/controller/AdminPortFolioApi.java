@@ -128,7 +128,7 @@ public class AdminPortFolioApi {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								  CommonImageDTO commonImageDTO,
-								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+								  @RequestParam(value = "imageFiles", required = false) List<MultipartFile> files) throws Exception {
 		String result = "N";
 
 		if(this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
@@ -162,7 +162,7 @@ public class AdminPortFolioApi {
 	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								  CommonImageDTO commonImageDTO,
-								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+								  @RequestParam(value = "imageFiles", required = false) List<MultipartFile> files) throws Exception {
 		String result = "N";
 
 		if(this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {

@@ -104,7 +104,7 @@ public class AdminModelApi {
 								 CommonImageDTO commonImageDTO,
 								 NewCommonDTO newCommonDTO,
 								 HttpServletRequest request,
-								 @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+								 @RequestParam(name="imageFiles", required = false) List<MultipartFile> fileName) throws Exception{
 
 		String result = "N";
 
@@ -149,19 +149,19 @@ public class AdminModelApi {
 
 //		searchCommon.giveAuth(request, newCommonDTO);
 
-		String categoryNm = "";
-		if(categoryCd == 1) {
-			categoryNm = "man";
-		} else if(categoryCd == 2) {
-			categoryNm = "woman";
-		} else {
-			categoryNm = "senior";
-		}
+		Map<String, Object> modelMap = new ConcurrentHashMap<>();
+
+		String [] arrayState = request.getParameter("imageState").split(",");
+		String [] arrayIdx = request.getParameter("idxState").split(",");
+
+		modelMap.put("arrayState", arrayState);
+		modelMap.put("arrayIdx", arrayIdx);
+
 		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
 
 		String result = "N";
 
-		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName) > 0){
+		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName, modelMap) > 0){
 			result = "Y";
 		} else {
 			result = "N";

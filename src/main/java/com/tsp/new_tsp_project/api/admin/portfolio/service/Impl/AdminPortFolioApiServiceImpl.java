@@ -88,7 +88,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 */
 	public Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								   CommonImageDTO commonImageDTO,
-								   MultipartFile[] files) throws Exception {
+								   List<MultipartFile> files) throws Exception {
 
 		int num = 0;
 
@@ -135,7 +135,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 */
 	public Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								   CommonImageDTO commonImageDTO,
-								   MultipartFile[] files) throws Exception {
+								   List<MultipartFile> files) throws Exception {
 
 		int num = 0;
 

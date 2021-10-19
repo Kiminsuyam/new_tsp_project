@@ -66,7 +66,7 @@ public interface AdminProductionApiService {
 	 */
 	Integer insertProduction(AdminProductionDTO adminProductionDTO,
 							 CommonImageDTO commonImageDTO,
-							 MultipartFile[] files) throws Exception;
+							 List<MultipartFile> files) throws Exception;
 
 	/**
 	 * <pre>
@@ -82,7 +82,7 @@ public interface AdminProductionApiService {
 	 */
 	Integer updateProduction(AdminProductionDTO adminProductionDTO,
 							 CommonImageDTO commonImageDTO,
-							 MultipartFile[] files) throws Exception;
+							 List<MultipartFile> files) throws Exception;
 
 	/**
 	 * <pre>

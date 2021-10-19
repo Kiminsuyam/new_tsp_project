@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,7 +104,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 */
 	public Integer insertModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
-							  MultipartFile[] fileName) throws Exception {
+							  List<MultipartFile> fileName) throws Exception {
 		Integer num = 0;
 
 		try {
@@ -138,15 +140,16 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * @throws Exception
 	 */
 	public Integer updateModel(AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  MultipartFile[] fileName) throws Exception {
+							   CommonImageDTO commonImageDTO,
+							   MultipartFile[] fileName,
+							   Map<String, Object> modelMap) throws Exception {
 		Integer num = 0;
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
 				commonImageDTO.setTypeName("model");
 				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
-				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "update"))) {
+				if("Y".equals(this.imageService.uploadModelFile(commonImageDTO, fileName, modelMap))) {
 					num = 1;
 				} else {
 					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);

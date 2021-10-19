@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Map;
 
 @Service
 public interface ImageService {
@@ -23,6 +25,8 @@ public interface ImageService {
      * @throws Exception
      */
     String uploadImageFile(CommonImageDTO commonImageDTO,
-                           MultipartFile[] files,
+                           List<MultipartFile> files,
                            String flag) throws Exception;
+
+    String uploadModelFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception;
 }

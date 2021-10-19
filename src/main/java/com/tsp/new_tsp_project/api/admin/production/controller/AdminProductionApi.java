@@ -135,7 +135,7 @@ public class AdminProductionApi {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertProduction(@Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
+								   @RequestParam(value="imageFiles", required=false) List<MultipartFile> files) throws Exception {
 		String result = "N";
 
 		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
@@ -168,7 +168,7 @@ public class AdminProductionApi {
 	public String updateProduction(@PathVariable("idx") Integer idx,
 								   @Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files,
+								   @RequestParam(value="imageFiles", required=false) List<MultipartFile> files,
 								   BindingResult bindingResult) throws Exception {
 		String result = "Y";
 

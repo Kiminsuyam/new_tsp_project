@@ -68,7 +68,7 @@ public interface AdminPortFolioApiService {
 	 */
 	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
 							CommonImageDTO commonImageDTO,
-							MultipartFile[] files) throws Exception;
+							List<MultipartFile> files) throws Exception;
 
 	/**
 	 * <pre>
@@ -86,5 +86,5 @@ public interface AdminPortFolioApiService {
 	 */
 	Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 							CommonImageDTO commonImageDTO,
-							MultipartFile[] files) throws Exception;
+							List<MultipartFile> files) throws Exception;
 }

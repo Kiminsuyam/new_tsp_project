@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @Service("ImageService")
@@ -65,7 +67,7 @@ public class ImageServiceImpl implements ImageService {
      * @throws Exception
      */
     public String uploadImageFile(CommonImageDTO commonImageDTO,
-                                  MultipartFile[] files,
+                                  List<MultipartFile> files,
                                   String flag) throws Exception {
 
         // 파일 확장자
@@ -78,6 +80,8 @@ public class ImageServiceImpl implements ImageService {
         long fileSize = 0;
 
         int mainCnt = 0;
+
+        log.info("files.length={}", files.size());
 
         File dir = new File(uploadPath);
         if (dir.exists() == false) {
@@ -148,6 +152,89 @@ public class ImageServiceImpl implements ImageService {
                     throw new Exception();
                 }
             }
+        }
+
+        return "Y";
+    }
+
+    @Override
+    public String uploadModelFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception {
+        // 파일 확장자
+        String ext = "";
+        // 파일명
+        String fileId = "";
+        // 파일 Mask
+        String fileMask = "";
+        // 파일 크기
+        long fileSize = 0;
+
+        int mainCnt = 0;
+
+        String [] arrayState = (String[]) modelMap.get("arrayState");
+        String [] arrayIdx = (String[]) modelMap.get("arrayIdx");
+
+        File dir = new File(uploadPath);
+        if (dir.exists() == false) {
+            dir.mkdirs();
+        }
+
+        int fileCnt = 0;
+
+        try {
+            for(int i = 0; i < arrayState.length; i++) {
+                if("U".equals(arrayState[i])) {
+                    if(files[fileCnt] != null) {
+                        ext = files[fileCnt].getOriginalFilename().substring(files[fileCnt].getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+                        fileId = currentDate();
+                        fileMask = fileId + '.' + ext;
+                        fileSize = files[fileCnt].getSize();
+
+                        if(!new File(uploadPath).exists()) {
+                            try {
+                                new File(uploadPath).mkdir();
+                            }catch(Exception e) {
+                                e.getStackTrace();
+                            }
+                        }
+
+                        String filePath = uploadPath + fileMask;
+                        files[fileCnt].transferTo(new File(filePath));
+
+                        Runtime.getRuntime().exec("chmod -R 755 " + filePath);
+
+                        log.info("fileName={}", files[fileCnt].getOriginalFilename());
+                        log.info("fileSize={}", fileSize);
+                        log.info("fileMask={}", fileMask);
+                        log.info("filePath={}", uploadPath+fileMask);
+                        log.info("modelIdx={}", commonImageDTO.getTypeIdx());
+                        if(i == 0) {
+                            commonImageDTO.setFileNum(0);
+                            commonImageDTO.setVisible("N");
+                            commonImageDTO.setImageType("main");// 파일Mask
+                            imageMapper.deleteImageFile(commonImageDTO);
+                        } else {
+                            commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
+                            commonImageDTO.setImageType("sub"+StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));// 파일Mask
+                        }
+                        commonImageDTO.setFileName(files[fileCnt].getOriginalFilename());                   // 파일명
+                        commonImageDTO.setFileSize(fileSize);  // 파일Size
+                        commonImageDTO.setFileMask(fileMask);
+                        commonImageDTO.setFilePath(uploadPath + fileMask);
+
+                        // 이미지 정보 insert
+                        if(imageMapper.addImageFile(commonImageDTO)>0) {
+                            mainCnt++;
+                        }
+                    }
+                    fileCnt++;
+                } else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
+                    commonImageDTO.setIdx(StringUtil.getInt(arrayIdx[i],0));
+                    imageMapper.deleteImageFile(commonImageDTO);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception();
         }
 
         return "Y";

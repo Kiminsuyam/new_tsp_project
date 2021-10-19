@@ -6,6 +6,7 @@
 		SELECT MAX(IFNULL(file_num,0))+1
         FROM tsp_image
 		WHERE type_idx = #{typeIdx}
+		AND visible = 'Y'
 	</select>
 
 	<insert id="addImageFile" parameterType="commonImageDto">
@@ -33,7 +34,17 @@
 
 	<delete id="deleteImageFile" parameterType="commonImageDto">
 		/* [CommonImage_SQL.xml].[deleteImageFile] */
-		DELETE FROM tsp_image WHERE type_idx = #{typeIdx}
+		UPDATE tsp_image SET visible = 'N'
+		<choose>
+			<when test="imageType != null and imageType != ''">
+		        WHERE type_idx = #{idx}
+		        AND image_type = #{imageType}
+			</when>
+			<otherwise>
+				WHERE idx = #{idx}
+			</otherwise>
+		</choose>
+
 	</delete>
 
 </mapper>

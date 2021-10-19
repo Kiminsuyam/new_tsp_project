@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,7 +72,7 @@ public interface AdminModelApiService {
 	 */
 	Integer insertModel(AdminModelDTO adminModelDTO,
 					   CommonImageDTO commonImageDTO,
-					   MultipartFile[] fileName) throws Exception;
+					   List<MultipartFile> fileName) throws Exception;
 
 	/**
 	 * <pre>
@@ -89,7 +90,8 @@ public interface AdminModelApiService {
 	 */
 	Integer updateModel(AdminModelDTO adminModelDTO,
 						CommonImageDTO commonImageDTO,
-						MultipartFile[] fileName) throws Exception;
+						MultipartFile[] fileName,
+						Map<String, Object> modelMap) throws Exception;
 
 	/**
 	 * <pre>
