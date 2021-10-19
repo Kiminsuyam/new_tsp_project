@@ -63,7 +63,7 @@ public class AdminProductionApi {
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,request);
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"","");
 
 		Integer productionCnt = this.adminProductionApiService.getProductionCnt(searchMap);
 

@@ -56,7 +56,7 @@ public class AdminSupportApi {
 		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
 
 		//페이징 및 조회조건
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,request);
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"","");
 
 		Integer supportModelCnt = this.adminSupportService.getSupportModelCnt(searchMap);
 
