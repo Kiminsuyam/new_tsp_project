@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +51,12 @@ public class AdminSupportApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping("/lists")
-	public ConcurrentHashMap getSupportModelList(Page page) throws Exception {
+	public ConcurrentHashMap getSupportModelList(Page page, HttpServletRequest request) throws Exception {
 
 		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
 
 		//페이징 및 조회조건
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,request);
 
 		Integer supportModelCnt = this.adminSupportService.getSupportModelCnt(searchMap);
 

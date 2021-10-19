@@ -31,7 +31,7 @@ public class SearchCommon {
 	 * @return ConcurrentHashMap
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> searchCommon(Page page, String searchKeyword) {
+	public ConcurrentHashMap<String, Object> searchCommon(Page page, HttpServletRequest request) {
 
 		ConcurrentHashMap<String, Object> searchMap = new ConcurrentHashMap<>();
 
@@ -42,7 +42,8 @@ public class SearchCommon {
 		page.setSize(pageSize);
 
 		// 검색 조건
-		searchMap.put("searchKeyword", StringUtil.getString(searchKeyword, ""));
+		searchMap.put("searchType", StringUtil.getString(request.getParameter("searchType"), ""));
+		searchMap.put("searchKeyword", StringUtil.getString(request.getParameter("searchKeyword"), ""));
 		searchMap.put("startPage", page.getStartPage());
 		searchMap.put("size", pageSize);
 

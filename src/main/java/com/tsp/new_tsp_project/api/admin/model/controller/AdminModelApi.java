@@ -55,9 +55,10 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap getModelList(Page page, @PathVariable("categoryCd") Integer categoryCd) throws Exception {
+	public ConcurrentHashMap getModelList(Page page, @PathVariable("categoryCd") Integer categoryCd, HttpServletRequest request) throws Exception {
+
 		// 페이징 및 검색
-		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, "");
+		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, request);
 		modelMap.put("categoryCd", categoryCd);
 
 		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);
@@ -147,7 +148,7 @@ public class AdminModelApi {
 								  HttpServletRequest request,
 								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
-//		searchCommon.giveAuth(request, newCommonDTO);
+		searchCommon.giveAuth(request, newCommonDTO);
 
 		Map<String, Object> modelMap = new ConcurrentHashMap<>();
 
@@ -260,8 +261,7 @@ public class AdminModelApi {
 	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		AdminModelDTO adminModelDTO = new AdminModelDTO();
-		adminModelDTO.builder().visible("N").idx(idx);
+		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
 
 		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
 			result = "Y";

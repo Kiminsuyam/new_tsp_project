@@ -68,9 +68,9 @@ public class AdminUserApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/users")
-	public List<AdminUserDTO> getUserList(Page page) throws Exception {
+	public List<AdminUserDTO> getUserList(Page page, HttpServletRequest request) throws Exception {
 		// 페이징 및 검색
-		ConcurrentHashMap userMap = searchCommon.searchCommon(page, "");
+		ConcurrentHashMap userMap = searchCommon.searchCommon(page, request);
 
 		List<AdminUserDTO> userInfoList = this.adminUserApiService.getUserList(userMap);
 

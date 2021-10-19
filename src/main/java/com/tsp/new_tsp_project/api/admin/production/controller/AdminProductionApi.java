@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.ArrayList;
@@ -58,11 +59,11 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getProductionList(Page page) throws Exception {
+	public ConcurrentHashMap getProductionList(Page page, HttpServletRequest request) throws Exception {
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,request);
 
 		Integer productionCnt = this.adminProductionApiService.getProductionCnt(searchMap);
 

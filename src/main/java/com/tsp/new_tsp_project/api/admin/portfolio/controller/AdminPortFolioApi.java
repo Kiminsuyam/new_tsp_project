@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
 import java.util.List;
 import java.util.Map;
@@ -50,10 +51,10 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getPortFolioList(Page page) throws Exception {
+	public ConcurrentHashMap getPortFolioList(Page page, HttpServletRequest request) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,request);
 
 		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 
