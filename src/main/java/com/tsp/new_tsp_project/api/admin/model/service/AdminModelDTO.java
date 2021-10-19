@@ -20,6 +20,9 @@ import java.util.List;
 @ApiModel
 public class AdminModelDTO extends NewCommonDTO {
 
+	@ApiModelProperty(required = true, value = "rnum", hidden = true)
+	private Integer rnum;
+
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	private Integer idx;
 

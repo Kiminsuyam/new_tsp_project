@@ -9,7 +9,7 @@
 		FROM tsp_portFolio tp, tsp_image ti
 		WHERE tp.idx = ti.type_idx
 		AND ti.type_name = 'portFolio'
-		AND visible = 'Y'
+		AND tp.visible = 'Y'
 	</select>
 
 	<!-- 포트폴리오 리스트 출력 -->

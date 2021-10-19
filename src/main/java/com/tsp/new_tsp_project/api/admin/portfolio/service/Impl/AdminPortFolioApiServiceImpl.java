@@ -117,6 +117,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 			}
 			return num;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
 		}
 	}

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,7 +59,7 @@ public class AdminPortFolioApi {
 
 		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 
-		List<AdminPortFolioDTO> portFolioList = null;
+		List<AdminPortFolioDTO> portFolioList = new ArrayList<>();
 
 		if(portFolioCnt > 0) {
 			portFolioList = this.adminPortFolioApiService.getPortFolioList(searchMap);
