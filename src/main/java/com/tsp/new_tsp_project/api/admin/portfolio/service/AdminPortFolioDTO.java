@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class AdminPortFolioDTO extends NewCommonDTO {
 
+	@ApiModelProperty(required = true, value = "rnum", hidden = true)
+	Integer rnum;
+
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	Integer idx;
 
