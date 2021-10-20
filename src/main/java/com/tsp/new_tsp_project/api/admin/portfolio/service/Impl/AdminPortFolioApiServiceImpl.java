@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -187,5 +188,35 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 */
 	public Integer deletePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception {
 		return this.adminPortFolioMapper.deletePortFolio(adminPortFolioDTO);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteAllPortFolio
+	 * 2. ClassName  : AdminPortFolioServiceImpl.java
+	 * 3. Comment    : 관리자 포트폴리오 전체 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
+	public Integer deleteAllPortFolio(Map<String, Object> portFolioMap) throws Exception {
+		return this.adminPortFolioMapper.deleteAllPortFolio(portFolioMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePartPortFolio
+	 * 2. ClassName  : AdminPortFolioServiceImpl.java
+	 * 3. Comment    : 관리자 포트폴리오 부분 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 * @param portFolioMap
+	 * @throws Exception
+	 */
+	public Integer deletePartPortFolio(Map<String, Object> portFolioMap) throws Exception {
+		return this.adminPortFolioMapper.deletePartPortFolio(portFolioMap);
 	}
 }

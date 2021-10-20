@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -213,6 +214,51 @@ public class AdminPortFolioApi {
 			result = "Y";
 		} else {
 			result = "N";
+		}
+
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteAllPortFolio
+	 * 2. ClassName  : AdminPortFolio.java
+	 * 3. Comment    : 관리자 포트폴리오 전체 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 * @param type
+	 * @param request
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 전체 삭제", notes = "포트폴리오를 전체 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping("/delete-{type}-portfolio")
+	public String deleteAllPortFolio(@PathVariable("type") String type,
+									 HttpServletRequest request) throws Exception {
+		Map<String, Object> portFolioMap = new HashMap<>();
+		String result = "N";
+
+		if("All".equals(type)) {
+			portFolioMap.put("type", "All");
+			if(this.adminPortFolioApiService.deleteAllPortFolio(portFolioMap) > 0) {
+				result = "Y";
+			} else {
+				result = "N";
+			}
+		} else {
+			String [] arrayIdx = request.getParameter("arrayIdx").split(",");
+			portFolioMap.put("arrayIdx", arrayIdx);
+
+			if(this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
+				result = "Y";
+			} else {
+				result = "N";
+			}
 		}
 
 		return result;

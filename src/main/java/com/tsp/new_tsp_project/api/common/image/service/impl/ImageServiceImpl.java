@@ -89,6 +89,8 @@ public class ImageServiceImpl implements ImageService {
         if(files != null) {
             if("update".equals(flag)) {
                 if("production".equals(commonImageDTO.getTypeName())) {
+                    commonImageDTO.setImageType("main");
+                    commonImageDTO.setTypeIdx(commonImageDTO.getIdx());
                     imageMapper.deleteImageFile(commonImageDTO);
                 }
             }

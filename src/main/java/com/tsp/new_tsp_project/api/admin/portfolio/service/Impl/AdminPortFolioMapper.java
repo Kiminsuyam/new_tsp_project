@@ -109,4 +109,30 @@ public interface AdminPortFolioMapper {
 	 * @throws Exception
 	 */
 	Integer deletePortFolio(AdminPortFolioDTO adminPortFolioDTO) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteAllPortFolio
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 전체 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
+	Integer deleteAllPortFolio(Map<String, Object> portFolioMap) throws Exception;
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePartPortFolio
+	 * 2. ClassName  : AdminPortFolioMapper.java
+	 * 3. Comment    : 관리자 포트폴리오 부분 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 * @param portFolioMap
+	 * @throws Exception
+	 */
+	Integer deletePartPortFolio(Map<String, Object> portFolioMap) throws Exception;
 }

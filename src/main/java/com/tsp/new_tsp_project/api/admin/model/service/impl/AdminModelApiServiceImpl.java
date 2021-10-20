@@ -92,7 +92,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 * <pre>
 	 * 1. MethodName : insertModel
 	 * 2. ClassName  : AdminModelApiServiceImpl.java
-	 * 3. Comment    : 관리자 남자 모델 등록
+	 * 3. Comment    : 관리자 모델 등록
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
@@ -127,9 +127,9 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : updateMenModel
+	 * 1. MethodName : updateModel
 	 * 2. ClassName  : AdminModelApiServiceImpl.java
-	 * 3. Comment    : 관리자 남자 모델 수정
+	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 10. 06
 	 * </pre>

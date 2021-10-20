@@ -148,4 +148,22 @@
 		update_time = NOW()
 		WHERE idx = #{idx}
 	</update>
+
+	<!-- 포트폴리오 전체 삭제 -->
+	<update id="deleteAllPortFolio" parameterType="java.util.HashMap">
+		UPDATE tsp_portFolio
+		SET visible = 'N',
+			update_time = NOW()
+	</update>
+
+	<!-- 포트폴리오 부분 삭제 -->
+	<update id="deletePartPortFolio" parameterType="java.util.HashMap">
+		UPDATE tsp_portFolio
+		SET visible = 'N',
+		    update_time = NOW()
+		WHERE idx IN
+		<foreach collection="arrayIdx" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</update>
 </mapper>
