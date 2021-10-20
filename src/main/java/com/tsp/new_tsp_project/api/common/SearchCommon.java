@@ -44,6 +44,7 @@ public class SearchCommon {
 		// 검색 조건
 		searchMap.put("searchType", StringUtil.getString(searchType,""));
 		searchMap.put("searchKeyword", StringUtil.getString(searchKeyword, ""));
+		searchMap.put("jpaStartPage", StringUtil.getInt(page.getStartPage(),0));
 		searchMap.put("startPage", pageCnt);
 		searchMap.put("size", pageSize);
 

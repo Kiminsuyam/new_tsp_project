@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
@@ -83,9 +82,9 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : insertMenModel
+	 * 1. MethodName : insertModel
 	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 남자 모델 등록
+	 * 3. Comment    : 관리자 모델 등록
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
@@ -101,7 +100,7 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String insertMenModel(AdminModelDTO adminModelDTO,
+	public String insertModel(AdminModelDTO adminModelDTO,
 								 CommonImageDTO commonImageDTO,
 								 NewCommonDTO newCommonDTO,
 								 HttpServletRequest request,
@@ -122,7 +121,7 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : updateMenModel
+	 * 1. MethodName : updateModel
 	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
@@ -140,7 +139,7 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String updateMenModel(@PathVariable(value = "idx") Integer idx,
+	public String updateModel(@PathVariable(value = "idx") Integer idx,
 								  @PathVariable(value = "categoryCd") Integer categoryCd,
 			                      @Valid AdminModelDTO adminModelDTO,
 								  CommonImageDTO commonImageDTO,
@@ -173,7 +172,7 @@ public class AdminModelApi {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getMenModelEdit
+	 * 1. MethodName : getModelEdit
 	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 모델 상세
 	 * 4. 작성자       : CHO
@@ -190,7 +189,7 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping("/{categoryCd}/{idx}")
-	public ConcurrentHashMap<String, Object> getMenModelEdit(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getModelEdit(@PathVariable("categoryCd") Integer categoryCd,
 															 @PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -86,7 +87,8 @@ public interface AdminPortFolioApiService {
 	 */
 	Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 							CommonImageDTO commonImageDTO,
-							List<MultipartFile> files) throws Exception;
+							MultipartFile[] files,
+							Map<String, Object> portFolioMap) throws Exception;
 
 	/**
 	 * <pre>

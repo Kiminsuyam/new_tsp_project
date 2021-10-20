@@ -163,10 +163,20 @@ public class AdminPortFolioApi {
 	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								  CommonImageDTO commonImageDTO,
-								  @RequestParam(value = "imageFiles", required = false) List<MultipartFile> files) throws Exception {
+								  HttpServletRequest request,
+								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+
+		Map<String, Object> portFolioMap = new ConcurrentHashMap<>();
+
+		String [] arrayState = request.getParameter("imageState").split(",");
+		String [] arrayIdx = request.getParameter("idxState").split(",");
+
+		portFolioMap.put("arrayState", arrayState);
+		portFolioMap.put("arrayIdx", arrayIdx);
+
 		String result = "N";
 
-		if(this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
+		if(this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files, portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

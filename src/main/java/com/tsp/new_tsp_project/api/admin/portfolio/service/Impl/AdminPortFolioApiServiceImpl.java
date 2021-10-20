@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -98,8 +99,6 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 		int num = 0;
 
-		String flag = "insert";
-
 		try {
 			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
 				adminPortFolioDTO.setCategoryNm("광고");
@@ -113,7 +112,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 			if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
 				commonImageDTO.setTypeName("portFolio");
 				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
-				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, "insert"))) {
 					num = 1;
 				} else {
 					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
@@ -142,11 +141,10 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 	 */
 	public Integer updatePortFolio(AdminPortFolioDTO adminPortFolioDTO,
 								   CommonImageDTO commonImageDTO,
-								   List<MultipartFile> files) throws Exception {
+								   MultipartFile[] files,
+								   Map<String, Object> portFolioMap) throws Exception {
 
 		int num = 0;
-
-		String flag = "update";
 
 		try {
 			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
@@ -161,7 +159,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 			if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {
 				commonImageDTO.setTypeName("portFolio");
 				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
-				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, flag))) {
+				if("Y".equals(this.imageService.updateMultipleFile(commonImageDTO, files, portFolioMap))) {
 					num = 1;
 				} else {
 					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);

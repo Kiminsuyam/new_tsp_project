@@ -81,8 +81,6 @@ public class ImageServiceImpl implements ImageService {
 
         int mainCnt = 0;
 
-        log.info("files.length={}", files.size());
-
         File dir = new File(uploadPath);
         if (dir.exists() == false) {
             dir.mkdirs();
@@ -90,7 +88,7 @@ public class ImageServiceImpl implements ImageService {
 
         if(files != null) {
             if("update".equals(flag)) {
-                if(!"model".equals(commonImageDTO.getTypeName())) {
+                if("production".equals(commonImageDTO.getTypeName())) {
                     imageMapper.deleteImageFile(commonImageDTO);
                 }
             }
@@ -116,7 +114,9 @@ public class ImageServiceImpl implements ImageService {
                             commonImageDTO.setImageType("sub"+mainCnt);
                         }
                     } else {
-                        if("model".equals(commonImageDTO.getTypeName())) {
+                        if("production".equals(commonImageDTO.getTypeName())) {
+                            commonImageDTO.setImageType("main");
+                        } else {
                             if(imageMapper.selectSubCnt(commonImageDTO) == 1) {
                                 commonImageDTO.setImageType("main");
                             } else {
@@ -158,7 +158,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String uploadModelFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception {
+    public String updateMultipleFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception {
         // 파일 확장자
         String ext = "";
         // 파일명
@@ -170,8 +170,8 @@ public class ImageServiceImpl implements ImageService {
 
         int mainCnt = 0;
 
-        String [] arrayState = (String[]) modelMap.get("arrayState");
-        String [] arrayIdx = (String[]) modelMap.get("arrayIdx");
+        String [] arrayState = (String []) modelMap.get("arrayState");
+        String [] arrayIdx = (String []) modelMap.get("arrayIdx");
 
         File dir = new File(uploadPath);
         if (dir.exists() == false) {

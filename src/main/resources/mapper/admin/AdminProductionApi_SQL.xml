@@ -49,6 +49,7 @@
 			ON tp.idx = ti.type_idx
 			WHERE ti.type_name = 'production'
 		    AND tp.visible = 'Y'
+			AND ti.visible = 'Y'
 		    ORDER BY tp.idx ASC
 		) AS A
 		WHERE A.RNUM <![CDATA[<=]]> #{startPage}*#{size}
@@ -74,6 +75,7 @@
 		ON tp.idx = ti.type_idx
 		WHERE ti.type_name = 'production'
 		AND tp.visible = 'Y'
+		AND ti.visible = 'Y'
 		AND tp.idx = #{idx}
 	</select>
 

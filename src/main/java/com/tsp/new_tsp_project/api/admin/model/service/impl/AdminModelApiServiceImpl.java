@@ -149,7 +149,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
 				commonImageDTO.setTypeName("model");
 				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
-				if("Y".equals(this.imageService.uploadModelFile(commonImageDTO, fileName, modelMap))) {
+				if("Y".equals(this.imageService.updateMultipleFile(commonImageDTO, fileName, modelMap))) {
 					num = 1;
 				} else {
 					throw new TspException(ApiExceptionType.NOT_EXIST_IMAGE);
