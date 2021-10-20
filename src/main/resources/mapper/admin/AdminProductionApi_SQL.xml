@@ -15,7 +15,22 @@
 	<!-- 프로덕션 리스트 출력 -->
 	<select id="getProductionList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		/*[AdminProductionApi_SQL.xml].[getProductionList] */
-		SELECT
+		SELECT RNUM,
+		       idx,
+		       title,
+		       description,
+		       visible,
+		       adminName,
+		       creator,
+		       createTime,
+		       updater,
+		       updateTime,
+		       file_mask,
+		       file_path,
+		       file_name,
+		       new_file_name
+		FROM (
+			SELECT
 			   @ROWNUM := @ROWNUM + 1 AS RNUM,
 		       tp.idx,
 			   title,
@@ -30,12 +45,14 @@
 			   file_path,
 			   file_name,
 			   concat('/upload/',file_name) AS new_file_name
-		FROM ( SELECT @ROWNUM := #{size}) temp, tsp_production tp LEFT OUTER JOIN tsp_image ti
-		ON tp.idx = ti.type_idx
-		WHERE ti.type_name = 'production'
-		AND tp.visible = 'Y'
-		ORDER BY tp.idx ASC
-			LIMIT #{startPage}, #{size}
+			FROM ( SELECT @ROWNUM := 0) temp, tsp_production tp LEFT OUTER JOIN tsp_image ti
+			ON tp.idx = ti.type_idx
+			WHERE ti.type_name = 'production'
+		    AND tp.visible = 'Y'
+		    ORDER BY tp.idx ASC
+		) AS A
+		WHERE A.RNUM <![CDATA[<=]]> #{startPage}*#{size}
+		  AND A.RNUM <![CDATA[>]]> (#{startPage}-1)*#{size}
 	</select>
 
 	<!-- 프로덕션 상세 조회 -->

@@ -25,31 +25,44 @@
 	<!-- 포트폴리오 리스트 출력 -->
 	<select id="getPortFolioList" parameterType="java.util.HashMap" resultType="adminPortFolioDto">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioList] */
-		SELECT
-			   @ROWNUM := @ROWNUM + 1 AS RNUM,
-		       tp.idx,
-			   tp.category_cd,
-			   tp.category_nm,
-			   tp.title,
-			   tp.description,
-			   tp.hash_tag,
-			   tp.video_url,
-				tp.create_time
-		FROM tsp_portFolio tp, ( SELECT @ROWNUM := #{size}) temp
-		WHERE tp.visible = 'Y'
-		<choose>
-			<when test='searchType == "0"'>
-				AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-				OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
-			</when>
-			<when test='searchType == "1"'>
-				AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
-			</when>
-			<otherwise>
-				AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
-			</otherwise>
-		</choose>
-			LIMIT #{startPage}, #{size}
+		SELECT RNUM,
+		       idx,
+		       category_cd,
+		       category_nm,
+		       title,
+		       description,
+		       hash_tag,
+		       video_url,
+		       create_time
+		FROM (
+			SELECT
+			@ROWNUM := @ROWNUM + 1 AS RNUM,
+			tp.idx,
+			tp.category_cd,
+			tp.category_nm,
+			tp.title,
+			tp.description,
+			tp.hash_tag,
+			tp.video_url,
+			tp.create_time
+			FROM tsp_portFolio tp, ( SELECT @ROWNUM := 0) temp
+			WHERE tp.visible = 'Y'
+			<choose>
+				<when test='searchType == "0"'>
+					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+					OR tp.description LIKE CONCAT ('%', #{searchKeyword},'%'))
+				</when>
+				<when test='searchType == "1"'>
+					AND tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
+				</when>
+				<otherwise>
+					AND tp.description LIKE CONCAT ('%', #{searchKeyword},'%')
+				</otherwise>
+			</choose>
+		    ORDER BY tp.idx DESC
+		) AS A
+		WHERE A.RNUM <![CDATA[<=]]> #{startPage}*#{size}
+		AND A.RNUM <![CDATA[>]]> (#{startPage}-1)*#{size}
 	</select>
 
 	<!-- 포트폴리오 상세 조회 -->
