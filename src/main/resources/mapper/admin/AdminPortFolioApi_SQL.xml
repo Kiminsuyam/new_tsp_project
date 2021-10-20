@@ -35,7 +35,7 @@
 			   tp.hash_tag,
 			   tp.video_url,
 				tp.create_time
-		FROM tsp_portFolio tp, ( SELECT @ROWNUM := 0) temp
+		FROM tsp_portFolio tp, ( SELECT @ROWNUM := #{size}) temp
 		WHERE tp.visible = 'Y'
 		<choose>
 			<when test='searchType == "0"'>

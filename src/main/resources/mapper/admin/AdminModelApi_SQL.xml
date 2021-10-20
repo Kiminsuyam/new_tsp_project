@@ -54,7 +54,7 @@
 			   tm.size3,
 			   tm.shoes,
 		       tm.create_time
-		FROM tsp_model tm, tsp_cmm_code tc, ( SELECT @ROWNUM := 0) temp
+		FROM tsp_model tm, tsp_cmm_code tc, ( SELECT @ROWNUM := #{size}) temp
 		WHERE tm.category_cd =  tc.category_cd
 		AND tm.visible = 'Y'
 		AND tc.category_cd = #{categoryCd}
