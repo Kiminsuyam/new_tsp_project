@@ -41,4 +41,7 @@ public class AdminPortFolioDTO extends NewCommonDTO {
 	@NotNull(message = "상세 내용 입력은 필수입니다.")
 	@ApiModelProperty(required = true, value = "description")
 	String description;
+
+	@ApiModelProperty(required = true, value = "visible")
+	String visible;
 }

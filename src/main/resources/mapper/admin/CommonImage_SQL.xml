@@ -36,7 +36,7 @@
 		/* [CommonImage_SQL.xml].[deleteImageFile] */
 		UPDATE tsp_image SET visible = 'N'
 		<choose>
-			<when test="imageType != null and imageType != ''">
+			<when test='imageType == "main"'>
 		        WHERE type_idx = #{idx}
 		        AND image_type = #{imageType}
 			</when>
