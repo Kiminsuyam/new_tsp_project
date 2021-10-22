@@ -7,6 +7,7 @@ import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelMapper;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
@@ -135,30 +136,30 @@ public class PortFolioRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminModelEntity
+	 * @param adminPortFolioEntity
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminModelEntity adminModelEntity) throws Exception {
-		QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
+	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity adminPortFolioEntity) throws Exception {
+		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
 		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminModelEntity findModel = jpaQueryFactory.selectFrom(qAdminModelEntity)
-				.where(qAdminModelEntity.idx.eq(adminModelEntity.getIdx()))
+		AdminPortFolioEntity findPortFolio = jpaQueryFactory.selectFrom(qAdminPortFolioEntity)
+				.where(qAdminPortFolioEntity.idx.eq(adminPortFolioEntity.getIdx()))
 				.fetchOne();
 
-		//모델 이미지 조회
-		List<CommonImageEntity> modelImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(adminModelEntity.getIdx()),
+		//포트폴리오 이미지 조회
+		List<CommonImageEntity> portFolioImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
+				.where(qCommonImageEntity.typeIdx.eq(adminPortFolioEntity.getIdx()),
 						qCommonImageEntity.visible.eq("Y"),
-						qCommonImageEntity.typeName.eq("model")).fetch();
+						qCommonImageEntity.typeName.eq("portFolio")).fetch();
 
 		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
-		modelMap.put("modelInfo", ModelMapper.INSTANCE.toDto(findModel));
-		modelMap.put("modelImageList", ModelImageMapper.INSTANCE.toDtoList(modelImageList));
+		modelMap.put("portFolioInfo", PortFolioMapper.INSTANCE.toDto(findPortFolio));
+		modelMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(portFolioImageList));
 
 		return modelMap;
 

@@ -19,6 +19,7 @@ public class ModelImageMapperImpl implements ModelImageMapper{
 				.typeIdx(entity.getTypeIdx())
 				.typeName(entity.getTypeName())
 				.fileMask(entity.getFileMask())
+				.fileSize(entity.getFileSize())
 				.fileName(entity.getFileName())
 				.fileNum(entity.getFileNum())
 				.filePath(entity.getFilePath())

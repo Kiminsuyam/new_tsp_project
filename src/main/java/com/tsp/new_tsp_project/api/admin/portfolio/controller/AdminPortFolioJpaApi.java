@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.controller;
 
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.jpa.AdminPortFolioJpaService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.common.paging.Page;
@@ -10,10 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
@@ -72,6 +70,35 @@ public class AdminPortFolioJpaApi {
 		portFolioMap.put("portFolioListCnt", portFolioCnt);
 
 		portFolioMap.put("portFolioList", portFolioList);
+
+		return portFolioMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getPortFolioInfo
+	 * 2. ClassName  : AdminPortFolio.java
+	 * 3. Comment    : 관리자 포트폴리오 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping(value = "/{idx}")
+	public ConcurrentHashMap getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> portFolioMap;
+
+		AdminPortFolioEntity adminPortFolioEntity = AdminPortFolioEntity.builder().idx(idx).build();
+
+		portFolioMap = this.adminPortFolioJpaService.findOnePortFolio(adminPortFolioEntity);
 
 		return portFolioMap;
 	}

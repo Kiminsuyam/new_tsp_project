@@ -239,6 +239,7 @@ public class AdminPortFolioApi {
 	})
 	@DeleteMapping("/delete-{type}-portfolio")
 	public String deleteAllPortFolio(@PathVariable("type") String type,
+									 String deleteIdx,
 									 HttpServletRequest request) throws Exception {
 		Map<String, Object> portFolioMap = new HashMap<>();
 		String result = "N";
@@ -251,7 +252,7 @@ public class AdminPortFolioApi {
 				result = "N";
 			}
 		} else {
-			String [] arrayIdx = request.getParameter("arrayIdx").split(",");
+			String [] arrayIdx = deleteIdx.split(",");
 			portFolioMap.put("arrayIdx", arrayIdx);
 
 			if(this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
