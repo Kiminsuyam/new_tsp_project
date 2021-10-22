@@ -4,9 +4,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
-import com.tsp.new_tsp_project.api.admin.model.service.QAdminModelEntity;
+import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.image.service.QCommonImageEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -119,9 +119,7 @@ public class ModelRepository {
 				.getResultList();
 
 		for(int i = 0; i < modelList.size(); i++) {
-			log.info("===rnum={}", i);
-			log.info("===newRnum={}",(StringUtil.getInt(modelMap.get("jpaStartPage"),1)+1)*i);
-			AdminModelDTO.builder().rnum((StringUtil.getInt(modelMap.get("jpaStartPage"),1)+1)*i).build();
+			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
 		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);

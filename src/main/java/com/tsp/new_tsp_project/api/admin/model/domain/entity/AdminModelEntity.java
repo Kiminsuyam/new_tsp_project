@@ -18,6 +18,9 @@ import static javax.persistence.FetchType.*;
 @Table(name = "tsp_model")
 public class AdminModelEntity extends NewCommonMappedClass {
 
+	@Transient
+	private Integer rnum;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idx")

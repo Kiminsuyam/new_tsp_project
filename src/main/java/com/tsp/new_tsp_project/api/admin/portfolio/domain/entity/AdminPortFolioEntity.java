@@ -19,6 +19,9 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "tsp_portfolio")
 public class AdminPortFolioEntity extends NewCommonMappedClass {
 
+	@Transient
+	private Integer rnum;
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idx")
 	private Integer idx;

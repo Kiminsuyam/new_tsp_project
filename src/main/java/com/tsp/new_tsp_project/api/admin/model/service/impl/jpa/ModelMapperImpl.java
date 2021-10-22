@@ -2,10 +2,12 @@ package com.tsp.new_tsp_project.api.admin.model.service.impl.jpa;
 
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ModelMapperImpl implements ModelMapper {
 
 	@Override
@@ -15,6 +17,7 @@ public class ModelMapperImpl implements ModelMapper {
 		}
 
 		AdminModelDTO adminModelDTO = AdminModelDTO.builder().idx(entity.getIdx())
+				.rnum(entity.getRnum())
 				.categoryCd(entity.getCategoryCd())
 				.modelKorName(entity.getModelKorName())
 				.modelEngName(entity.getModelEngName())
@@ -42,6 +45,7 @@ public class ModelMapperImpl implements ModelMapper {
 		}
 
 		AdminModelEntity adminModelEntity = AdminModelEntity.builder()
+				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.categoryCd(dto.getCategoryCd())
 				.modelKorName(dto.getModelKorName())

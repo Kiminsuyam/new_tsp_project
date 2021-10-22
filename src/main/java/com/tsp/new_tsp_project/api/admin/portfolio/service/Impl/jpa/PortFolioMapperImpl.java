@@ -15,6 +15,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 		}
 
 		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder()
+				.rnum(entity.getRnum())
 				.idx(entity.getIdx())
 				.categoryCd(entity.getCategoryCd())
 				.title(entity.getTitle())
@@ -40,6 +41,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 		}
 
 		AdminPortFolioEntity adminPortFolioEntity = AdminPortFolioEntity.builder()
+				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.categoryCd(dto.getCategoryCd())
 				.title(dto.getTitle())
