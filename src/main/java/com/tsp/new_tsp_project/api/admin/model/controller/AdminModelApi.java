@@ -55,7 +55,7 @@ public class AdminModelApi {
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
 	public ConcurrentHashMap getModelList(@PathVariable("categoryCd") Integer categoryCd,
-										  @RequestParam Map<String, Object> paramMap,
+										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
 
 		// 페이징 및 검색
