@@ -9,15 +9,15 @@
         <!-- userDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.user.service.AdminUserDTO" alias="adminUserDto"/>
         <!-- modelDTO -->
-        <typeAlias type="com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO" alias="adminModelDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO" alias="adminModelDto"/>
         <!-- portFolioDTO -->
-        <typeAlias type="com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO" alias="adminPortFolioDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO" alias="adminPortFolioDto"/>
         <!-- productionDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO" alias="adminProductionDto"/>
         <!-- supportDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.support.service.AdminSupportDTO" alias="adminSupportDto"/>
         <!-- imageDTO -->
-        <typeAlias type="com.tsp.new_tsp_project.api.common.image.CommonImageDTO" alias="commonImageDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO" alias="commonImageDto"/>
         <!-- securityUser -->
         <typeAlias type="com.tsp.new_tsp_project.api.jwt.SecurityUser" alias="securityUser"/>
         <!-- apiVo -->

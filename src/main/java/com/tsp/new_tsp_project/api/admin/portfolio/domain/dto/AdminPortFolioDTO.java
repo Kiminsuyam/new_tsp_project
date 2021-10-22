@@ -1,17 +1,17 @@
-package com.tsp.new_tsp_project.api.admin.portfolio.service;
+package com.tsp.new_tsp_project.api.admin.portfolio.domain.dto;
 
-import com.tsp.new_tsp_project.api.common.NewCommonDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel
 public class AdminPortFolioDTO extends NewCommonDTO {
 
@@ -30,10 +30,7 @@ public class AdminPortFolioDTO extends NewCommonDTO {
 
 	@NotNull(message = "카테고리 선택은 필수입니다.")
 	@ApiModelProperty(required = true, value = "categoryCd")
-	String categoryCd;
-
-	@ApiModelProperty(required = true, value = "categoryNm")
-	String categoryNm;
+	Integer categoryCd;
 
 	@ApiModelProperty(required = true, value = "videoUrl")
 	String videoUrl;

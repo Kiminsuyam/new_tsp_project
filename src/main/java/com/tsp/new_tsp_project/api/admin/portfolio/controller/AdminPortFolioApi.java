@@ -1,9 +1,9 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.controller;
 
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@RequestMapping(value = "/api/portfolio")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api/portfolio")
 @Api(tags = "포트폴리오 관련 API")
 public class AdminPortFolioApi {
 
@@ -53,10 +53,10 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getPortFolioList(Page page, String searchType, String searchKeyword) throws Exception {
+	public ConcurrentHashMap getPortFolioList(Page page, @RequestParam(required = false) Map<String, Object> paramMap) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchKeyword, searchType);
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
 		Integer portFolioCnt = this.adminPortFolioApiService.getPortFolioCnt(searchMap);
 

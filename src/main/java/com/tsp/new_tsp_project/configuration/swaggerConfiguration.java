@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
+@Profile({"local","kang"})
 public class swaggerConfiguration {
 
 	private ApiInfo apiInfo() {

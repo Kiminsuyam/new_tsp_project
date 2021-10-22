@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_project.api.common;
 
 import com.tsp.new_tsp_project.api.admin.user.service.impl.AdminUserMapper;
+import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -27,11 +29,11 @@ public class SearchCommon {
 	 * </pre>
 	 *
 	 * @param  page
-	 * @param  searchKeyword
+	 * @param  paramMap
 	 * @return ConcurrentHashMap
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> searchCommon(Page page, String searchKeyword, String searchType) {
+	public ConcurrentHashMap<String, Object> searchCommon(Page page, Map<String, Object> paramMap) {
 
 		ConcurrentHashMap<String, Object> searchMap = new ConcurrentHashMap<>();
 
@@ -42,8 +44,8 @@ public class SearchCommon {
 		page.setSize(pageSize);
 
 		// 검색 조건
-		searchMap.put("searchType", StringUtil.getString(searchType,""));
-		searchMap.put("searchKeyword", StringUtil.getString(searchKeyword, ""));
+		searchMap.put("searchType", StringUtil.getString(paramMap.get("searchType"),""));
+		searchMap.put("searchKeyword", StringUtil.getString(paramMap.get("searchKeyword"), ""));
 		searchMap.put("jpaStartPage", StringUtil.getInt(page.getStartPage(),0));
 		searchMap.put("startPage", pageCnt);
 		searchMap.put("size", pageSize);

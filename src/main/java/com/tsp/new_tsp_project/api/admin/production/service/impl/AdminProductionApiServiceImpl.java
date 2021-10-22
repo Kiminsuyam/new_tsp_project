@@ -2,7 +2,7 @@ package com.tsp.new_tsp_project.api.admin.production.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;

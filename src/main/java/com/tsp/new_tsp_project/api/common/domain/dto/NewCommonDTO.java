@@ -1,12 +1,17 @@
-package com.tsp.new_tsp_project.api.common;
+package com.tsp.new_tsp_project.api.common.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 @ApiModel
 public class NewCommonDTO {
 
@@ -20,8 +25,8 @@ public class NewCommonDTO {
 	private String adminName;
 
 	@ApiModelProperty(required = true, value = "등록 일자", hidden = true)
-	private String createTime;
+	private Date createTime;
 
 	@ApiModelProperty(required = true, value = "수정 일자", hidden = true)
-	private String updateTime;
+	private Date updateTime;
 }

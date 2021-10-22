@@ -6,8 +6,10 @@
 	<select id="getPortFolioCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioCnt] */
 		SELECT COUNT(*)
-		FROM tsp_portFolio tp
+		FROM tsp_portfolio tp LEFT OUTER JOIN tsp_cmm_code tcc
+		ON tp.category_cd = tcc.category_cd
 		WHERE tp.visible = 'Y'
+		AND tcc.cmm_type = 'portfolio'
 		<choose>
 			<when test='searchType == "0"'>
 				AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
@@ -45,8 +47,10 @@
 			tp.hash_tag,
 			tp.video_url,
 			tp.create_time
-			FROM tsp_portFolio tp, ( SELECT @ROWNUM := 0) temp
+			FROM ( SELECT @ROWNUM := 0) temp, tsp_portfolio tp LEFT OUTER JOIN tsp_cmm_code tcc
+			ON tp.category_cd = tcc.category_cd
 			WHERE tp.visible = 'Y'
+			AND tcc.cmm_type = 'portfolio'
 			<choose>
 				<when test='searchType == "0"'>
 					AND (tp.title LIKE CONCAT ('%', #{searchKeyword},'%')
@@ -75,14 +79,15 @@
 			   tp.description,
 			   tp.hash_tag,
 			   tp.video_url
-		FROM tsp_portFolio tp
+		FROM tsp_portfolio tp LEFT OUTER JOIN tsp_cmm_code tcc
+		  ON tp.category_cd = tcc.category_cd
 		  WHERE tp.visible = 'Y'
 		  AND tp.idx = #{idx}
 	</select>
 
 	<!-- 포트폴리오 등록 -->
 	<insert id="insertPortFolio" parameterType="adminPortFolioDto" useGeneratedKeys="true" keyProperty="idx">
-		INSERT INTO tsp_portFolio(title,
+		INSERT INTO tsp_portfolio(title,
 								  description,
 								  hash_tag,
 								  category_cd,
@@ -108,7 +113,7 @@
 
 	<!-- 프로덕션 수정 -->
 	<update id="updatePortFolio" parameterType="adminPortFolioDto">
-		UPDATE tsp_portFolio
+		UPDATE tsp_portfolio
 		SET
 		<if test="title != null and title != ''">title = #{title},</if>
 		<if test="videoUrl != null and videoUrl != ''">video_url = #{videoUrl},</if>
@@ -143,7 +148,7 @@
 
 	<!-- 포트폴리오 삭제 -->
 	<update id="deletePortFolio" parameterType="adminPortFolioDto">
-		UPDATE tsp_portFolio
+		UPDATE tsp_portfolio
 		SET visible = 'N',
 		update_time = NOW()
 		WHERE idx = #{idx}
@@ -151,14 +156,14 @@
 
 	<!-- 포트폴리오 전체 삭제 -->
 	<update id="deleteAllPortFolio" parameterType="java.util.HashMap">
-		UPDATE tsp_portFolio
+		UPDATE tsp_portfolio
 		SET visible = 'N',
 			update_time = NOW()
 	</update>
 
 	<!-- 포트폴리오 부분 삭제 -->
 	<update id="deletePartPortFolio" parameterType="java.util.HashMap">
-		UPDATE tsp_portFolio
+		UPDATE tsp_portfolio
 		SET visible = 'N',
 		    update_time = NOW()
 		WHERE idx IN

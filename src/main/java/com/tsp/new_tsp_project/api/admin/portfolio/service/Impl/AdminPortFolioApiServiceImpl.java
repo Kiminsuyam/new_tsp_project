@@ -1,8 +1,8 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl;
 
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioApiService;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -101,15 +100,6 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 		int num = 0;
 
 		try {
-			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("광고");
-			} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("패션쇼");
-			} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("패션필름");
-			} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("뮤직비디오");
-			}
 			if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
 				commonImageDTO.setTypeName("portFolio");
 				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
@@ -148,15 +138,6 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 		int num = 0;
 
 		try {
-			if("0".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("광고");
-			} else if("1".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("패션쇼");
-			} else if("2".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("패션필름");
-			} else if("3".equals(adminPortFolioDTO.getCategoryCd())) {
-				adminPortFolioDTO.setCategoryNm("뮤직비디오");
-			}
 			if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {
 				commonImageDTO.setTypeName("portFolio");
 				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());

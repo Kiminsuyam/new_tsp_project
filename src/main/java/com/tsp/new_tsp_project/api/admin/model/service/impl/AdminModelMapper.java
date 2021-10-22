@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
-import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

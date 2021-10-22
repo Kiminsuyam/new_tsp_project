@@ -20,9 +20,10 @@
 	<select id="getModelListCnt" parameterType="java.util.HashMap" resultType="Integer">
 		/*[AdminModelApi_SQL.xml].[getModelListCnt] */
 		SELECT COUNT(*)
-		FROM tsp_model
+		FROM tsp_model tm LEFT OUTER JOIN tsp_cmm_code tcc
+		ON tm.category_cd = tcc.category_cd
 		WHERE visible = 'Y'
-		AND category_cd = #{categoryCd}
+		AND tm.category_cd = #{categoryCd}
 		<choose>
 			<when test='searchType == "0"'>
 				AND (model_kor_name LIKE CONCAT ('%', #{searchKeyword},'%') OR model_eng_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -68,9 +69,9 @@
 				tm.size3,
 				tm.shoes,
 				tm.create_time
-				FROM tsp_model tm, tsp_cmm_code tc, ( SELECT @ROWNUM := 0) temp
-				WHERE tm.category_cd =  tc.category_cd
-				AND tm.visible = 'Y'
+				FROM ( SELECT @ROWNUM := 0) temp, tsp_model tm LEFT OUTER JOIN tsp_cmm_code tc
+				ON tm.category_cd =  tc.category_cd
+				WHERE tm.visible = 'Y'
 				AND tc.category_cd = #{categoryCd}
 				<choose>
 					<when test='searchType == "0"'>
@@ -103,9 +104,9 @@
 		       tm.height,
 		       tm.size3,
 		       tm.shoes
-		FROM tsp_model tm, tsp_cmm_code tc
-		  WHERE tm.category_cd = tc.category_cd
-		  AND tm.visible = 'Y'
+		FROM tsp_model tm LEFT OUTER JOIN tsp_cmm_code tc
+		  ON tm.category_cd = tc.category_cd
+		  WHERE tm.visible = 'Y'
 		  AND tm.category_cd = #{categoryCd}
 		  AND tm.idx = #{idx}
 	</select>

@@ -1,19 +1,19 @@
 package com.tsp.new_tsp_project.api.admin.production.service;
 
-import com.tsp.new_tsp_project.api.common.NewCommonDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel
 public class AdminProductionDTO extends NewCommonDTO {
 

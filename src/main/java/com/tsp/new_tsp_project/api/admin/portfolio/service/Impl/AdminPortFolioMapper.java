@@ -1,13 +1,11 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl;
 
-import com.tsp.new_tsp_project.api.admin.portfolio.service.AdminPortFolioDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Mapper
 public interface AdminPortFolioMapper {

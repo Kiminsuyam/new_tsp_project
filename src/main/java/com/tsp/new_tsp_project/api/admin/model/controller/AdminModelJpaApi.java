@@ -1,10 +1,11 @@
 package com.tsp.new_tsp_project.api.admin.model.controller;
 
-import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
+import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
+import com.tsp.new_tsp_project.api.admin.model.service.jpa.AdminModelService;
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
-import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,33 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@RequestMapping(value = "/api/model")
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "모델관련 API")
-public class AdminModelApi {
+@RequestMapping(value = "/api/jpa-model")
+public class AdminModelJpaApi {
 
-	private final AdminModelApiService adminModelApiService;
+	private final AdminModelService adminModelService;
 	private final SearchCommon searchCommon;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : lists
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 모델 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 08.
-	 * </pre>
-	 *
-	 * @param page
-	 * @throws Exception
-	 */
 	@ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = Map.class),
@@ -55,19 +43,19 @@ public class AdminModelApi {
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
 	public ConcurrentHashMap getModelList(@PathVariable("categoryCd") Integer categoryCd,
-										  @RequestParam Map<String, Object> paramMap,
+										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
 
 		// 페이징 및 검색
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);
+		Integer modelListCnt = this.adminModelService.findModelsCount(modelMap);
 
-		List<AdminModelDTO> modelList = new ArrayList<>();
+		List<AdminModelDTO> modelList = null;
 
 		if(modelListCnt > 0) {
-			modelList = this.adminModelApiService.getModelList(modelMap);
+			modelList = this.adminModelService.findModelsList(modelMap);
 		}
 
 		// 리스트 수
@@ -103,18 +91,16 @@ public class AdminModelApi {
 	@GetMapping("/{categoryCd}/{idx}")
 	public ConcurrentHashMap<String, Object> getModelEdit(@PathVariable("categoryCd") Integer categoryCd,
 														  @PathVariable("idx") Integer idx) throws Exception {
-		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
-		ConcurrentHashMap<String, Object> modelMap;
 
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder()
+		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+
+		AdminModelEntity adminModelEntity = AdminModelEntity.builder()
 				.idx(idx)
 				.categoryCd(categoryCd).build();
 
-		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
+		modelMap.put("modelMap", this.adminModelService.findOneModel(adminModelEntity));
 
-		resultMap.put("modelMap", modelMap);
-
-		return resultMap;
+		return modelMap;
 	}
 
 	/**
@@ -127,7 +113,7 @@ public class AdminModelApi {
 	 * </pre>
 	 *
 	 * @param fileName
-	 * @param adminModelDTO
+	 * @param adminModelEntity
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 등록", notes = "모델을 등록한다.")
@@ -137,17 +123,17 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String insertModel(AdminModelDTO adminModelDTO,
-							  CommonImageDTO commonImageDTO,
+	public String insertModel(@Valid AdminModelEntity adminModelEntity,
+							  CommonImageEntity commonImageEntity,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) List<MultipartFile> fileName) throws Exception{
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
 		String result = "N";
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName) > 0){
+		if(this.adminModelService.insertModel(adminModelEntity, commonImageEntity, fileName) > 0){
 			result = "Y";
 		} else {
 			result = "N";
@@ -162,11 +148,11 @@ public class AdminModelApi {
 	 * 2. ClassName  : AdminModelApi.java
 	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06.
+	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
 	 * @param fileName
-	 * @param adminModelDTO
+	 * @param adminModelEntity
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
@@ -176,17 +162,17 @@ public class AdminModelApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String updateModel(@PathVariable(value = "idx") Integer idx,
-								  @PathVariable(value = "categoryCd") Integer categoryCd,
-			                      @Valid AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  NewCommonDTO newCommonDTO,
-								  HttpServletRequest request,
-								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+	public Integer updateModel(@PathVariable(value = "idx") Integer idx,
+							   @PathVariable(value = "categoryCd") Integer categoryCd,
+							   @Valid AdminModelEntity adminModelEntity,
+							   CommonImageEntity commonImageEntity,
+							   NewCommonDTO newCommonDTO,
+							   HttpServletRequest request,
+							   @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		Map<String, Object> modelMap = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
 		String [] arrayState = request.getParameter("imageState").split(",");
 		String [] arrayIdx = request.getParameter("idxState").split(",");
@@ -194,81 +180,10 @@ public class AdminModelApi {
 		modelMap.put("arrayState", arrayState);
 		modelMap.put("arrayIdx", arrayIdx);
 
-		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
+		adminModelEntity.builder().idx(idx).categoryCd(categoryCd).build();
 
-		String result = "N";
+		Integer result = this.adminModelService.updateModel(adminModelEntity, commonImageEntity, fileName, modelMap);
 
-		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName, modelMap) > 0){
-			result = "Y";
-		} else {
-			result = "N";
-		}
-
-		return result;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : deleteModelImage
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 모델 첨부파일 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06.
-	 * </pre>
-	 *
-	 * @param idx
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "모델 이미지 삭제", notes = "모델 이미지를 삭제한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@DeleteMapping("/image/{idx}")
-	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
-		String result = "Y";
-
-		CommonImageDTO commonImageDTO = new CommonImageDTO();
-		commonImageDTO.setIdx(idx);
-
-		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
-			result = "Y";
-		} else {
-			result = "N";
-		}
-		return result;
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : deleteModel
-	 * 2. ClassName  : AdminModelApi.java
-	 * 3. Comment    : 관리자 모델 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06.
-	 * </pre>
-	 *
-	 * @param idx
-	 * @throws Exception
-	 */
-	@ApiOperation(value = "모델 삭제", notes = "모델을 삭제한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공", response = Map.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@DeleteMapping("/{idx}")
-	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
-		String result = "Y";
-
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
-
-		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
-			result = "Y";
-		} else {
-			result = "N";
-		}
 		return result;
 	}
 }

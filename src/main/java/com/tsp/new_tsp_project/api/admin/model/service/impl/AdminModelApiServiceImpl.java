@@ -1,10 +1,9 @@
 package com.tsp.new_tsp_project.api.admin.model.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.model.service.AdminModelApiService;
-import com.tsp.new_tsp_project.api.admin.model.service.AdminModelDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.image.service.ImageService;
-import com.tsp.new_tsp_project.common.utils.StringUtil;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service("AdminModelApiService")
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
+@Service("AdminModelApiService")
 public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 	private final AdminModelMapper adminModelMapper;
@@ -78,9 +74,10 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	public ConcurrentHashMap<String, Object> getModelInfo(AdminModelDTO adminModelDTO) throws Exception {
 		ConcurrentHashMap modelMap = new ConcurrentHashMap();
 
-		CommonImageDTO commonImageDTO = new CommonImageDTO();
-		commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
-		commonImageDTO.setTypeName("model");
+		CommonImageDTO commonImageDTO = CommonImageDTO.builder()
+										.typeIdx(adminModelDTO.getIdx())
+										.typeName("model")
+										.build();
 
 		modelMap.put("modelInfo", this.adminModelMapper.getModelInfo(adminModelDTO));
 		modelMap.put("modelImageList", this.adminModelMapper.getImageList(commonImageDTO));
@@ -109,8 +106,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
-				commonImageDTO.setTypeName("model");
-				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).build();
 				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
 					num = 1;
 				} else {
@@ -147,8 +143,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
-				commonImageDTO.setTypeName("model");
-				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).build();
 				if("Y".equals(this.imageService.updateMultipleFile(commonImageDTO, fileName, modelMap))) {
 					num = 1;
 				} else {

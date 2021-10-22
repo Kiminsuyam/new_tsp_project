@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,12 +48,12 @@ public class AdminSupportApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping("/lists")
-	public ConcurrentHashMap getSupportModelList(Page page, HttpServletRequest request) throws Exception {
+	public ConcurrentHashMap getSupportModelList(@RequestParam ConcurrentHashMap<String, Object> paramMap, Page page) throws Exception {
 
 		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
 
 		//페이징 및 조회조건
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page,"","");
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
 		Integer supportModelCnt = this.adminSupportService.getSupportModelCnt(searchMap);
 

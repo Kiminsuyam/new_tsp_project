@@ -1,27 +1,20 @@
-package com.tsp.new_tsp_project.api.admin.model.service;
+package com.tsp.new_tsp_project.api.admin.model.domain.dto;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.tsp.new_tsp_project.api.common.NewCommonDTO;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
+import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel
-public class AdminModelDTO extends NewCommonDTO {
+public class AdminModelDTO extends NewCommonDTO{
 
 	@ApiModelProperty(required = true, value = "rnum", hidden = true)
 	private Integer rnum;

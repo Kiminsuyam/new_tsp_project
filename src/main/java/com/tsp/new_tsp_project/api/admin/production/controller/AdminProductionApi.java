@@ -3,26 +3,20 @@ package com.tsp.new_tsp_project.api.admin.production.controller;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
-import com.tsp.new_tsp_project.exception.ApiExceptionType;
-import com.tsp.new_tsp_project.exception.TspException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.ArrayList;
@@ -59,11 +53,11 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap getProductionList(Page page, String searchType, String searchKeyword) throws Exception {
+	public ConcurrentHashMap getProductionList(Page page, @RequestParam Map<String, Object> paramMap) throws Exception {
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, searchType, searchKeyword);
+		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
 		Integer productionCnt = this.adminProductionApiService.getProductionCnt(searchMap);
 

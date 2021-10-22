@@ -1,12 +1,14 @@
-package com.tsp.new_tsp_project.api.common.image;
+package com.tsp.new_tsp_project.api.common.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class CommonImageDTO {
 	@ApiModelProperty(value = "파일 IDX", required = true, hidden = true)

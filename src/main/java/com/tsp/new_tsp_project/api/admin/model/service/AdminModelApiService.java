@@ -1,12 +1,10 @@
 package com.tsp.new_tsp_project.api.admin.model.service;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

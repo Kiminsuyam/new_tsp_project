@@ -1,10 +1,10 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service;
 
-import com.tsp.new_tsp_project.api.common.image.CommonImageDTO;
+import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

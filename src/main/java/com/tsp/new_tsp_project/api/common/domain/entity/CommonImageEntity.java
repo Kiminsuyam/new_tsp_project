@@ -1,16 +1,18 @@
-package com.tsp.new_tsp_project.api.common.image.service;
+package com.tsp.new_tsp_project.api.common.domain.entity;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tsp_image")
-public class CommonImageJpaDTO {
+public class CommonImageEntity {
 
 	@Id
 	@GeneratedValue

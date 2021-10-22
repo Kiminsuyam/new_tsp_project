@@ -22,10 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -68,9 +65,9 @@ public class AdminUserApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/users")
-	public List<AdminUserDTO> getUserList(Page page, HttpServletRequest request) throws Exception {
+	public List<AdminUserDTO> getUserList(@RequestParam ConcurrentHashMap<String, Object> paramMap, Page page) throws Exception {
 		// 페이징 및 검색
-		ConcurrentHashMap userMap = searchCommon.searchCommon(page, "", "");
+		ConcurrentHashMap userMap = searchCommon.searchCommon(page, paramMap);
 
 		List<AdminUserDTO> userInfoList = this.adminUserApiService.getUserList(userMap);
 
