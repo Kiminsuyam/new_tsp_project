@@ -1,13 +1,21 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.jpa;
 
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
+import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa.PortFolioRepository;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,5 +75,57 @@ public class AdminPortFolioJpaService {
 	@Transactional(readOnly = true)
 	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity adminPortFolioEntity) throws Exception {
 		return portFolioRepository.findOnePortFolio(adminPortFolioEntity);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertPortFolio
+	 * 2. ClassName  : AdminPortFolioJpaService.java
+	 * 3. Comment    : 관리자 포트폴리오 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioEntity
+	 * @throws Exception
+	 */
+	@Transactional
+	public Integer insertPortFolio(AdminPortFolioEntity adminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
+		return portFolioRepository.insertPortFolio(adminPortFolioEntity, commonImageEntity, files);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updatePortFolio
+	 * 2. ClassName  : AdminPortFolioJpaService.java
+	 * 3. Comment    : 관리자 모델 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 06
+	 * </pre>
+	 *
+	 * @param adminPortFolioEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	@Modifying
+	@Transactional
+	public Integer updatePortFolio(AdminPortFolioEntity adminPortFolioEntity,
+								   CommonImageEntity commonImageEntity,
+								   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
+		Integer num = 0;
+
+		try {
+			if(this.portFolioRepository.updatePortFolio(adminPortFolioEntity, commonImageEntity, files, portFolioMap) > 0) {
+				commonImageEntity.setTypeName("portfolio");
+				commonImageEntity.setTypeIdx(adminPortFolioEntity.getIdx());
+				num = 1;
+			} else {
+				throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
+			}
+			return num;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
+		}
 	}
 }

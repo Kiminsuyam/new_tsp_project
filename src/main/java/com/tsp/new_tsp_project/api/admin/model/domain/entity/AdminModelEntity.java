@@ -56,8 +56,8 @@ public class AdminModelEntity extends NewCommonMappedClass {
 	@Column(name = "visible")
 	private String visible;
 
-	@ManyToOne(fetch = LAZY, cascade = CascadeType.MERGE)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
-	private NewCodeEntity newCodeJpaDTO;
+	private NewCodeEntity newModelCodeJpaDTO;
 }
 

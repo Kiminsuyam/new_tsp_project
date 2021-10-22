@@ -82,7 +82,7 @@
 			tm.height,
 			tm.size3,
 			tm.shoes,
-			tm.create_time
+			DATE_FORMAT(tm.create_time,'%Y-%m-%d') AS create_time
 			FROM ( SELECT @ROWNUM := 0) temp, tsp_model tm LEFT OUTER JOIN tsp_cmm_code tc
 			ON tm.category_cd = tc.category_cd
 			WHERE tm.visible = 'Y'

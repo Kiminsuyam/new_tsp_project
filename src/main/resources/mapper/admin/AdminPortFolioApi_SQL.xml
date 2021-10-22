@@ -50,7 +50,7 @@
 				SELECT
 				tp.idx,
 				tp.category_cd,
-				tp.category_nm,
+				tcc.category_nm,
 				tp.title,
 				tp.description,
 				tp.hash_tag,
@@ -84,7 +84,7 @@
 		/*[AdminPortFolioApi_SQL.xml].[getPortFolioInfo] */
 		SELECT tp.idx,
 			   tp.category_cd,
-			   tp.category_nm,
+			   tcc.category_nm,
 			   tp.title,
 			   tp.description,
 			   tp.hash_tag,
@@ -101,7 +101,6 @@
 								  description,
 								  hash_tag,
 								  category_cd,
-								  category_nm,
 								  video_url,
 								  visible,
 								  creator,
@@ -112,7 +111,6 @@
 				#{description},
 				#{hashTag},
 				#{categoryCd},
-				#{categoryNm},
 				#{videoUrl},
 				'Y',
 				'1',
@@ -129,7 +127,6 @@
 		<if test="videoUrl != null and videoUrl != ''">video_url = #{videoUrl},</if>
 		<if test="hashTag != null and hashTag != ''">hash_tag = #{hashTag},</if>
 		<if test="categoryCd != null and categoryCd != ''">category_cd = #{categoryCd},</if>
-		<if test="categoryNm != null and categoryNm != ''">category_nm = #{categoryNm},</if>
 		<if test="description != null and description != ''">description = #{description},</if>
 		<if test="visible != null and visible != ''">visible = #{visible},</if>
 		<if test="updater != null and updater != ''">updater = #{updater},</if>
@@ -150,7 +147,7 @@
 			   image_type,
 			   reg_date
 		FROM tsp_image
-		WHERE type_name = 'portFolio'
+		WHERE type_name = 'portfolio'
 		  AND visible = 'Y'
 		  AND type_idx = #{typeIdx}
 		ORDER BY file_num ASC

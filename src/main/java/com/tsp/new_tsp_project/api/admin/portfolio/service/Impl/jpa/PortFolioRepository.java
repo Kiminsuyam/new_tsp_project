@@ -1,26 +1,26 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
-import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
-import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelMapper;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
+import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,36 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class PortFolioRepository {
 
-	/**
-	 * 업로드 경로
-	 **/
-	@Value("${image.uploadPath}")
-	private String uploadPath;
-
 	private final EntityManager em;
+	private final ImageRepository imageRepository;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : currentDate
-	 * 2. ClassName  : ImageServiceImpl.java
-	 * 3. Comment    : 현재 날짜 구하기
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 06. 02.
-	 * </pre>
-	 *
-	 * @return
-	 */
-	public String currentDate() {
-		// 현재 날짜 구하기
-		String pattern = "MMddHHmmssSSS";
-
-		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-
-		String rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
-
-		return rtnStr;
-	}
 
 	private String getPortFolioQuery(Map<String, Object> portFolioMap) {
 		String query = "select m from AdminPortFolioEntity m join fetch m.newCodeJpaDTO where m.visible = :visible and m.newCodeJpaDTO.cmmType = :cmmType";
@@ -154,7 +127,7 @@ public class PortFolioRepository {
 		List<CommonImageEntity> portFolioImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
 				.where(qCommonImageEntity.typeIdx.eq(adminPortFolioEntity.getIdx()),
 						qCommonImageEntity.visible.eq("Y"),
-						qCommonImageEntity.typeName.eq("portFolio")).fetch();
+						qCommonImageEntity.typeName.eq("portfolio")).fetch();
 
 		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
@@ -163,5 +136,76 @@ public class PortFolioRepository {
 
 		return modelMap;
 
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertPortFolio
+	 * 2. ClassName  : PortFolioRepository.java
+	 * 3. Comment    : 관리자 포트폴리오 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	 public Integer insertPortFolio(AdminPortFolioEntity adminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
+		 Date date = new Date();
+		 adminPortFolioEntity.builder().createTime(date).creator(1).build();
+		 em.persist(adminPortFolioEntity);
+
+		 commonImageEntity.builder().typeName("portfolio").typeIdx(adminPortFolioEntity.getIdx()).build();
+
+		 imageRepository.uploadImageFile(commonImageEntity, files);
+
+		 return adminPortFolioEntity.getIdx();
+	 }
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updatePortFolio
+	 * 2. ClassName  : PortFolioRepository.java
+	 * 3. Comment    : 관리자 포트폴리오 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminPortFolioEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	@Modifying
+	@Transactional
+	public Integer updatePortFolio(AdminPortFolioEntity adminPortFolioEntity, CommonImageEntity commonImageEntity,
+							   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
+
+		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
+
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminPortFolioEntity);
+
+		Date currentTime = new Date();
+
+		adminPortFolioEntity.builder().updateTime(currentTime).updater(1).build();
+
+		update.set(qAdminPortFolioEntity.title, adminPortFolioEntity.getTitle())
+				.set(qAdminPortFolioEntity.description, adminPortFolioEntity.getDescription())
+				.set(qAdminPortFolioEntity.hashTag, adminPortFolioEntity.getHashTag())
+				.set(qAdminPortFolioEntity.videoUrl, adminPortFolioEntity.getVideoUrl())
+				.set(qAdminPortFolioEntity.visible, "Y")
+				.set(qAdminPortFolioEntity.updateTime, currentTime)
+				.set(qAdminPortFolioEntity.updater, 1)
+				.where(qAdminPortFolioEntity.idx.eq(adminPortFolioEntity.getIdx())).execute();
+
+		commonImageEntity.setTypeName("portfolio");
+		commonImageEntity.setTypeIdx(adminPortFolioEntity.getIdx());
+
+		portFolioMap.put("typeName", "portfolio");
+		imageRepository.updateMultipleFile(commonImageEntity, files, portFolioMap);
+
+		return 1;
 	}
 }
