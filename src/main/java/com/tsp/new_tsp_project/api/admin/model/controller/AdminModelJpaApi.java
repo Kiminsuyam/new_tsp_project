@@ -35,6 +35,20 @@ public class AdminModelJpaApi {
 	private final AdminModelJpaService adminModelJpaService;
 	private final SearchCommon searchCommon;
 
+	/**
+	 * <pre>
+	 * 1. MethodName : getModelList
+	 * 2. ClassName  : AdminModelJpaApi.java
+	 * 3. Comment    : 관리자 모델 리스트 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param categoryCd
+	 * @param paramMap
+	 * @param page
+	 * @throws Exception
+	 */
 	@ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = Map.class),
@@ -79,6 +93,7 @@ public class AdminModelJpaApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
+	 * @param categoryCd
 	 * @param idx
 	 * @throws Exception
 	 */
@@ -112,8 +127,11 @@ public class AdminModelJpaApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param fileName
 	 * @param adminModelEntity
+	 * @param commonImageEntity
+	 * @param newCommonDTO
+	 * @param request
+	 * @param files
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 등록", notes = "모델을 등록한다.")
@@ -127,13 +145,13 @@ public class AdminModelJpaApi {
 							  CommonImageEntity commonImageEntity,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
 
 		String result = "N";
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelJpaService.insertModel(adminModelEntity, commonImageEntity, fileName) > 0){
+		if(this.adminModelJpaService.insertModel(adminModelEntity, commonImageEntity, files) > 0){
 			result = "Y";
 		} else {
 			result = "N";
@@ -151,8 +169,13 @@ public class AdminModelJpaApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param fileName
 	 * @param adminModelEntity
+	 * @param commonImageEntity
+	 * @param newCommonDTO
+	 * @param request
+	 * @param files
+	 * @param categoryCd
+	 * @param idx
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
@@ -168,7 +191,7 @@ public class AdminModelJpaApi {
 							   CommonImageEntity commonImageEntity,
 							   NewCommonDTO newCommonDTO,
 							   HttpServletRequest request,
-							   @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+							   @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
@@ -182,7 +205,7 @@ public class AdminModelJpaApi {
 
 		adminModelEntity.builder().idx(idx).categoryCd(categoryCd).build();
 
-		Integer result = this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, fileName, modelMap);
+		Integer result = this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, files, modelMap);
 
 		return result;
 	}

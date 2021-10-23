@@ -44,6 +44,8 @@ public class AdminModelApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
+	 * @param categoryCd
+	 * @param paramMap
 	 * @param page
 	 * @throws Exception
 	 */
@@ -91,6 +93,7 @@ public class AdminModelApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
+	 * @param categoryCd
 	 * @param idx
 	 * @throws Exception
 	 */
@@ -104,7 +107,7 @@ public class AdminModelApi {
 	public ConcurrentHashMap<String, Object> getModelEdit(@PathVariable("categoryCd") Integer categoryCd,
 														  @PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
-		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, Object> modelMap;
 
 		AdminModelDTO adminModelDTO = AdminModelDTO.builder()
 				.idx(idx)
@@ -126,8 +129,11 @@ public class AdminModelApi {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param fileName
 	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param newCommonDTO
+	 * @param request
+	 * @param files
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 등록", notes = "모델을 등록한다.")
@@ -141,13 +147,13 @@ public class AdminModelApi {
 							  CommonImageDTO commonImageDTO,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
 
 		String result = "N";
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, fileName) > 0){
+		if(this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, files) > 0){
 			result = "Y";
 		} else {
 			result = "N";
@@ -165,8 +171,13 @@ public class AdminModelApi {
 	 * 5. 작성일       : 2021. 10. 06.
 	 * </pre>
 	 *
-	 * @param fileName
 	 * @param adminModelDTO
+	 * @param commonImageDTO
+	 * @param newCommonDTO
+	 * @param request
+	 * @param files
+	 * @param idx
+	 * @param categoryCd
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
@@ -177,12 +188,12 @@ public class AdminModelApi {
 	})
 	@PostMapping(value = "/{categoryCd}/{idx}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public String updateModel(@PathVariable(value = "idx") Integer idx,
-								  @PathVariable(value = "categoryCd") Integer categoryCd,
-			                      @Valid AdminModelDTO adminModelDTO,
-								  CommonImageDTO commonImageDTO,
-								  NewCommonDTO newCommonDTO,
-								  HttpServletRequest request,
-								  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
+							  @PathVariable(value = "categoryCd") Integer categoryCd,
+							  @Valid AdminModelDTO adminModelDTO,
+							  CommonImageDTO commonImageDTO,
+							  NewCommonDTO newCommonDTO,
+							  HttpServletRequest request,
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
@@ -198,7 +209,7 @@ public class AdminModelApi {
 
 		String result = "N";
 
-		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, fileName, modelMap) > 0){
+		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, files, modelMap) > 0){
 			result = "Y";
 		} else {
 			result = "N";
