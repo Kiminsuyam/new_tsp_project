@@ -67,7 +67,7 @@ public class ImageServiceImpl implements ImageService {
      * @throws Exception
      */
     public String uploadImageFile(CommonImageDTO commonImageDTO,
-                                  List<MultipartFile> files,
+                                  MultipartFile[] files,
                                   String flag) throws Exception {
 
         // 파일 확장자

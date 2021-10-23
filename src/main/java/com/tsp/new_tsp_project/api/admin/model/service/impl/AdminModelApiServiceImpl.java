@@ -101,7 +101,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	 */
 	public Integer insertModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
-							  List<MultipartFile> fileName) throws Exception {
+							  MultipartFile[] fileName) throws Exception {
 		Integer num = 0;
 
 		try {

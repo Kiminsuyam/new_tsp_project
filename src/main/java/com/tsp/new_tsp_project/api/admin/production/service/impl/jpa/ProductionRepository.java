@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.production.service.impl.jpa;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa.PortFolioMapper;
@@ -13,8 +14,10 @@ import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -128,5 +131,105 @@ public class ProductionRepository {
 		productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
 
 		return productionMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertProduction
+	 * 2. ClassName  : ProductionRepository.java
+	 * 3. Comment    : 관리자 프로덕션 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	public Integer insertProduction(AdminProductionEntity adminProductionEntity,
+									CommonImageEntity commonImageEntity,
+									MultipartFile[] files) throws Exception {
+		Date date = new Date();
+		adminProductionEntity.builder().createTime(date).creator(1).build();
+		em.persist(adminProductionEntity);
+
+		commonImageEntity.builder().typeName("production").typeIdx(adminProductionEntity.getIdx()).build();
+
+		imageRepository.uploadImageFile(commonImageEntity, files);
+
+		return adminProductionEntity.getIdx();
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateProduction
+	 * 2. ClassName  : ProductionRepository.java
+	 * 3. Comment    : 관리자 프로덕션 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	public Integer updateProduction(AdminProductionEntity adminProductionEntity,
+									CommonImageEntity commonImageEntity,
+									MultipartFile[] files) throws Exception {
+
+		QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
+
+		Date currentTime = new Date();
+
+		adminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+
+		update.set(qAdminProductionEntity.title, adminProductionEntity.getTitle())
+				.set(qAdminProductionEntity.description, adminProductionEntity.getDescription())
+				.set(qAdminProductionEntity.visible, "Y")
+				.set(qAdminProductionEntity.updateTime, currentTime)
+				.set(qAdminProductionEntity.updater, 1)
+				.where(qAdminProductionEntity.idx.eq(adminProductionEntity.getIdx())).execute();
+
+		commonImageEntity.setTypeName("production");
+		commonImageEntity.setTypeIdx(adminProductionEntity.getIdx());
+
+		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+		productionMap.put("typeName", "portfolio");
+
+		imageRepository.uploadImageFile(commonImageEntity, files);
+
+		return 1;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteProduction
+	 * 2. ClassName  : ProductionRepository.java
+	 * 3. Comment    : 관리자 프로덕션 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionEntity
+	 * @throws Exception
+	 */
+	public Integer deleteProduction(AdminProductionEntity adminProductionEntity) throws Exception {
+		QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
+
+		Date currentTime = new Date();
+
+		adminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+
+		update.set(qAdminProductionEntity.title, adminProductionEntity.getTitle())
+				.set(qAdminProductionEntity.visible, "N")
+				.set(qAdminProductionEntity.updateTime, currentTime)
+				.set(qAdminProductionEntity.updater, 1)
+				.where(qAdminProductionEntity.idx.eq(adminProductionEntity.getIdx())).execute();
+
+		return 1;
 	}
 }

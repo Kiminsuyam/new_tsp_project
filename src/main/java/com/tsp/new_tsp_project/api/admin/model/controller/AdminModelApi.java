@@ -104,7 +104,7 @@ public class AdminModelApi {
 	public ConcurrentHashMap<String, Object> getModelEdit(@PathVariable("categoryCd") Integer categoryCd,
 														  @PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
-		ConcurrentHashMap<String, Object> modelMap;
+		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
 		AdminModelDTO adminModelDTO = AdminModelDTO.builder()
 				.idx(idx)
@@ -141,7 +141,7 @@ public class AdminModelApi {
 							  CommonImageDTO commonImageDTO,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) List<MultipartFile> fileName) throws Exception{
+							  @RequestParam(name="imageFiles", required = false) MultipartFile[] fileName) throws Exception{
 
 		String result = "N";
 

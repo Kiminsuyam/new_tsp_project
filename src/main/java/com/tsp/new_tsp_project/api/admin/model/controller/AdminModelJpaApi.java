@@ -2,7 +2,7 @@ package com.tsp.new_tsp_project.api.admin.model.controller;
 
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
-import com.tsp.new_tsp_project.api.admin.model.service.jpa.AdminModelService;
+import com.tsp.new_tsp_project.api.admin.model.service.jpa.AdminModelJpaService;
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping(value = "/api/jpa-model")
 public class AdminModelJpaApi {
 
-	private final AdminModelService adminModelService;
+	private final AdminModelJpaService adminModelJpaService;
 	private final SearchCommon searchCommon;
 
 	@ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
@@ -50,12 +50,12 @@ public class AdminModelJpaApi {
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Integer modelListCnt = this.adminModelService.findModelsCount(modelMap);
+		Integer modelListCnt = this.adminModelJpaService.findModelsCount(modelMap);
 
 		List<AdminModelDTO> modelList = null;
 
 		if(modelListCnt > 0) {
-			modelList = this.adminModelService.findModelsList(modelMap);
+			modelList = this.adminModelJpaService.findModelsList(modelMap);
 		}
 
 		// 리스트 수
@@ -73,7 +73,7 @@ public class AdminModelJpaApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : getModelEdit
-	 * 2. ClassName  : AdminModelApi.java
+	 * 2. ClassName  : AdminModelJpaApi.java
 	 * 3. Comment    : 관리자 모델 상세
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
@@ -98,7 +98,7 @@ public class AdminModelJpaApi {
 				.idx(idx)
 				.categoryCd(categoryCd).build();
 
-		modelMap.put("modelMap", this.adminModelService.findOneModel(adminModelEntity));
+		modelMap.put("modelMap", this.adminModelJpaService.findOneModel(adminModelEntity));
 
 		return modelMap;
 	}
@@ -106,7 +106,7 @@ public class AdminModelJpaApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : insertModel
-	 * 2. ClassName  : AdminModelApi.java
+	 * 2. ClassName  : AdminModelJpaApi.java
 	 * 3. Comment    : 관리자 모델 등록
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
@@ -133,7 +133,7 @@ public class AdminModelJpaApi {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelService.insertModel(adminModelEntity, commonImageEntity, fileName) > 0){
+		if(this.adminModelJpaService.insertModel(adminModelEntity, commonImageEntity, fileName) > 0){
 			result = "Y";
 		} else {
 			result = "N";
@@ -145,7 +145,7 @@ public class AdminModelJpaApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : updateModel
-	 * 2. ClassName  : AdminModelApi.java
+	 * 2. ClassName  : AdminModelJpaApi.java
 	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
@@ -182,8 +182,41 @@ public class AdminModelJpaApi {
 
 		adminModelEntity.builder().idx(idx).categoryCd(categoryCd).build();
 
-		Integer result = this.adminModelService.updateModel(adminModelEntity, commonImageEntity, fileName, modelMap);
+		Integer result = this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, fileName, modelMap);
 
 		return result;
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModel
+	 * 2. ClassName  : AdminModelJpaApi.java
+	 * 3. Comment    : 관리자 모델 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "모델 수정", notes = "모델을 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping(value = "/{idx}")
+	public String deleteModel (@PathVariable("idx") Integer idx) throws Exception {
+		String result = "N";
+
+		AdminModelEntity adminModelEntity = AdminModelEntity.builder().visible("N").idx(idx).build();
+
+		if(this.adminModelJpaService.deleteModel(adminModelEntity) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
+	}
+
 }

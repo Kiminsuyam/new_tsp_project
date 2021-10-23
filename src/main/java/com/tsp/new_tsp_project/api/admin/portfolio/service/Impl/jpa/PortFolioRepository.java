@@ -34,7 +34,7 @@ public class PortFolioRepository {
 
 
 	private String getPortFolioQuery(Map<String, Object> portFolioMap) {
-		String query = "select m from AdminPortFolioEntity m join fetch m.newCodeJpaDTO where m.visible = :visible and m.newCodeJpaDTO.cmmType = :cmmType";
+		String query = "select m from AdminPortFolioEntity m join fetch m.newPortFolioJpaDTO where m.visible = :visible and m.newPortFolioJpaDTO.cmmType = :cmmType";
 
 		if ("0".equals(StringUtil.getString(portFolioMap.get("searchType"), "0"))) {
 			query += " and (m.title like :searchKeyword or m.description like :searchKeyword)";
@@ -204,8 +204,10 @@ public class PortFolioRepository {
 		commonImageEntity.setTypeIdx(adminPortFolioEntity.getIdx());
 
 		portFolioMap.put("typeName", "portfolio");
-		imageRepository.updateMultipleFile(commonImageEntity, files, portFolioMap);
-
-		return 1;
+		if("Y".equals(imageRepository.updateMultipleFile(commonImageEntity, files, portFolioMap))) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

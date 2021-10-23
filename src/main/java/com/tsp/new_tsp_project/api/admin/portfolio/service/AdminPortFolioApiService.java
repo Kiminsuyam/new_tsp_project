@@ -70,7 +70,7 @@ public interface AdminPortFolioApiService {
 	 */
 	Integer insertPortFolio(AdminPortFolioDTO adminPortFolioDTO,
 							CommonImageDTO commonImageDTO,
-							List<MultipartFile> files) throws Exception;
+							MultipartFile[] files) throws Exception;
 
 	/**
 	 * <pre>

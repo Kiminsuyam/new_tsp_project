@@ -25,7 +25,7 @@ public interface ImageService {
      * @throws Exception
      */
     String uploadImageFile(CommonImageDTO commonImageDTO,
-                           List<MultipartFile> files,
+                           MultipartFile[] files,
                            String flag) throws Exception;
 
     String updateMultipleFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception;

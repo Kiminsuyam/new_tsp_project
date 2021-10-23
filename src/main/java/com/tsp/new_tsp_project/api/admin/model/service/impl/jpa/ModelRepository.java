@@ -32,7 +32,7 @@ public class ModelRepository {
 	private final EntityManager em;
 
 	private String getModelQuery(Map<String, Object> modelMap) {
-		String query = "select m from AdminModelEntity m join fetch m.newCodeJpaDTO where m.categoryCd = :categoryCd and m.visible = :visible and m.newCodeJpaDTO.cmmType = :cmmType";
+		String query = "select m from AdminModelEntity m join fetch m.newModelCodeJpaDTO where m.categoryCd = :categoryCd and m.visible = :visible and m.newModelCodeJpaDTO.cmmType = :cmmType";
 
 		if ("0".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
 			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword or m.modelDescription like :searchKeyword)";
@@ -144,7 +144,7 @@ public class ModelRepository {
 	 * 2. ClassName  : ModelRepository.java
 	 * 3. Comment    : 관리자 모델 등록
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
+	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
 	 * @param adminModelEntity
@@ -175,7 +175,7 @@ public class ModelRepository {
 	 * 2. ClassName  : ModelRepository.java
 	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
+	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
 	 * @param adminModelEntity
@@ -213,7 +213,38 @@ public class ModelRepository {
 
 		modelMap.put("typeName", "model");
 
-		imageRepository.updateMultipleFile(commonImageEntity, files, modelMap);
+		if("Y".equals(imageRepository.updateMultipleFile(commonImageEntity, files, modelMap))) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteModel
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param adminModelEntity
+	 * @throws Exception
+	 */
+	public Integer deleteModel(AdminModelEntity adminModelEntity) throws Exception {
+		QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
+
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelEntity);
+
+		Date currentTime = new Date ();
+
+		adminModelEntity.builder().updateTime(currentTime).updater(1).build();
+
+		update.set(qAdminModelEntity.visible, "N")
+				.set(qAdminModelEntity.updateTime, adminModelEntity.getUpdateTime())
+				.set(qAdminModelEntity.updater, 1)
+				.where(qAdminModelEntity.idx.eq(adminModelEntity.getIdx())).execute();
 
 		return 1;
 	}

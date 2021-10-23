@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDT
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
 import com.tsp.new_tsp_project.api.admin.production.service.jpa.AdminProductionJpaService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,9 +13,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +107,108 @@ public class AdminProductionJpaApi {
 		productionMap = this.adminProductionJpaService.findOneProduction(adminProductionEntity);
 
 		return productionMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertProduction
+	 * 2. ClassName  : AdminProductionJpaApi.java
+	 * 3. Comment    : 관리자 프로덕션 등록
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 등록", notes = "프로덕션을 등록한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String insertProduction(@Valid AdminProductionEntity adminProductionEntity,
+									CommonImageEntity commonImageEntity,
+									@RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+
+		String result = "N";
+
+		if(this.adminProductionJpaService.insertProduction(adminProductionEntity, commonImageEntity, files) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : updateProduction
+	 * 2. ClassName  : AdminProductionJpaApi.java
+	 * 3. Comment    : 관리자 프로덕션 수정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @param adminProductionEntity
+	 * @param commonImageEntity
+	 * @param files
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 수정", notes = "프로덕션을 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String updateProduction(@PathVariable("idx") Integer idx,
+								   @Valid AdminProductionEntity adminProductionEntity,
+								   CommonImageEntity commonImageEntity,
+								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
+		String result = "N";
+
+		adminProductionEntity.builder().idx(idx).build();
+
+		if(this.adminProductionJpaService.updateProduction(adminProductionEntity, commonImageEntity, files) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deleteProduction
+	 * 2. ClassName  : AdminProductionJpaApi.java
+	 * 3. Comment    : 관리자 프로덕션 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 10. 22
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 삭제", notes = "프로덕션을 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping(value = "/{idx}")
+	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
+		String result = "N";
+
+		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().visible("N").idx(idx).build();
+
+		if(this.adminProductionJpaService.deleteProduction(adminProductionEntity) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+		return result;
 	}
 }
