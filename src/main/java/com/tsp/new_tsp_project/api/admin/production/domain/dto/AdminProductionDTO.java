@@ -1,4 +1,4 @@
-package com.tsp.new_tsp_project.api.admin.production.service;
+package com.tsp.new_tsp_project.api.admin.production.domain.dto;
 
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
@@ -16,6 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @ApiModel
 public class AdminProductionDTO extends NewCommonDTO {
+
+	@ApiModelProperty(required = true, value = "rnum", hidden = true)
+	Integer rnum;
 
 	@ApiModelProperty(required = true, value = "idx", hidden = true)
 	Integer idx;

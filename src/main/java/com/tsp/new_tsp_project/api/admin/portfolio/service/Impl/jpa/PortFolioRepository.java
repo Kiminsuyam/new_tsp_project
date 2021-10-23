@@ -129,12 +129,12 @@ public class PortFolioRepository {
 						qCommonImageEntity.visible.eq("Y"),
 						qCommonImageEntity.typeName.eq("portfolio")).fetch();
 
-		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		modelMap.put("portFolioInfo", PortFolioMapper.INSTANCE.toDto(findPortFolio));
-		modelMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(portFolioImageList));
+		portFolioMap.put("portFolioInfo", PortFolioMapper.INSTANCE.toDto(findPortFolio));
+		portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(portFolioImageList));
 
-		return modelMap;
+		return portFolioMap;
 
 	}
 

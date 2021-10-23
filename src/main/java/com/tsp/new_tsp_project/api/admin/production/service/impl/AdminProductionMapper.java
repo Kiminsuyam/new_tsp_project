@@ -1,6 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.production.service.impl;
 
-import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
+import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -13,7 +13,7 @@
         <!-- portFolioDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO" alias="adminPortFolioDto"/>
         <!-- productionDTO -->
-        <typeAlias type="com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO" alias="adminProductionDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO" alias="adminProductionDto"/>
         <!-- supportDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.support.service.AdminSupportDTO" alias="adminSupportDto"/>
         <!-- imageDTO -->

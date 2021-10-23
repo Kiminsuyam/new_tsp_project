@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.production.controller;
 
 import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionApiService;
-import com.tsp.new_tsp_project.api.admin.production.service.AdminProductionDTO;
+import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.common.paging.Page;
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping(value = "/api/production")
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "프로덕션관련 API")
+@Api(tags = "프로덕션 관련 API")
 public class AdminProductionApi {
 
 	private final AdminProductionApiService adminProductionApiService;

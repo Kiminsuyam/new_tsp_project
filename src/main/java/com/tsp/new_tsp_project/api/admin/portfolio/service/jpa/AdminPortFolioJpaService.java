@@ -1,8 +1,5 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.jpa;
 
-import com.querydsl.jpa.impl.JPAUpdateClause;
-import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
-import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa.PortFolioRepository;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
