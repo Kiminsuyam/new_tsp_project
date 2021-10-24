@@ -7,7 +7,7 @@
 
     <typeAliases>
         <!-- userDTO -->
-        <typeAlias type="com.tsp.new_tsp_project.api.admin.user.service.AdminUserDTO" alias="adminUserDto"/>
+        <typeAlias type="com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO" alias="adminUserDto"/>
         <!-- modelDTO -->
         <typeAlias type="com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO" alias="adminModelDto"/>
         <!-- portFolioDTO -->

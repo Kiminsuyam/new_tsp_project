@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_project.api.admin.user.service.impl;
 
 import com.tsp.new_tsp_project.api.admin.user.service.AdminUserApiService;
-import com.tsp.new_tsp_project.api.admin.user.service.AdminUserDTO;
+import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.common.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,7 +1,8 @@
 package com.tsp.new_tsp_project.api.admin.user.controller;
 
-import com.tsp.new_tsp_project.api.admin.user.service.AdminUserApiService;
 import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
+import com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity;
+import com.tsp.new_tsp_project.api.admin.user.service.jpa.AdminUserJpaService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.jwt.AuthenticationRequest;
 import com.tsp.new_tsp_project.api.jwt.AuthenticationResponse;
@@ -34,22 +35,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@RequestMapping(value = "/api/auth")
+@RequestMapping(value = "/api/jpa-auth")
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "회원관련 API")
-public class AdminUserApi {
-
+public class AdminUserJpaApi {
 	private final AuthenticationManager authenticationManager;
 	private final MyUserDetailsService userDetailsService;
 	private final JwtUtil jwtTokenUtil;
-	private final AdminUserApiService adminUserApiService;
+	private final AdminUserJpaService adminUserJpaService;
 	private final SearchCommon searchCommon;
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getUserList
-	 * 2. ClassName  : AdminUserApi.java
+	 * 1. MethodName : findUserList
+	 * 2. ClassName  : AdminUserJpaApi.java
 	 * 3. Comment    : 관리자 유저 조회
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 08.
@@ -65,11 +65,12 @@ public class AdminUserApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/users")
-	public List<AdminUserDTO> getUserList(@RequestParam ConcurrentHashMap<String, Object> paramMap, Page page) throws Exception {
+	public List<AdminUserDTO> findUserList(@RequestParam(required = false) Map<String, Object> paramMap,
+										   Page page) throws Exception {
 		// 페이징 및 검색
 		ConcurrentHashMap userMap = searchCommon.searchCommon(page, paramMap);
 
-		List<AdminUserDTO> userInfoList = this.adminUserApiService.getUserList(userMap);
+		List<AdminUserDTO> userInfoList = this.adminUserJpaService.findUserList(userMap);
 
 		return userInfoList;
 	}
@@ -77,7 +78,7 @@ public class AdminUserApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : admin-login
-	 * 2. ClassName  : AdminLoginApi.java
+	 * 2. ClassName  : AdminUserJpaApi.java
 	 * 3. Comment    : 관리자 로그인 처리
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 04. 23.
@@ -99,25 +100,26 @@ public class AdminUserApi {
 										HttpServletResponse response,
 										BindingResult bindingResult) throws Exception {
 
-		AdminUserDTO newUserDTO = new AdminUserDTO();
+		AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+						.userId(authenticationRequest.getUserId())
+						.password(authenticationRequest.getPassword())
+						.build();
 
-		newUserDTO.setUserId(authenticationRequest.getUserId());
-		newUserDTO.setPassword(authenticationRequest.getPassword());
-
-		String resultValue = adminUserApiService.adminLogin(newUserDTO, request, bindingResult);
+		String resultValue = adminUserJpaService.adminLogin(adminUserEntity, request, bindingResult);
 
 		ConcurrentHashMap<String, Object> userMap = new ConcurrentHashMap<>();
 
 		if ("Y".equals(resultValue)) {
 			userMap.put("loginYn", resultValue);
-			userMap.put("userId", newUserDTO.getUserId());
+			userMap.put("userId", adminUserEntity.getUserId());
 			userMap.put("token", createAuthenticationToken(authenticationRequest));
 
 			// 로그인 완료 시 생성된 token 값 DB에 저장
 			UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserId());
 			String token = jwtTokenUtil.generateToken(userDetails);
-			newUserDTO.setUserToken(token);
-			adminUserApiService.insertUserToken(newUserDTO);
+
+			adminUserEntity.setUserToken(token);
+			adminUserJpaService.insertUserToken(adminUserEntity);
 		}
 
 		return userMap;
@@ -175,5 +177,4 @@ public class AdminUserApi {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
-
 }

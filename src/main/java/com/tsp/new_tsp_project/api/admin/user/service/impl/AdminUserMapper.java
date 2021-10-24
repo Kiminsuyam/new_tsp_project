@@ -1,6 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.user.service.impl;
 
-import com.tsp.new_tsp_project.api.admin.user.service.AdminUserDTO;
+import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.api.jwt.SecurityUser;
 import org.apache.ibatis.annotations.Mapper;
 
