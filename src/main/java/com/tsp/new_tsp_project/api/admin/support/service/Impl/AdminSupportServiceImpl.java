@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service("AdminSupportService")
@@ -27,7 +28,7 @@ public class AdminSupportServiceImpl implements AdminSupportService {
 	 * @throws Exception
 	 */
 	@Override
-	public Integer getSupportModelCnt(ConcurrentHashMap<String, Object> searchMap) throws Exception {
+	public Integer getSupportModelCnt(Map<String, Object> searchMap) throws Exception {
 		return this.adminSupportMapper.getSupportModelCnt(searchMap);
 	}
 
@@ -44,7 +45,7 @@ public class AdminSupportServiceImpl implements AdminSupportService {
 	 * @throws Exception
 	 */
 	@Override
-	public List<AdminSupportDTO> getSupportModelList(ConcurrentHashMap<String, Object> searchMap) throws Exception {
+	public List<AdminSupportDTO> getSupportModelList(Map<String, Object> searchMap) throws Exception {
 		return this.adminSupportMapper.getSupportModelList(searchMap);
 	}
 

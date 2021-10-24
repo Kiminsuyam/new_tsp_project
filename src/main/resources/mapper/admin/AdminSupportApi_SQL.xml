@@ -7,22 +7,39 @@
 		/*[AdminSupportApi.xml].[getSupportModelCnt] */
 		SELECT COUNT(*)
 		FROM tsp_support
+		WHERE visible = 'Y'
 	</select>
 
 	<!-- 모델 리스트 출력 -->
 	<select id="getSupportModelList" parameterType="java.util.HashMap" resultType="adminSupportDto">
 		/*[AdminSupportApi.xml].[getSupportModelList] */
-		SELECT idx,
+		SELECT RNUM,
+			   idx,
 			   support_name,
-		       support_height,
-		       support_size3,
-		       support_instagram,
-		       support_phone,
-		       support_message,
-		       support_time
-		FROM tsp_support
-		ORDER BY idx ASC
-			LIMIT #{startPage}, #{size}
+			   support_height,
+			   support_size3,
+			   support_instagram,
+			   support_phone,
+			   support_message,
+			   visible,
+			   support_time
+		FROM (
+				 SELECT
+					 @ROWNUM := @ROWNUM + 1 AS RNUM,
+					   idx,
+					   support_name,
+					   support_height,
+					   support_size3,
+					   support_instagram,
+					   support_phone,
+					   support_message,
+					   visible,
+					   DATE_FORMAT(support_time,'%Y-%m-%d') AS support_time
+				 FROM ( SELECT @ROWNUM := 0) temp, tsp_support
+				 WHERE visible = 'Y'
+			 )	AS A
+		WHERE A.RNUM <![CDATA[<=]]> #{startPage}*#{size}
+		  AND A.RNUM <![CDATA[>]]> (#{startPage}-1)*#{size}
 	</select>
 
 	<select id="getSupportModelInfo" parameterType="adminSupportDto" resultType="java.util.HashMap">
@@ -34,9 +51,11 @@
 			   support_instagram,
 			   support_phone,
 		       support_message,
-			   support_time
+		       visible,
+			   DATE_FORMAT(support_time,'%Y-%m-%d') AS support_time
 		FROM tsp_support
-		  WHERE idx = #{idx}
+		WHERE idx = #{idx}
+		AND visible = 'Y'
 	</select>
 
 </mapper>

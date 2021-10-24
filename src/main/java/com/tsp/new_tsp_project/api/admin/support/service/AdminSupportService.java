@@ -4,6 +4,7 @@ import com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -21,7 +22,7 @@ public interface AdminSupportService {
 	 * @param searchMap
 	 * @throws Exception
 	 */
-	Integer getSupportModelCnt(ConcurrentHashMap<String, Object> searchMap) throws Exception;
+	Integer getSupportModelCnt(Map<String, Object> searchMap) throws Exception;
 
 	/**
 	 * <pre>
@@ -35,7 +36,7 @@ public interface AdminSupportService {
 	 * @param searchMap
 	 * @throws Exception
 	 */
-	List<AdminSupportDTO> getSupportModelList(ConcurrentHashMap<String, Object> searchMap) throws Exception;
+	List<AdminSupportDTO> getSupportModelList(Map<String, Object> searchMap) throws Exception;
 
 	/**
 	 * <pre>
