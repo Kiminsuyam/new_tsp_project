@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_project.api.admin.production.service.jpa;
 
-import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
 import com.tsp.new_tsp_project.api.admin.production.service.impl.jpa.ProductionRepository;

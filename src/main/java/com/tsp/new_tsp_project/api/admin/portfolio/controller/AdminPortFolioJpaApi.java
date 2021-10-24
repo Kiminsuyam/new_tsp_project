@@ -6,7 +6,6 @@ import com.tsp.new_tsp_project.api.admin.portfolio.service.jpa.AdminPortFolioJpa
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
-import com.tsp.new_tsp_project.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

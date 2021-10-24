@@ -3,8 +3,6 @@ package com.tsp.new_tsp_project.api.admin.production.service.impl.jpa;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
-import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
-import com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa.PortFolioMapper;
 import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity;

@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.support.service;
 
+import com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

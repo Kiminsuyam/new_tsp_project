@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.support.service.Impl;
 
-import com.tsp.new_tsp_project.api.admin.model.service.impl.AdminModelMapper;
-import com.tsp.new_tsp_project.api.admin.support.service.AdminSupportDTO;
+import com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

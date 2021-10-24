@@ -1,6 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.support.service.Impl;
 
-import com.tsp.new_tsp_project.api.admin.support.service.AdminSupportDTO;
+import com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO;
 import com.tsp.new_tsp_project.api.admin.support.service.AdminSupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
