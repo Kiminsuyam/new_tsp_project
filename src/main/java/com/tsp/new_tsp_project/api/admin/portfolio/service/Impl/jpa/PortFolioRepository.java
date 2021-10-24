@@ -210,4 +210,35 @@ public class PortFolioRepository {
 			return 0;
 		}
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : PortFolioRepository.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 *
+	 * @param portFolioMap
+	 * @throws Exception
+	 */
+	@Modifying
+	@Transactional
+	public Integer deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
+		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
+
+		JPAUpdateClause update = new JPAUpdateClause(em, qAdminPortFolioEntity);
+
+		Date currentTime = new Date();
+
+		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
+
+		update.set(qAdminPortFolioEntity.visible, "N")
+				.set(qAdminPortFolioEntity.updateTime, currentTime)
+				.set(qAdminPortFolioEntity.updater, 1)
+				.where(qAdminPortFolioEntity.idx.in(deleteIdx)).execute();
+
+		return 1;
+	}
 }

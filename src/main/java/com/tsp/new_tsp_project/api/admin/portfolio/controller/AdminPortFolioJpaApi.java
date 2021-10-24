@@ -6,6 +6,7 @@ import com.tsp.new_tsp_project.api.admin.portfolio.service.jpa.AdminPortFolioJpa
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
+import com.tsp.new_tsp_project.common.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.rmi.ServerError;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -178,6 +180,41 @@ public class AdminPortFolioJpaApi {
 		String result = "N";
 
 		if(this.adminPortFolioJpaService.updatePortFolio(adminPortFolioEntity, commonImageEntity, files, portFolioMap) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
+		}
+
+		return result;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : AdminPortFolioJpaApi.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 * @param deleteIdx
+	 * @param request
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 삭제", notes = "포트폴리오를 삭제한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@DeleteMapping("/deletePortfolio")
+	public String deleteAllPortFolio(Long[] deleteIdx,
+									 HttpServletRequest request) throws Exception {
+		Map<String, Object> portFolioMap = new HashMap<>();
+		String result = "N";
+
+		portFolioMap.put("deleteIdx", deleteIdx);
+
+		if(this.adminPortFolioJpaService.deletePortFolio(portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

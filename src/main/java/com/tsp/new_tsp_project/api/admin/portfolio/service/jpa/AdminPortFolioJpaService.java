@@ -124,4 +124,21 @@ public class AdminPortFolioJpaService {
 			throw new TspException(ApiExceptionType.ERROR_PORTFOLIO);
 		}
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : deletePortFolio
+	 * 2. ClassName  : AdminPortFolioJpaService.java
+	 * 3. Comment    : 관리자 포트폴리오 삭제
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 28.
+	 * </pre>
+	 *
+	 * @param portFolioMap
+	 * @throws Exception
+	 */
+	@Transactional
+	public Integer deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
+		return portFolioRepository.deletePortFolio(portFolioMap);
+	}
 }
