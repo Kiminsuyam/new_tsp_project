@@ -50,4 +50,21 @@ public class AdminSupportJpaService {
 	public List<AdminSupportDTO> findSupportModelList(Map<String, Object> supportMap) throws Exception {
 		return this.supportRepository.findSupportModelList(supportMap);
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : findOneSupportModel
+	 * 2. ClassName  : AdminSupportJpaService.java
+	 * 3. Comment    : 관리자 지원모델 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 26.
+	 * </pre>
+	 *
+	 * @param adminSupportEntity
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public Map<String, Object> findOneSupportModel(AdminSupportEntity adminSupportEntity) throws Exception {
+		return this.supportRepository.findOneSupportModel(adminSupportEntity);
+	}
 }

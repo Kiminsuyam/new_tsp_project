@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
@@ -35,7 +32,7 @@ public class AdminSupportJpaApi {
 	/**
 	 * <pre>
 	 * 1. MethodName : findSupportModelList
-	 * 2. ClassName  : AdminSupportApi.java
+	 * 2. ClassName  : AdminSupportJpaApi.java
 	 * 3. Comment    : 관리자 지원모델 리스트 조회
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 26.
@@ -75,6 +72,35 @@ public class AdminSupportJpaApi {
 		supportMap.put("supportListCnt", supportModelCnt);
 
 		supportMap.put("supportModelList", supportModelList);
+
+		return supportMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : findOneSupportModel
+	 * 2. ClassName  : AdminSupportJpaApi.java
+	 * 3. Comment    : 관리자 지원모델 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 26.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "지원모델 상세 조회", notes = "지원모델을 상세 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping("/{idx}")
+	public ConcurrentHashMap<String, Object> findOneSupportModel(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
+
+		AdminSupportEntity adminSupportEntity = AdminSupportEntity.builder().idx(idx).build();
+
+		supportMap.put("supportModelInfo", this.adminSupportJpaService.findOneSupportModel(adminSupportEntity));
 
 		return supportMap;
 	}
