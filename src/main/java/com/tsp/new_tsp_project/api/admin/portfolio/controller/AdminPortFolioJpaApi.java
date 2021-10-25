@@ -18,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,7 +154,7 @@ public class AdminPortFolioJpaApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String insertPortFolio(AdminPortFolioEntity adminPortFolioEntity,
+	public String insertPortFolio(@Valid AdminPortFolioEntity adminPortFolioEntity,
 								  CommonImageEntity commonImageEntity,
 								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 		String result = "N";
@@ -187,7 +188,7 @@ public class AdminPortFolioJpaApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping(value = "/{idx}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String updatePortFolio(AdminPortFolioEntity adminPortFolioEntity,
+	public String updatePortFolio(@Valid AdminPortFolioEntity adminPortFolioEntity,
 								  CommonImageEntity commonImageEntity,
 								  HttpServletRequest request,
 								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
