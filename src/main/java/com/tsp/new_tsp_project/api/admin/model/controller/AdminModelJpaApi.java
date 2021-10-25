@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,7 +60,7 @@ public class AdminModelJpaApi {
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
 	public ConcurrentHashMap getModelList(@PathVariable("categoryCd") Integer categoryCd,
-										  @RequestParam(required = false) Map<String, Object> paramMap,
+										  Map<String, Object> paramMap,
 										  Page page) throws Exception {
 
 		// 페이징 및 검색
@@ -67,7 +69,7 @@ public class AdminModelJpaApi {
 
 		Integer modelListCnt = this.adminModelJpaService.findModelsCount(modelMap);
 
-		List<AdminModelDTO> modelList = null;
+		List<AdminModelDTO> modelList = new ArrayList<>();
 
 		if(modelListCnt > 0) {
 			modelList = this.adminModelJpaService.findModelsList(modelMap);

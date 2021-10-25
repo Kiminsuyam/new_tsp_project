@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.model.service.impl.jpa;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,20 +27,45 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class ModelRepository {
 
+	private final QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
 	private final ImageRepository imageRepository;
 	private final EntityManager em;
 
-	private String getModelQuery(Map<String, Object> modelMap) {
-		String query = "select m from AdminModelEntity m join fetch m.newModelCodeJpaDTO where m.categoryCd = :categoryCd and m.visible = :visible and m.newModelCodeJpaDTO.cmmType = :cmmType";
+//	private String getModelQuery(Map<String, Object> modelMap) {
+//
+//		String query = "select m from AdminModelEntity m join fetch m.newModelCodeJpaDTO where m.categoryCd = :categoryCd and m.visible = :visible and m.newModelCodeJpaDTO.cmmType = :cmmType";
+//
+//		if ("0".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
+//			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword or m.modelDescription like :searchKeyword)";
+//		} else if ("1".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
+//			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword)";
+//		} else {
+//			query += " and (m.modelDescription like :searchKeyword)";
+//		}
+//		return query;
+//	}
 
-		if ("0".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
-			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword or m.modelDescription like :searchKeyword)";
-		} else if ("1".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
-			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword)";
+	private BooleanExpression searchType0(Map<String, Object> modelMap) {
+		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
+		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
+		Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"),0);
+
+		if (modelMap == null) {
+			return null;
 		} else {
-			query += " and (m.modelDescription like :searchKeyword)";
+			if ("0".equals(searchType)) {
+				return qAdminModelEntity.modelKorName.like("%"+searchKeyword+"%")
+						.or(qAdminModelEntity.modelEngName.like("%"+searchKeyword+"%")
+						.or(qAdminModelEntity.modelDescription.like("%"+searchKeyword+"%")))
+						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
+			} else if ("1".equals(searchType)) {
+				return qAdminModelEntity.modelKorName.like("%"+searchKeyword+"%")
+						.or(qAdminModelEntity.modelEngName.like("%"+searchKeyword+"%"))
+						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
+			} else {
+				return qAdminModelEntity.modelDescription.like("%"+searchKeyword+"%").and(qAdminModelEntity.categoryCd.eq(categoryCd));
+			}
 		}
-		return query;
 	}
 
 	/**
@@ -54,15 +81,25 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public Integer findModelsCount(Map<String, Object> modelMap) throws Exception {
-		String query = getModelQuery(modelMap);
 
-		return em.createQuery(query, AdminModelEntity.class)
-				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
-				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.setParameter("cmmType","model")
-				.getResultList().size();
+//		String query = getModelQuery(modelMap);
+
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+		return queryFactory.selectFrom(qAdminModelEntity)
+				.where(searchType0(modelMap))
+				.fetch().size();
+
+
+
+//		return em.createQuery(query, AdminModelEntity.class)
+//				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
+//				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
+//				.setParameter("visible", "Y")
+//				.setParameter("cmmType","model")
+//				.getResultList().size();
 	}
+
 
 	/**
 	 * <pre>
@@ -77,22 +114,32 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public List<AdminModelDTO> findModelsList(Map<String, Object> modelMap) throws Exception{
-		String query = getModelQuery(modelMap);
 
-		List<AdminModelEntity> modelList = em.createQuery(query, AdminModelEntity.class)
-				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
-				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.setParameter("cmmType","model")
-				.setFirstResult(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
-				.setMaxResults(StringUtil.getInt(modelMap.get("size"),0))
-				.getResultList();
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+		List<AdminModelEntity> modelList = queryFactory.selectFrom(qAdminModelEntity)
+											.where(searchType0(modelMap))
+											.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
+											.limit(StringUtil.getInt(modelMap.get("size"),0))
+											.fetch();
+
+//		String query = getModelQuery(modelMap);
+//
+//		List<AdminModelEntity> modelList = em.createQuery(query, AdminModelEntity.class)
+//				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
+//				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
+//				.setParameter("visible", "Y")
+//				.setParameter("cmmType","model")
+//				.setFirstResult(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
+//				.setMaxResults(StringUtil.getInt(modelMap.get("size"),0))
+//				.getResultList();
 
 		for(int i = 0; i < modelList.size(); i++) {
 			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
-		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
+		List<AdminModelDTO> modelDtoList = modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
+
 
 		return modelDtoList;
 	}
@@ -135,7 +182,6 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity adminModelEntity) throws Exception {
-		QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
 		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -210,8 +256,6 @@ public class ModelRepository {
 	public Integer updateModel(AdminModelEntity adminModelEntity, CommonImageEntity commonImageEntity,
 							   MultipartFile[] files, ConcurrentHashMap<String, Object> modelMap) throws Exception {
 
-		QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
-
 		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelEntity);
 
 		Date currentTime = new Date ();
@@ -255,7 +299,6 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public Integer deleteModel(AdminModelEntity adminModelEntity) throws Exception {
-		QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
 
 		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelEntity);
 
