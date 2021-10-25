@@ -69,19 +69,31 @@ public class UserRepository {
 	 * @throws Exception
 	 */
 	public Map<String, Object> adminLogin(AdminUserEntity adminUserEntity) throws Exception {
+
 		Map<String, Object> userMap = new HashMap<>();
 
-		String query = "select m from AdminUserEntity m where m.visible = :visible and m.userId = :userId";
+		try {
 
-		AdminUserEntity existAdminUserEntity = em.createQuery(query, AdminUserEntity.class)
-				.setParameter("visible", "Y")
-				.setParameter("userId", adminUserEntity.getUserId())
-				.getSingleResult();
+			String query = "select m from AdminUserEntity m where m.visible = :visible and m.userId = :userId";
 
-		userMap.put("userId", existAdminUserEntity.getUserId());
-		userMap.put("password", existAdminUserEntity.getPassword());
+			AdminUserEntity existAdminUserEntity = em.createQuery(query, AdminUserEntity.class)
+					.setParameter("visible", "Y")
+					.setParameter("userId", adminUserEntity.getUserId())
+					.getSingleResult();
+
+			if(existAdminUserEntity == null) {
+				return null;
+			}
+
+			userMap.put("userId", existAdminUserEntity.getUserId());
+			userMap.put("password", existAdminUserEntity.getPassword());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return userMap;
+
 	}
 
 	/**
@@ -124,8 +136,16 @@ public class UserRepository {
 	 */
 	public Integer insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
 
+		//회원 등록
 		em.persist(adminUserEntity);
 
-		return 1;
+		//회원 등록된 IDX
+		AdminUserEntity newAdminUserEntity = em.find(AdminUserEntity.class, adminUserEntity.getIdx());
+		Integer newIdx = newAdminUserEntity.getIdx();
+
+		em.flush();
+		em.close();
+
+		return newIdx;
 	}
 }

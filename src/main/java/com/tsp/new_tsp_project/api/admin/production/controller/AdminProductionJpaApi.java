@@ -4,7 +4,6 @@ import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDT
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
 import com.tsp.new_tsp_project.api.admin.production.service.jpa.AdminProductionJpaService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
-import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -14,7 +13,6 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
