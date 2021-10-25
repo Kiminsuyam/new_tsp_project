@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.user.service.impl.jpa;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity;
@@ -18,13 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserRepository {
 
+	private final QAdminUserEntity qAdminUserEntity = QAdminUserEntity.adminUserEntity;
 	private final EntityManager em;
-
-	private String getUserQuery(Map<String, Object> userMap) {
-		String query = "select m from AdminUserEntity m where m.visible = :visible";
-
-		return query;
-	}
 
 	/**
 	 * <pre>
@@ -39,13 +35,14 @@ public class UserRepository {
 	 * @throws Exception
 	 */
 	public List<AdminUserDTO> findUserList(Map<String, Object> userMap) throws Exception {
-		String query = getUserQuery(userMap);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminUserEntity> userList = em.createQuery(query, AdminUserEntity.class)
-				.setParameter("visible", "Y")
-				.setFirstResult(StringUtil.getInt(userMap.get("jpaStartPage"),0))
-				.setMaxResults(StringUtil.getInt(userMap.get("size"),0))
-				.getResultList();
+		List<AdminUserEntity> userList = queryFactory.selectFrom(qAdminUserEntity)
+				.where(qAdminUserEntity.visible.eq("Y"))
+				.orderBy(qAdminUserEntity.idx.desc())
+				.offset(StringUtil.getInt(userMap.get("jpaStartPage"),0))
+				.limit(StringUtil.getInt(userMap.get("size"),0))
+				.fetch();
 
 		List<AdminUserDTO> userDtoList = UserMapper.INSTANCE.toDtoList(userList);
 
@@ -70,16 +67,13 @@ public class UserRepository {
 	 */
 	public Map<String, Object> adminLogin(AdminUserEntity adminUserEntity) throws Exception {
 
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 		Map<String, Object> userMap = new HashMap<>();
 
 		try {
-
-			String query = "select m from AdminUserEntity m where m.visible = :visible and m.userId = :userId";
-
-			AdminUserEntity existAdminUserEntity = em.createQuery(query, AdminUserEntity.class)
-					.setParameter("visible", "Y")
-					.setParameter("userId", adminUserEntity.getUserId())
-					.getSingleResult();
+			AdminUserEntity existAdminUserEntity = queryFactory.selectFrom(qAdminUserEntity)
+					.where(qAdminUserEntity.visible.eq("Y"), qAdminUserEntity.userId.eq(adminUserEntity.getUserId()))
+					.fetchOne();
 
 			if(existAdminUserEntity == null) {
 				return null;

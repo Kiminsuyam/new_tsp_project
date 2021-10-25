@@ -113,7 +113,6 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOneProduction(AdminProductionEntity adminProductionEntity) throws Exception {
-		QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
 		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
@@ -183,7 +182,6 @@ public class ProductionRepository {
 									CommonImageEntity commonImageEntity,
 									MultipartFile[] files) throws Exception {
 
-		QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
 		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
 
 		Date currentTime = new Date();
@@ -221,7 +219,6 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public Integer deleteProduction(AdminProductionEntity adminProductionEntity) throws Exception {
-		QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
 		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
 
 		Date currentTime = new Date();

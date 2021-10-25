@@ -30,7 +30,7 @@ public class AdminSupportJpaService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public Integer findSupportModelCount(Map<String, Object> supportMap) throws Exception {
+	public Long findSupportModelCount(Map<String, Object> supportMap) throws Exception {
 		return this.supportRepository.findSupportModelCount(supportMap);
 	}
 

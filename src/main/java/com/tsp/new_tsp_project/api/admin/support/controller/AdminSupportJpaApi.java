@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,9 +57,9 @@ public class AdminSupportJpaApi {
 		//페이징 및 조회조건
 		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
-		Integer supportModelCnt = this.adminSupportJpaService.findSupportModelCount(searchMap);
+		Long supportModelCnt = this.adminSupportJpaService.findSupportModelCount(searchMap);
 
-		List<AdminSupportDTO> supportModelList = null;
+		List<AdminSupportDTO> supportModelList = new ArrayList<>();
 
 		if(supportModelCnt > 0) {
 			supportModelList = this.adminSupportJpaService.findSupportModelList(searchMap);

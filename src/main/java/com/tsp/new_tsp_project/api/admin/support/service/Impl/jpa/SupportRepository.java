@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.support.service.Impl.jpa;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO;
 import com.tsp.new_tsp_project.api.admin.support.domain.entity.AdminSupportEntity;
@@ -17,19 +18,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SupportRepository {
 
+	private final QAdminSupportEntity qAdminSupportEntity = QAdminSupportEntity.adminSupportEntity;
 	private final EntityManager em;
 
-	private String getSupportQuery(Map<String, Object> supportMap) {
-		String query = "select m from AdminSupportEntity m where m.visible = :visible";
+	private BooleanExpression searchSupport(Map<String, Object> supportMap) {
+		String searchType = StringUtil.getString(supportMap.get("searchType"),"");
+		String searchKeyword = StringUtil.getString(supportMap.get("searchKeyword"),"");
 
-		if ("0".equals(StringUtil.getString(supportMap.get("searchType"), "0"))) {
-			query += " and (m.supportName like :searchKeyword or m.supportMessage like :searchKeyword)";
-		} else if ("1".equals(StringUtil.getString(supportMap.get("searchType"), "0"))) {
-			query += " and m.supportName like :searchKeyword";
+		if (supportMap == null) {
+			return null;
 		} else {
-			query += " and m.supportMessage like :searchKeyword";
+			if ("0".equals(searchType)) {
+				return qAdminSupportEntity.supportName.like("%"+searchKeyword+"%")
+						.or(qAdminSupportEntity.supportMessage.like("%"+searchKeyword+"%"));
+			} else if ("1".equals(searchType)) {
+				return qAdminSupportEntity.supportName.like("%"+searchKeyword+"%");
+			} else {
+				return qAdminSupportEntity.supportMessage.like("%"+searchKeyword+"%");
+			}
 		}
-		return query;
 	}
 
 	/**
@@ -44,13 +51,12 @@ public class SupportRepository {
 	 * @param supportMap
 	 * @throws Exception
 	 */
-	public Integer findSupportModelCount(Map<String, Object> supportMap) throws Exception {
-		String query = getSupportQuery(supportMap);
+	public Long findSupportModelCount(Map<String, Object> supportMap) throws Exception {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return em.createQuery(query, AdminSupportEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(supportMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.getResultList().size();
+		return queryFactory.selectFrom(qAdminSupportEntity)
+				.where(searchSupport(supportMap))
+				.fetchCount();
 	}
 
 	/**
@@ -66,12 +72,14 @@ public class SupportRepository {
 	 * @throws Exception
 	 */
 	public List<AdminSupportDTO> findSupportModelList(Map<String, Object> supportMap) throws Exception {
-		String query = getSupportQuery(supportMap);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminSupportEntity> supportList = em.createQuery(query, AdminSupportEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(supportMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.getResultList();
+		List<AdminSupportEntity> supportList = queryFactory.selectFrom(qAdminSupportEntity)
+				.where(searchSupport(supportMap))
+				.orderBy(qAdminSupportEntity.idx.desc())
+				.offset(StringUtil.getInt(supportMap.get("jpaStartPage"),0))
+				.limit(StringUtil.getInt(supportMap.get("size"),0))
+				.fetch();
 
 		List<AdminSupportDTO> supportDtoList = SupportMapper.INSTANCE.toDtoList(supportList);
 
@@ -95,7 +103,6 @@ public class SupportRepository {
 	 * @throws Exception
 	 */
 	public Map<String, Object> findOneSupportModel(AdminSupportEntity adminSupportEntity) throws Exception {
-		QAdminSupportEntity qAdminSupportEntity = QAdminSupportEntity.adminSupportEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
