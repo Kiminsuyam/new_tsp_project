@@ -34,7 +34,7 @@ public class AdminModelEntity extends NewCommonMappedClass {
 	private Integer categoryCd;
 
 	@Column(name = "category_age")
-	@NotNull(message = "모델 연령대 선택은 필수입니다.")
+	@NotEmpty(message = "모델 연령대 선택은 필수입니다.")
 	private String categoryAge;
 
 	@Column(name = "model_kor_name")
