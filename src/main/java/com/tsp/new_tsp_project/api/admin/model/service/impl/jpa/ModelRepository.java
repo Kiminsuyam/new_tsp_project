@@ -6,6 +6,7 @@ import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
@@ -94,6 +95,31 @@ public class ModelRepository {
 		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
 
 		return modelDtoList;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : modelCommonCode
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 공통 코드 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param modelCodeEntity
+	 * @throws Exception
+	 */
+	public ConcurrentHashMap<String, Object> modelCommonCode(ModelCodeEntity modelCodeEntity) throws Exception {
+		ConcurrentHashMap<String, Object> modelCommonMap = new ConcurrentHashMap<>();
+
+		String query = "select m from ModelCodeEntity m where m.cmmType = :cmmType";
+
+		List<ModelCodeEntity> codeEntityList = em.createQuery(query, ModelCodeEntity.class)
+				.setParameter("cmmType", modelCodeEntity.getCmmType()).getResultList();
+
+		modelCommonMap.put("codeEntityList", codeEntityList);
+
+		return modelCommonMap;
 	}
 
 	/**

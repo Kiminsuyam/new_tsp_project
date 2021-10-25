@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "tsp_cmm_code")
 @SuperBuilder
@@ -37,10 +39,10 @@ public class NewCodeEntity extends NewCommonMappedClass {
 	@Column(name = "cmm_type")
 	String cmmType;
 
-	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
 	private List<AdminModelEntity> adminModelEntityList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "newPortFolioJpaDTO", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "newPortFolioJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
 	private List<AdminPortFolioEntity> adminPortFolioEntityList = new ArrayList<>();
 
 }

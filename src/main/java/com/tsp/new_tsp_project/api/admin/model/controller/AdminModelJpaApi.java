@@ -6,6 +6,7 @@ import com.tsp.new_tsp_project.api.admin.model.service.jpa.AdminModelJpaService;
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -116,6 +117,34 @@ public class AdminModelJpaApi {
 		modelMap.put("modelMap", this.adminModelJpaService.findOneModel(adminModelEntity));
 
 		return modelMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : modelCommonCode
+	 * 2. ClassName  : AdminModelJpaApi.java
+	 * 3. Comment    : 관리자 모델 공통 코드 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "모델 공통 코드 조회", notes = "모델을 공통 코드를 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "브랜드 등록성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping(value = "/common")
+	public ConcurrentHashMap<String, Object> modelCommonCode() throws Exception {
+		ConcurrentHashMap<String, Object> modelCmmCode = new ConcurrentHashMap<>();
+
+		ModelCodeEntity modelCodeEntity = ModelCodeEntity.builder().cmmType("model").build();
+
+		modelCmmCode.put("modelCmmCode",this.adminModelJpaService.modelCommonCode(modelCodeEntity));
+
+		return modelCmmCode;
 	}
 
 	/**

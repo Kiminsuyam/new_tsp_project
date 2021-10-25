@@ -4,6 +4,8 @@ import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelRepository;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.NewCodeEntity;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +72,22 @@ public class AdminModelJpaService {
 	@Transactional
 	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity adminModelEntity) throws Exception {
 		return modelRepository.findOneModel(adminModelEntity);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : modelCommonCode
+	 * 2. ClassName  : AdminModelJpaService.java
+	 * 3. Comment    : 관리자 모델 공통 코드 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public ConcurrentHashMap<String, Object> modelCommonCode(ModelCodeEntity modelCodeEntity) throws Exception {
+		return modelRepository.modelCommonCode(modelCodeEntity);
 	}
 
 	/**
