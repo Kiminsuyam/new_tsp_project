@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -31,10 +32,12 @@ public abstract class NewCommonMappedClass {
 	@Column(name = "create_time", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@ApiModelProperty(required = true, value = "등록 일자")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createTime;
 
 	@Column(name = "update_time", insertable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@ApiModelProperty(required = true, value = "수정 일자")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date updateTime;
 }

@@ -11,7 +11,8 @@ public enum ApiExceptionType implements BaseExceptionType {
 	ERROR_PRODUCTION("ERROR_PRODUCTION", 500, "프로덕션 등록 에러"),
 	ERROR_PORTFOLIO("ERROR_PORTFOLIO", 500, "포트폴리오 등록 에러"),
 	ERROR_MODEL("ERROR_MODEL", 500, "모델 등록 에러"),
-	NOT_NULL("NOT_NULL", 400, "필수값 누락");
+	NOT_NULL("NOT_NULL", 400, "필수값 누락"),
+	ID_EXIST("ERROR_REGIST",400,"같은 아이디 존재");
 
 	private String errorCode;
 	private int httpStatus;

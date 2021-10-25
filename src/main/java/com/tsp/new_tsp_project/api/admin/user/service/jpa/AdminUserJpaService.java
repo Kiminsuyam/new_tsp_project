@@ -3,8 +3,12 @@ package com.tsp.new_tsp_project.api.admin.user.service.jpa;
 import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity;
 import com.tsp.new_tsp_project.api.admin.user.service.impl.jpa.UserRepository;
+import com.tsp.new_tsp_project.common.utils.StringUtil;
 import com.tsp.new_tsp_project.common.utils.StringUtils;
+import com.tsp.new_tsp_project.exception.ApiExceptionType;
+import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,10 +17,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AdminUserJpaService {
 
@@ -61,7 +67,9 @@ public class AdminUserJpaService {
 			return "redirect:/login";
 		}
 
-		final String db_pw = StringUtils.nullStrToStr(this.userRepository.adminLogin(adminUserEntity));
+		String password = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("password"),"");
+
+		final String db_pw = StringUtils.nullStrToStr(password);
 
 		String result = "";
 
@@ -90,5 +98,46 @@ public class AdminUserJpaService {
 	@Transactional
 	public Integer insertUserToken(AdminUserEntity adminUserEntity) throws Exception {
 		return this.userRepository.insertUserToken(adminUserEntity);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertAdminUser
+	 * 2. ClassName  : AdminUserApiServiceImpl.java
+	 * 3. Comment    : 관리자 회원가입
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param adminUserEntity
+	 * @return result
+	 * @throws Exception
+	 */
+	@Transactional
+	public Integer insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
+
+		String userId = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("userId"),"");
+
+		if(userId.equals(adminUserEntity.getUserId())) {
+			throw new TspException(ApiExceptionType.ID_EXIST);
+		}
+		// 패스워드 인코딩
+		String password = passwordEncoder.encode(adminUserEntity.getPassword());
+
+		Date currentTime = new Date();
+
+		AdminUserEntity encodeUserEntity = AdminUserEntity.builder()
+				.userId(adminUserEntity.getUserId())
+				.password(password)
+				.email(adminUserEntity.getEmail())
+				.name(adminUserEntity.getName())
+				.visible("Y")
+				.creator(1)
+				.createTime(currentTime)
+				.updater(1)
+				.updateTime(currentTime)
+				.build();
+
+		return this.userRepository.insertAdminUser(encodeUserEntity);
 	}
 }

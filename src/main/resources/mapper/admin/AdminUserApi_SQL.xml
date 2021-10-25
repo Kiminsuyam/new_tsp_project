@@ -10,7 +10,7 @@
                password,
                name as user_name,
                user_type_cd
-        FROM app_user_info
+        FROM tsp_admin
         ORDER BY user_seq ASC
             LIMIT #{startPage}, #{size}
     </select>
@@ -18,14 +18,14 @@
     <select id="getUserId" resultType="securityUser">
         /*[AdminUserApi_SQL.xml].[getUserId] */
         SELECT user_id as id, password
-        FROM app_user_info
+        FROM tsp_admin
         WHERE user_id = #{id}
     </select>
 
     <select id="adminLogin" parameterType="adminUserDto" resultType="String">
         /*[AdminUserApi_SQL.xml].[adminLogin] */
         SELECT PASSWORD
-        FROM app_user_info
+        FROM tsp_admin
         WHERE USER_ID = #{userId}
     </select>
 
@@ -33,13 +33,13 @@
         /*[AdminUserApi_SQL.xml].[selectAdminSeq] */
         SELECT USER_SEQ as userSeq,
                name
-        FROM app_user_info
+        FROM tsp_admin
         WHERE user_token = #{userToken}
     </select>
 
     <insert id="insertUserToken" parameterType="adminUserDto">
         /*[AdminUserApi_SQL.xml].[insertUserToken] */
-        UPDATE app_user_info SET user_token = #{userToken}
+        UPDATE tsp_admin SET user_token = #{userToken}
         WHERE USER_ID = #{userId}
     </insert>
 </mapper>

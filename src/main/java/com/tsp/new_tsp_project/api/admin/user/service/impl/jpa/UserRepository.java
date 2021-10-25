@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.user.service.impl.jpa;
 
 import com.querydsl.jpa.impl.JPAUpdateClause;
-import com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity;
 import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity;
 import com.tsp.new_tsp_project.api.admin.user.entity.QAdminUserEntity;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,15 +68,20 @@ public class UserRepository {
 	 * @param adminUserEntity
 	 * @throws Exception
 	 */
-	public String adminLogin(AdminUserEntity adminUserEntity) throws Exception {
+	public Map<String, Object> adminLogin(AdminUserEntity adminUserEntity) throws Exception {
+		Map<String, Object> userMap = new HashMap<>();
+
 		String query = "select m from AdminUserEntity m where m.visible = :visible and m.userId = :userId";
 
-		String password = em.createQuery(query, AdminUserEntity.class)
+		AdminUserEntity existAdminUserEntity = em.createQuery(query, AdminUserEntity.class)
 				.setParameter("visible", "Y")
 				.setParameter("userId", adminUserEntity.getUserId())
-				.getSingleResult().getPassword();
+				.getSingleResult();
 
-		return password;
+		userMap.put("userId", existAdminUserEntity.getUserId());
+		userMap.put("password", existAdminUserEntity.getPassword());
+
+		return userMap;
 	}
 
 	/**
@@ -101,6 +106,25 @@ public class UserRepository {
 				.set(qAdminUserEntity.updater, 1)
 				.set(qAdminUserEntity.updateTime, currentTime)
 				.where(qAdminUserEntity.userId.eq(adminUserEntity.getUserId())).execute();
+
+		return adminUserEntity.getIdx();
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : insertAdminUser
+	 * 2. ClassName  : UserRepository.java
+	 * 3. Comment    : 관리자 회원가입 처리
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param adminUserEntity
+	 * @throws Exception
+	 */
+	public Integer insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
+
+		em.persist(adminUserEntity);
 
 		return 1;
 	}
