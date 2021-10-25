@@ -59,7 +59,7 @@ public class AdminPortFolioJpaApi {
 
 		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
-		Integer portFolioCnt = this.adminPortFolioJpaService.findPortFolioCount(searchMap);
+		Long portFolioCnt = this.adminPortFolioJpaService.findPortFolioCount(searchMap);
 
 		List<AdminPortFolioDTO> portFolioList = new ArrayList<>();
 

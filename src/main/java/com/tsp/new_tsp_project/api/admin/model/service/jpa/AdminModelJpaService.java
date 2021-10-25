@@ -36,7 +36,7 @@ public class AdminModelJpaService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public Integer findModelsCount(Map<String, Object> modelMap) throws Exception{
+	public Long findModelsCount(Map<String, Object> modelMap) throws Exception{
 		return modelRepository.findModelsCount(modelMap);
 	}
 

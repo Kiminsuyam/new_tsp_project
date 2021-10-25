@@ -58,22 +58,22 @@ public class AdminProductionJpaApi {
 
 		ConcurrentHashMap<String, Object> searchMap = searchCommon.searchCommon(page, paramMap);
 
-		Integer portFolioCnt = this.adminProductionJpaService.findProductionCount(searchMap);
+		Long productionCnt = this.adminProductionJpaService.findProductionCount(searchMap);
 
-		List<AdminProductionDTO> portFolioList = new ArrayList<>();
+		List<AdminProductionDTO> productionList = new ArrayList<>();
 
-		if(portFolioCnt > 0) {
-			portFolioList = this.adminProductionJpaService.findProductionList(searchMap);
+		if(productionCnt > 0) {
+			productionList = this.adminProductionJpaService.findProductionList(searchMap);
 		}
 
 		// 리스트 수
 		productionMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		productionMap.put("perPageListCnt", Math.ceil((portFolioCnt - 1) / page.getSize() + 1));
+		productionMap.put("perPageListCnt", Math.ceil((productionCnt - 1) / page.getSize() + 1));
 		// 전체 아이템 수
-		productionMap.put("portFolioListCnt", portFolioCnt);
+		productionMap.put("productionListCnt", productionCnt);
 
-		productionMap.put("portFolioList", portFolioList);
+		productionMap.put("productionList", productionList);
 
 		return productionMap;
 	}

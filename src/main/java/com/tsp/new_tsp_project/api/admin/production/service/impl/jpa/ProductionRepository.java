@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.production.service.impl.jpa;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
@@ -24,21 +25,27 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class ProductionRepository {
 
+	private final QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
 
-	private String getProductionQuery(Map<String, Object> portFolioMap) {
-		String query = "select m from AdminProductionEntity m where m.visible = :visible";
+	private BooleanExpression searchProduction(Map<String, Object> productionMap) {
+		String searchType = StringUtil.getString(productionMap.get("searchType"),"");
+		String searchKeyword = StringUtil.getString(productionMap.get("searchKeyword"),"");
 
-		if ("0".equals(StringUtil.getString(portFolioMap.get("searchType"), "0"))) {
-			query += " and (m.title like :searchKeyword or m.description like :searchKeyword)";
-		} else if ("1".equals(StringUtil.getString(portFolioMap.get("searchType"), "0"))) {
-			query += " and m.title like :searchKeyword";
+		if (productionMap == null) {
+			return null;
 		} else {
-			query += " and m.description like :searchKeyword";
+			if ("0".equals(searchType)) {
+				return qAdminProductionEntity.title.like("%"+searchKeyword+"%")
+						.or(qAdminProductionEntity.description.like("%"+searchKeyword+"%"));
+			} else if ("1".equals(searchType)) {
+				return qAdminProductionEntity.title.like("%"+searchKeyword+"%");
+			} else {
+				return qAdminProductionEntity.description.like("%"+searchKeyword+"%");
+			}
 		}
-		return query;
 	}
 
 	/**
@@ -53,13 +60,12 @@ public class ProductionRepository {
 	 * @param productionMap
 	 * @throws Exception
 	 */
-	public Integer findProductionCount(Map<String, Object> productionMap) throws Exception {
-		String query = getProductionQuery(productionMap);
+	public Long findProductionCount(Map<String, Object> productionMap) throws Exception {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return em.createQuery(query, AdminProductionEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(productionMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.getResultList().size();
+		return queryFactory.selectFrom(qAdminProductionEntity)
+				.where(searchProduction(productionMap))
+				.fetchCount();
 	}
 
 	/**
@@ -75,14 +81,14 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public List<AdminProductionDTO> findProductionList(Map<String, Object> productionMap) throws Exception {
-		String query = getProductionQuery(productionMap);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminProductionEntity> productionList = em.createQuery(query, AdminProductionEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(productionMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.setFirstResult(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
-				.setMaxResults(StringUtil.getInt(productionMap.get("size"),0))
-				.getResultList();
+		List<AdminProductionEntity> productionList = queryFactory.selectFrom(qAdminProductionEntity)
+				.where(searchProduction(productionMap))
+				.orderBy(qAdminProductionEntity.idx.desc())
+				.offset(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
+				.limit(StringUtil.getInt(productionMap.get("size"),0))
+				.fetch();
 
 		List<AdminProductionDTO> productionDtoList = ProductionMapper.INSTANCE.toDtoList(productionList);
 

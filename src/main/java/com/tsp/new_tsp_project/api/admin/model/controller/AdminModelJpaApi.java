@@ -67,7 +67,7 @@ public class AdminModelJpaApi {
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Integer modelListCnt = this.adminModelJpaService.findModelsCount(modelMap);
+		Long modelListCnt = this.adminModelJpaService.findModelsCount(modelMap);
 
 		List<AdminModelDTO> modelList = new ArrayList<>();
 

@@ -35,7 +35,7 @@ public class AdminPortFolioJpaService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public Integer findPortFolioCount(ConcurrentHashMap<String, Object> searchMap) throws Exception {
+	public Long findPortFolioCount(ConcurrentHashMap<String, Object> searchMap) throws Exception {
 		return this.portFolioRepository.findPortFolioCount(searchMap);
 	}
 

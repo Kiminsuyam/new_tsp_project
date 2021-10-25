@@ -31,21 +31,8 @@ public class ModelRepository {
 	private final ImageRepository imageRepository;
 	private final EntityManager em;
 
-//	private String getModelQuery(Map<String, Object> modelMap) {
-//
-//		String query = "select m from AdminModelEntity m join fetch m.newModelCodeJpaDTO where m.categoryCd = :categoryCd and m.visible = :visible and m.newModelCodeJpaDTO.cmmType = :cmmType";
-//
-//		if ("0".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
-//			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword or m.modelDescription like :searchKeyword)";
-//		} else if ("1".equals(StringUtil.getString(modelMap.get("searchType"), "0"))) {
-//			query += " and (m.modelKorName like :searchKeyword or m.modelEngName like :searchKeyword)";
-//		} else {
-//			query += " and (m.modelDescription like :searchKeyword)";
-//		}
-//		return query;
-//	}
 
-	private BooleanExpression searchType0(Map<String, Object> modelMap) {
+	private BooleanExpression searchModel(Map<String, Object> modelMap) {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 		Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"),0);
@@ -80,24 +67,13 @@ public class ModelRepository {
 	 * @param modelMap
 	 * @throws Exception
 	 */
-	public Integer findModelsCount(Map<String, Object> modelMap) throws Exception {
-
-//		String query = getModelQuery(modelMap);
+	public Long findModelsCount(Map<String, Object> modelMap) throws Exception {
 
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		return queryFactory.selectFrom(qAdminModelEntity)
-				.where(searchType0(modelMap))
-				.fetch().size();
-
-
-
-//		return em.createQuery(query, AdminModelEntity.class)
-//				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
-//				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
-//				.setParameter("visible", "Y")
-//				.setParameter("cmmType","model")
-//				.getResultList().size();
+				.where(searchModel(modelMap))
+				.fetchCount();
 	}
 
 
@@ -118,27 +94,17 @@ public class ModelRepository {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		List<AdminModelEntity> modelList = queryFactory.selectFrom(qAdminModelEntity)
-											.where(searchType0(modelMap))
-											.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
-											.limit(StringUtil.getInt(modelMap.get("size"),0))
-											.fetch();
-
-//		String query = getModelQuery(modelMap);
-//
-//		List<AdminModelEntity> modelList = em.createQuery(query, AdminModelEntity.class)
-//				.setParameter("categoryCd", StringUtil.getInt(modelMap.get("categoryCd"),0))
-//				.setParameter("searchKeyword", "%" + StringUtil.getString(modelMap.get("searchKeyword"),"") + "%")
-//				.setParameter("visible", "Y")
-//				.setParameter("cmmType","model")
-//				.setFirstResult(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
-//				.setMaxResults(StringUtil.getInt(modelMap.get("size"),0))
-//				.getResultList();
+				.orderBy(qAdminModelEntity.idx.desc())
+				.where(searchModel(modelMap))
+				.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
+				.limit(StringUtil.getInt(modelMap.get("size"),0))
+				.fetch();
 
 		for(int i = 0; i < modelList.size(); i++) {
 			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
-		List<AdminModelDTO> modelDtoList = modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
+		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
 
 
 		return modelDtoList;

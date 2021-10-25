@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
@@ -29,22 +30,28 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class PortFolioRepository {
 
+	private final QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
+	private BooleanExpression searchPortFolio(Map<String, Object> modelMap) {
+		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
+		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 
-	private String getPortFolioQuery(Map<String, Object> portFolioMap) {
-		String query = "select m from AdminPortFolioEntity m join fetch m.newPortFolioJpaDTO where m.visible = :visible and m.newPortFolioJpaDTO.cmmType = :cmmType";
-
-		if ("0".equals(StringUtil.getString(portFolioMap.get("searchType"), "0"))) {
-			query += " and (m.title like :searchKeyword or m.description like :searchKeyword)";
-		} else if ("1".equals(StringUtil.getString(portFolioMap.get("searchType"), "0"))) {
-			query += " and m.title like :searchKeyword";
+		if (modelMap == null) {
+			return null;
 		} else {
-			query += " and m.description like :searchKeyword";
+			if ("0".equals(searchType)) {
+				return qAdminPortFolioEntity.title.like("%"+searchKeyword+"%")
+						.or(qAdminPortFolioEntity.description.like("%"+searchKeyword+"%"));
+			} else if ("1".equals(searchType)) {
+				return qAdminPortFolioEntity.title.like("%"+searchKeyword+"%");
+			} else {
+				return qAdminPortFolioEntity.description.like("%"+searchKeyword+"%");
+			}
 		}
-		return query;
 	}
+
 
 	/**
 	 * <pre>
@@ -58,14 +65,12 @@ public class PortFolioRepository {
 	 * @param portFolioMap
 	 * @throws Exception
 	 */
-	public Integer findPortFolioCount(Map<String, Object> portFolioMap) throws Exception {
-		String query = getPortFolioQuery(portFolioMap);
+	public Long findPortFolioCount(Map<String, Object> portFolioMap) throws Exception {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return em.createQuery(query, AdminPortFolioEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(portFolioMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.setParameter("cmmType","portfolio")
-				.getResultList().size();
+		return queryFactory.selectFrom(qAdminPortFolioEntity)
+				.where(searchPortFolio(portFolioMap))
+				.fetchCount();
 	}
 
 	/**
@@ -81,15 +86,14 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	public List<AdminPortFolioDTO> findPortFolioList(Map<String, Object> portFolioMap) throws Exception {
-		String query = getPortFolioQuery(portFolioMap);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminPortFolioEntity> portFolioList = em.createQuery(query, AdminPortFolioEntity.class)
-				.setParameter("searchKeyword", "%" + StringUtil.getString(portFolioMap.get("searchKeyword"),"") + "%")
-				.setParameter("visible", "Y")
-				.setParameter("cmmType", "portfolio")
-				.setFirstResult(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
-				.setMaxResults(StringUtil.getInt(portFolioMap.get("size"),0))
-				.getResultList();
+		List<AdminPortFolioEntity> portFolioList = queryFactory.selectFrom(qAdminPortFolioEntity)
+				.where(searchPortFolio(portFolioMap))
+				.orderBy(qAdminPortFolioEntity.idx.desc())
+				.offset(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
+				.limit(StringUtil.getInt(portFolioMap.get("size"),0))
+				.fetch();
 
 		List<AdminPortFolioDTO> portFolioDtoList = PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 

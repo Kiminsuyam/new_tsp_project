@@ -34,7 +34,7 @@ public class AdminProductionJpaService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public Integer findProductionCount(ConcurrentHashMap<String, Object> productionMap) throws Exception {
+	public Long findProductionCount(ConcurrentHashMap<String, Object> productionMap) throws Exception {
 		return this.productionRepository.findProductionCount(productionMap);
 	}
 
