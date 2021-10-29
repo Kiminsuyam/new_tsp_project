@@ -22,6 +22,8 @@ import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Repository
@@ -41,16 +43,16 @@ public class ModelRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminModelEntity.modelKorName.like("%"+searchKeyword+"%")
-						.or(qAdminModelEntity.modelEngName.like("%"+searchKeyword+"%")
-						.or(qAdminModelEntity.modelDescription.like("%"+searchKeyword+"%")))
+				return qAdminModelEntity.modelKorName.contains(searchKeyword)
+						.or(qAdminModelEntity.modelEngName.contains(searchKeyword)
+						.or(qAdminModelEntity.modelDescription.contains(searchKeyword)))
 						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
 			} else if ("1".equals(searchType)) {
-				return qAdminModelEntity.modelKorName.like("%"+searchKeyword+"%")
-						.or(qAdminModelEntity.modelEngName.like("%"+searchKeyword+"%"))
+				return qAdminModelEntity.modelKorName.contains(searchKeyword)
+						.or(qAdminModelEntity.modelEngName.contains(searchKeyword))
 						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
 			} else {
-				return qAdminModelEntity.modelDescription.like("%"+searchKeyword+"%").and(qAdminModelEntity.categoryCd.eq(categoryCd));
+				return qAdminModelEntity.modelDescription.contains(searchKeyword).and(qAdminModelEntity.categoryCd.eq(categoryCd));
 			}
 		}
 	}
@@ -148,7 +150,7 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity adminModelEntity) throws Exception {
-		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
+		QCommonImageEntity qCommonImageEntity = commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
