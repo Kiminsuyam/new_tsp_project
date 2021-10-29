@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
-import com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
@@ -22,6 +21,7 @@ import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity.adminModelEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
 @Slf4j
@@ -29,10 +29,8 @@ import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntit
 @Repository
 public class ModelRepository {
 
-	private final QAdminModelEntity qAdminModelEntity = QAdminModelEntity.adminModelEntity;
 	private final ImageRepository imageRepository;
 	private final EntityManager em;
-
 
 	private BooleanExpression searchModel(Map<String, Object> modelMap) {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
@@ -43,16 +41,16 @@ public class ModelRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminModelEntity.modelKorName.contains(searchKeyword)
-						.or(qAdminModelEntity.modelEngName.contains(searchKeyword)
-						.or(qAdminModelEntity.modelDescription.contains(searchKeyword)))
-						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
+				return adminModelEntity.modelKorName.contains(searchKeyword)
+						.or(adminModelEntity.modelEngName.contains(searchKeyword)
+						.or(adminModelEntity.modelDescription.contains(searchKeyword)))
+						.and(adminModelEntity.categoryCd.eq(categoryCd));
 			} else if ("1".equals(searchType)) {
-				return qAdminModelEntity.modelKorName.contains(searchKeyword)
-						.or(qAdminModelEntity.modelEngName.contains(searchKeyword))
-						.and(qAdminModelEntity.categoryCd.eq(categoryCd));
+				return adminModelEntity.modelKorName.contains(searchKeyword)
+						.or(adminModelEntity.modelEngName.contains(searchKeyword))
+						.and(adminModelEntity.categoryCd.eq(categoryCd));
 			} else {
-				return qAdminModelEntity.modelDescription.contains(searchKeyword).and(qAdminModelEntity.categoryCd.eq(categoryCd));
+				return adminModelEntity.modelDescription.contains(searchKeyword).and(adminModelEntity.categoryCd.eq(categoryCd));
 			}
 		}
 	}
@@ -73,7 +71,7 @@ public class ModelRepository {
 
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return queryFactory.selectFrom(qAdminModelEntity)
+		return queryFactory.selectFrom(adminModelEntity)
 				.where(searchModel(modelMap))
 				.fetchCount();
 	}
@@ -95,8 +93,9 @@ public class ModelRepository {
 
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminModelEntity> modelList = queryFactory.selectFrom(qAdminModelEntity)
-				.orderBy(qAdminModelEntity.idx.desc())
+		List<AdminModelEntity> modelList = queryFactory
+				.selectFrom(adminModelEntity)
+				.orderBy(adminModelEntity.idx.desc())
 				.where(searchModel(modelMap))
 				.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(modelMap.get("size"),0))
@@ -146,22 +145,24 @@ public class ModelRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param adminModelEntity
+	 * @param existAdminModelEntity
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity adminModelEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity existAdminModelEntity) throws Exception {
 		QCommonImageEntity qCommonImageEntity = commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminModelEntity findModel = jpaQueryFactory.selectFrom(qAdminModelEntity)
-				.where(qAdminModelEntity.idx.eq(adminModelEntity.getIdx()))
+		AdminModelEntity findModel = jpaQueryFactory
+				.selectFrom(adminModelEntity)
+				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx()))
 				.fetchOne();
 
 		//모델 이미지 조회
-		List<CommonImageEntity> modelImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(adminModelEntity.getIdx()),
+		List<CommonImageEntity> modelImageList = jpaQueryFactory
+				.selectFrom(qCommonImageEntity)
+				.where(qCommonImageEntity.typeIdx.eq(existAdminModelEntity.getIdx()),
 						qCommonImageEntity.visible.eq("Y"),
 						qCommonImageEntity.typeName.eq("model")).fetch();
 
@@ -214,36 +215,36 @@ public class ModelRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param adminModelEntity
+	 * @param existAdminModelEntity
 	 * @param commonImageEntity
 	 * @param files
 	 * @throws Exception
 	 */
 	@Modifying
 	@Transactional
-	public Integer updateModel(AdminModelEntity adminModelEntity, CommonImageEntity commonImageEntity,
+	public Integer updateModel(AdminModelEntity existAdminModelEntity, CommonImageEntity commonImageEntity,
 							   MultipartFile[] files, ConcurrentHashMap<String, Object> modelMap) throws Exception {
 
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
 		Date currentTime = new Date ();
 
-		adminModelEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminModelEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(qAdminModelEntity.modelKorName, adminModelEntity.getModelKorName())
-				.set(qAdminModelEntity.categoryCd, adminModelEntity.getCategoryCd())
-				.set(qAdminModelEntity.modelEngName, adminModelEntity.getModelEngName())
-				.set(qAdminModelEntity.modelDescription, adminModelEntity.getModelDescription())
-				.set(qAdminModelEntity.height, adminModelEntity.getHeight())
-				.set(qAdminModelEntity.size3, adminModelEntity.getSize3())
-				.set(qAdminModelEntity.shoes, adminModelEntity.getShoes())
-				.set(qAdminModelEntity.categoryAge, adminModelEntity.getCategoryAge())
-				.set(qAdminModelEntity.updateTime, adminModelEntity.getUpdateTime())
-				.set(qAdminModelEntity.updater, 1)
-				.where(qAdminModelEntity.idx.eq(adminModelEntity.getIdx())).execute();
+		update.set(adminModelEntity.modelKorName, existAdminModelEntity.getModelKorName())
+				.set(adminModelEntity.categoryCd, existAdminModelEntity.getCategoryCd())
+				.set(adminModelEntity.modelEngName, existAdminModelEntity.getModelEngName())
+				.set(adminModelEntity.modelDescription, existAdminModelEntity.getModelDescription())
+				.set(adminModelEntity.height, existAdminModelEntity.getHeight())
+				.set(adminModelEntity.size3, existAdminModelEntity.getSize3())
+				.set(adminModelEntity.shoes, existAdminModelEntity.getShoes())
+				.set(adminModelEntity.categoryAge, existAdminModelEntity.getCategoryAge())
+				.set(adminModelEntity.updateTime, existAdminModelEntity.getUpdateTime())
+				.set(adminModelEntity.updater, 1)
+				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
 
 		commonImageEntity.setTypeName("model");
-		commonImageEntity.setTypeIdx(adminModelEntity.getIdx());
+		commonImageEntity.setTypeIdx(existAdminModelEntity.getIdx());
 
 		modelMap.put("typeName", "model");
 
@@ -263,21 +264,21 @@ public class ModelRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param adminModelEntity
+	 * @param existAdminModelEntity
 	 * @throws Exception
 	 */
-	public Integer deleteModel(AdminModelEntity adminModelEntity) throws Exception {
+	public Integer deleteModel(AdminModelEntity existAdminModelEntity) throws Exception {
 
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminModelEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
 		Date currentTime = new Date ();
 
-		adminModelEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminModelEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(qAdminModelEntity.visible, "N")
-				.set(qAdminModelEntity.updateTime, adminModelEntity.getUpdateTime())
-				.set(qAdminModelEntity.updater, 1)
-				.where(qAdminModelEntity.idx.eq(adminModelEntity.getIdx())).execute();
+		update.set(adminModelEntity.visible, "N")
+				.set(adminModelEntity.updateTime, existAdminModelEntity.getUpdateTime())
+				.set(adminModelEntity.updater, 1)
+				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
 
 		return 1;
 	}

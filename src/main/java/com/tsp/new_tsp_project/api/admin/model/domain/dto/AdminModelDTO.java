@@ -60,5 +60,4 @@ public class AdminModelDTO extends NewCommonDTO{
 	@ApiModelProperty(required = true, value = "visible")
 	private String visible;
 
-	private List<CommonImageDTO> commonImageDTOList;
 }

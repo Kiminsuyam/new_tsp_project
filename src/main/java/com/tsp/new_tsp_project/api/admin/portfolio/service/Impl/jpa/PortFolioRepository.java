@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
-import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
@@ -25,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity.adminPortFolioEntity;
+
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class PortFolioRepository {
-
-	private final QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
@@ -42,12 +41,12 @@ public class PortFolioRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminPortFolioEntity.title.contains(searchKeyword)
-						.or(qAdminPortFolioEntity.description.contains(searchKeyword));
+				return adminPortFolioEntity.title.contains(searchKeyword)
+						.or(adminPortFolioEntity.description.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminPortFolioEntity.title.contains(searchKeyword);
+				return adminPortFolioEntity.title.contains(searchKeyword);
 			} else {
-				return qAdminPortFolioEntity.description.contains(searchKeyword);
+				return adminPortFolioEntity.description.contains(searchKeyword);
 			}
 		}
 	}
@@ -68,7 +67,7 @@ public class PortFolioRepository {
 	public Long findPortFolioCount(Map<String, Object> portFolioMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return queryFactory.selectFrom(qAdminPortFolioEntity)
+		return queryFactory.selectFrom(adminPortFolioEntity)
 				.where(searchPortFolio(portFolioMap))
 				.fetchCount();
 	}
@@ -88,9 +87,10 @@ public class PortFolioRepository {
 	public List<AdminPortFolioDTO> findPortFolioList(Map<String, Object> portFolioMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminPortFolioEntity> portFolioList = queryFactory.selectFrom(qAdminPortFolioEntity)
+		List<AdminPortFolioEntity> portFolioList = queryFactory
+				.selectFrom(adminPortFolioEntity)
 				.where(searchPortFolio(portFolioMap))
-				.orderBy(qAdminPortFolioEntity.idx.desc())
+				.orderBy(adminPortFolioEntity.idx.desc())
 				.offset(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(portFolioMap.get("size"),0))
 				.fetch();
@@ -113,23 +113,23 @@ public class PortFolioRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminPortFolioEntity
+	 * @param existAdminPortFolioEntity
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity adminPortFolioEntity) throws Exception {
-		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
+	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity existAdminPortFolioEntity) throws Exception {
 		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminPortFolioEntity findPortFolio = jpaQueryFactory.selectFrom(qAdminPortFolioEntity)
-				.where(qAdminPortFolioEntity.idx.eq(adminPortFolioEntity.getIdx()))
+		AdminPortFolioEntity findPortFolio = jpaQueryFactory.selectFrom(adminPortFolioEntity)
+				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx()))
 				.fetchOne();
 
 		//포트폴리오 이미지 조회
-		List<CommonImageEntity> portFolioImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(adminPortFolioEntity.getIdx()),
+		List<CommonImageEntity> portFolioImageList = jpaQueryFactory
+				.selectFrom(qCommonImageEntity)
+				.where(qCommonImageEntity.typeIdx.eq(existAdminPortFolioEntity.getIdx()),
 						qCommonImageEntity.visible.eq("Y"),
 						qCommonImageEntity.typeName.eq("portfolio")).fetch();
 
@@ -151,21 +151,21 @@ public class PortFolioRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminPortFolioEntity
+	 * @param existAdminPortFolioEntity
 	 * @param commonImageEntity
 	 * @param files
 	 * @throws Exception
 	 */
-	 public Integer insertPortFolio(AdminPortFolioEntity adminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
+	 public Integer insertPortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
 		 Date date = new Date();
-		 adminPortFolioEntity.builder().createTime(date).creator(1).build();
+		 existAdminPortFolioEntity.builder().createTime(date).creator(1).build();
 		 em.persist(adminPortFolioEntity);
 
-		 commonImageEntity.builder().typeName("portfolio").typeIdx(adminPortFolioEntity.getIdx()).build();
+		 commonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
 
 		 imageRepository.uploadImageFile(commonImageEntity, files);
 
-		 return adminPortFolioEntity.getIdx();
+		 return existAdminPortFolioEntity.getIdx();
 	 }
 
 	/**
@@ -177,35 +177,33 @@ public class PortFolioRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminPortFolioEntity
+	 * @param existAdminPortFolioEntity
 	 * @param commonImageEntity
 	 * @param files
 	 * @throws Exception
 	 */
 	@Modifying
 	@Transactional
-	public Integer updatePortFolio(AdminPortFolioEntity adminPortFolioEntity, CommonImageEntity commonImageEntity,
+	public Integer updatePortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity,
 							   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
 
-		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
-
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminPortFolioEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
 		Date currentTime = new Date();
 
-		adminPortFolioEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminPortFolioEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(qAdminPortFolioEntity.title, adminPortFolioEntity.getTitle())
-				.set(qAdminPortFolioEntity.description, adminPortFolioEntity.getDescription())
-				.set(qAdminPortFolioEntity.hashTag, adminPortFolioEntity.getHashTag())
-				.set(qAdminPortFolioEntity.videoUrl, adminPortFolioEntity.getVideoUrl())
-				.set(qAdminPortFolioEntity.visible, "Y")
-				.set(qAdminPortFolioEntity.updateTime, currentTime)
-				.set(qAdminPortFolioEntity.updater, 1)
-				.where(qAdminPortFolioEntity.idx.eq(adminPortFolioEntity.getIdx())).execute();
+		update.set(adminPortFolioEntity.title, existAdminPortFolioEntity.getTitle())
+				.set(adminPortFolioEntity.description, existAdminPortFolioEntity.getDescription())
+				.set(adminPortFolioEntity.hashTag, existAdminPortFolioEntity.getHashTag())
+				.set(adminPortFolioEntity.videoUrl, existAdminPortFolioEntity.getVideoUrl())
+				.set(adminPortFolioEntity.visible, "Y")
+				.set(adminPortFolioEntity.updateTime, currentTime)
+				.set(adminPortFolioEntity.updater, 1)
+				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx())).execute();
 
 		commonImageEntity.setTypeName("portfolio");
-		commonImageEntity.setTypeIdx(adminPortFolioEntity.getIdx());
+		commonImageEntity.setTypeIdx(existAdminPortFolioEntity.getIdx());
 
 		portFolioMap.put("typeName", "portfolio");
 		if("Y".equals(imageRepository.updateMultipleFile(commonImageEntity, files, portFolioMap))) {
@@ -230,18 +228,17 @@ public class PortFolioRepository {
 	@Modifying
 	@Transactional
 	public Integer deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
-		QAdminPortFolioEntity qAdminPortFolioEntity = QAdminPortFolioEntity.adminPortFolioEntity;
 
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminPortFolioEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
 		Date currentTime = new Date();
 
 		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
 
-		update.set(qAdminPortFolioEntity.visible, "N")
-				.set(qAdminPortFolioEntity.updateTime, currentTime)
-				.set(qAdminPortFolioEntity.updater, 1)
-				.where(qAdminPortFolioEntity.idx.in(deleteIdx)).execute();
+		update.set(adminPortFolioEntity.visible, "N")
+				.set(adminPortFolioEntity.updateTime, currentTime)
+				.set(adminPortFolioEntity.updater, 1)
+				.where(adminPortFolioEntity.idx.in(deleteIdx)).execute();
 
 		return 1;
 	}

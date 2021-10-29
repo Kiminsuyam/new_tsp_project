@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
 import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
-import com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
@@ -21,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity.*;
+
 @Repository
 @RequiredArgsConstructor
 public class ProductionRepository {
-
-	private final QAdminProductionEntity qAdminProductionEntity = QAdminProductionEntity.adminProductionEntity;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
@@ -38,12 +37,12 @@ public class ProductionRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminProductionEntity.title.contains(searchKeyword)
-						.or(qAdminProductionEntity.description.contains(searchKeyword));
+				return adminProductionEntity.title.contains(searchKeyword)
+						.or(adminProductionEntity.description.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminProductionEntity.title.contains(searchKeyword);
+				return adminProductionEntity.title.contains(searchKeyword);
 			} else {
-				return qAdminProductionEntity.description.contains(searchKeyword);
+				return adminProductionEntity.description.contains(searchKeyword);
 			}
 		}
 	}
@@ -63,7 +62,7 @@ public class ProductionRepository {
 	public Long findProductionCount(Map<String, Object> productionMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return queryFactory.selectFrom(qAdminProductionEntity)
+		return queryFactory.selectFrom(adminProductionEntity)
 				.where(searchProduction(productionMap))
 				.fetchCount();
 	}
@@ -83,9 +82,10 @@ public class ProductionRepository {
 	public List<AdminProductionDTO> findProductionList(Map<String, Object> productionMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminProductionEntity> productionList = queryFactory.selectFrom(qAdminProductionEntity)
+		List<AdminProductionEntity> productionList = queryFactory
+				.selectFrom(adminProductionEntity)
 				.where(searchProduction(productionMap))
-				.orderBy(qAdminProductionEntity.idx.desc())
+				.orderBy(adminProductionEntity.idx.desc())
 				.offset(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(productionMap.get("size"),0))
 				.fetch();
@@ -109,22 +109,22 @@ public class ProductionRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminProductionEntity
+	 * @param existAdminProductionEntity
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> findOneProduction(AdminProductionEntity adminProductionEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> findOneProduction(AdminProductionEntity existAdminProductionEntity) throws Exception {
 		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminProductionEntity findOneProduction = jpaQueryFactory.selectFrom(qAdminProductionEntity)
-				.where(qAdminProductionEntity.idx.eq(adminProductionEntity.getIdx()))
+		AdminProductionEntity findOneProduction = jpaQueryFactory.selectFrom(adminProductionEntity)
+				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx()))
 				.fetchOne();
 
 		//포트폴리오 이미지 조회
 		List<CommonImageEntity> productionImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(adminProductionEntity.getIdx()),
+				.where(qCommonImageEntity.typeIdx.eq(existAdminProductionEntity.getIdx()),
 						qCommonImageEntity.visible.eq("Y"),
 						qCommonImageEntity.typeName.eq("production")).fetch();
 
@@ -173,30 +173,30 @@ public class ProductionRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminProductionEntity
+	 * @param existAdminProductionEntity
 	 * @param commonImageEntity
 	 * @param files
 	 * @throws Exception
 	 */
-	public Integer updateProduction(AdminProductionEntity adminProductionEntity,
+	public Integer updateProduction(AdminProductionEntity existAdminProductionEntity,
 									CommonImageEntity commonImageEntity,
 									MultipartFile[] files) throws Exception {
 
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, adminProductionEntity);
 
 		Date currentTime = new Date();
 
-		adminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(qAdminProductionEntity.title, adminProductionEntity.getTitle())
-				.set(qAdminProductionEntity.description, adminProductionEntity.getDescription())
-				.set(qAdminProductionEntity.visible, "Y")
-				.set(qAdminProductionEntity.updateTime, currentTime)
-				.set(qAdminProductionEntity.updater, 1)
-				.where(qAdminProductionEntity.idx.eq(adminProductionEntity.getIdx())).execute();
+		update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
+				.set(adminProductionEntity.description, existAdminProductionEntity.getDescription())
+				.set(adminProductionEntity.visible, "Y")
+				.set(adminProductionEntity.updateTime, currentTime)
+				.set(adminProductionEntity.updater, 1)
+				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
 
 		commonImageEntity.setTypeName("production");
-		commonImageEntity.setTypeIdx(adminProductionEntity.getIdx());
+		commonImageEntity.setTypeIdx(existAdminProductionEntity.getIdx());
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 		productionMap.put("typeName", "portfolio");
@@ -215,21 +215,21 @@ public class ProductionRepository {
 	 * 5. 작성일       : 2021. 09. 22.
 	 * </pre>
 	 *
-	 * @param adminProductionEntity
+	 * @param existAdminProductionEntity
 	 * @throws Exception
 	 */
-	public Integer deleteProduction(AdminProductionEntity adminProductionEntity) throws Exception {
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminProductionEntity);
+	public Integer deleteProduction(AdminProductionEntity existAdminProductionEntity) throws Exception {
+		JPAUpdateClause update = new JPAUpdateClause(em, adminProductionEntity);
 
 		Date currentTime = new Date();
 
-		adminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(qAdminProductionEntity.title, adminProductionEntity.getTitle())
-				.set(qAdminProductionEntity.visible, "N")
-				.set(qAdminProductionEntity.updateTime, currentTime)
-				.set(qAdminProductionEntity.updater, 1)
-				.where(qAdminProductionEntity.idx.eq(adminProductionEntity.getIdx())).execute();
+		update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
+				.set(adminProductionEntity.visible, "N")
+				.set(adminProductionEntity.updateTime, currentTime)
+				.set(adminProductionEntity.updater, 1)
+				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
 
 		return 1;
 	}
