@@ -42,12 +42,12 @@ public class PortFolioRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminPortFolioEntity.title.like("%"+searchKeyword+"%")
-						.or(qAdminPortFolioEntity.description.like("%"+searchKeyword+"%"));
+				return qAdminPortFolioEntity.title.contains(searchKeyword)
+						.or(qAdminPortFolioEntity.description.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminPortFolioEntity.title.like("%"+searchKeyword+"%");
+				return qAdminPortFolioEntity.title.contains(searchKeyword);
 			} else {
-				return qAdminPortFolioEntity.description.like("%"+searchKeyword+"%");
+				return qAdminPortFolioEntity.description.contains(searchKeyword);
 			}
 		}
 	}

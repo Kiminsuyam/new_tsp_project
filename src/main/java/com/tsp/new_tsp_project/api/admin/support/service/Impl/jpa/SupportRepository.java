@@ -29,12 +29,12 @@ public class SupportRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminSupportEntity.supportName.like("%"+searchKeyword+"%")
-						.or(qAdminSupportEntity.supportMessage.like("%"+searchKeyword+"%"));
+				return qAdminSupportEntity.supportName.contains(searchKeyword)
+						.or(qAdminSupportEntity.supportMessage.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminSupportEntity.supportName.like("%"+searchKeyword+"%");
+				return qAdminSupportEntity.supportName.contains(searchKeyword);
 			} else {
-				return qAdminSupportEntity.supportMessage.like("%"+searchKeyword+"%");
+				return qAdminSupportEntity.supportMessage.contains(searchKeyword);
 			}
 		}
 	}

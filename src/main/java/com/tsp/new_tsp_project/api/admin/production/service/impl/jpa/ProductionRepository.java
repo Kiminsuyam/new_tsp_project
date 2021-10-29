@@ -38,12 +38,12 @@ public class ProductionRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminProductionEntity.title.like("%"+searchKeyword+"%")
-						.or(qAdminProductionEntity.description.like("%"+searchKeyword+"%"));
+				return qAdminProductionEntity.title.contains(searchKeyword)
+						.or(qAdminProductionEntity.description.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminProductionEntity.title.like("%"+searchKeyword+"%");
+				return qAdminProductionEntity.title.contains(searchKeyword);
 			} else {
-				return qAdminProductionEntity.description.like("%"+searchKeyword+"%");
+				return qAdminProductionEntity.description.contains(searchKeyword);
 			}
 		}
 	}
