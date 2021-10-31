@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.user.dto.AdminUserDTO;
 import com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity;
-import com.tsp.new_tsp_project.api.admin.user.entity.QAdminUserEntity;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,11 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_project.api.admin.user.entity.QAdminUserEntity.*;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
 
-	private final QAdminUserEntity qAdminUserEntity = QAdminUserEntity.adminUserEntity;
+	private final JPAQueryFactory queryFactory;
 	private final EntityManager em;
 
 	/**
@@ -35,11 +36,10 @@ public class UserRepository {
 	 * @throws Exception
 	 */
 	public List<AdminUserDTO> findUserList(Map<String, Object> userMap) throws Exception {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminUserEntity> userList = queryFactory.selectFrom(qAdminUserEntity)
-				.where(qAdminUserEntity.visible.eq("Y"))
-				.orderBy(qAdminUserEntity.idx.desc())
+		List<AdminUserEntity> userList = queryFactory.selectFrom(adminUserEntity)
+				.where(adminUserEntity.visible.eq("Y"))
+				.orderBy(adminUserEntity.idx.desc())
 				.offset(StringUtil.getInt(userMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(userMap.get("size"),0))
 				.fetch();
@@ -62,25 +62,24 @@ public class UserRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param adminUserEntity
+	 * @param existAdminUserEntity
 	 * @throws Exception
 	 */
-	public Map<String, Object> adminLogin(AdminUserEntity adminUserEntity) throws Exception {
+	public Map<String, Object> adminLogin(AdminUserEntity existAdminUserEntity) throws Exception {
 
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 		Map<String, Object> userMap = new HashMap<>();
 
 		try {
-			AdminUserEntity existAdminUserEntity = queryFactory.selectFrom(qAdminUserEntity)
-					.where(qAdminUserEntity.visible.eq("Y"), qAdminUserEntity.userId.eq(adminUserEntity.getUserId()))
+			AdminUserEntity NewAdminUserEntity = queryFactory.selectFrom(adminUserEntity)
+					.where(adminUserEntity.visible.eq("Y"), adminUserEntity.userId.eq(existAdminUserEntity.getUserId()))
 					.fetchOne();
 
-			if(existAdminUserEntity == null) {
+			if(NewAdminUserEntity == null) {
 				return null;
 			}
 
-			userMap.put("userId", existAdminUserEntity.getUserId());
-			userMap.put("password", existAdminUserEntity.getPassword());
+			userMap.put("userId", NewAdminUserEntity.getUserId());
+			userMap.put("password", NewAdminUserEntity.getPassword());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,18 +101,17 @@ public class UserRepository {
 	 * @param adminUserEntity
 	 * @throws Exception
 	 */
-	public Integer insertUserToken(AdminUserEntity adminUserEntity) throws Exception {
-		QAdminUserEntity qAdminUserEntity = QAdminUserEntity.adminUserEntity;
-		JPAUpdateClause update = new JPAUpdateClause(em, qAdminUserEntity);
+	public Integer insertUserToken(AdminUserEntity existAdminUserEntity) throws Exception {
+		JPAUpdateClause update = new JPAUpdateClause(em, adminUserEntity);
 
 		Date currentTime = new Date();
 
-		update.set(qAdminUserEntity.userToken, adminUserEntity.getUserToken())
-				.set(qAdminUserEntity.updater, 1)
-				.set(qAdminUserEntity.updateTime, currentTime)
-				.where(qAdminUserEntity.userId.eq(adminUserEntity.getUserId())).execute();
+		update.set(adminUserEntity.userToken, existAdminUserEntity.getUserToken())
+				.set(adminUserEntity.updater, 1)
+				.set(adminUserEntity.updateTime, currentTime)
+				.where(adminUserEntity.userId.eq(existAdminUserEntity.getUserId())).execute();
 
-		return adminUserEntity.getIdx();
+		return existAdminUserEntity.getIdx();
 	}
 
 	/**
