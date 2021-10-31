@@ -150,11 +150,16 @@ public class ProductionRepository {
 	public Integer insertProduction(AdminProductionEntity adminProductionEntity,
 									CommonImageEntity commonImageEntity,
 									MultipartFile[] files) throws Exception {
-		Date date = new Date();
-		adminProductionEntity.builder().createTime(date).creator(1).build();
-		em.persist(adminProductionEntity);
 
-		commonImageEntity.builder().typeName("production").typeIdx(adminProductionEntity.getIdx()).build();
+		adminProductionEntity.builder().createTime(new Date()).creator(1).build();
+		em.persist(adminProductionEntity);
+		em.flush();
+		em.clear();
+
+		commonImageEntity.builder()
+				.typeName("production")
+				.typeIdx(adminProductionEntity.getIdx())
+				.build();
 
 		imageRepository.uploadImageFile(commonImageEntity, files);
 
@@ -181,19 +186,19 @@ public class ProductionRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminProductionEntity);
 
-		Date currentTime = new Date();
-
-		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminProductionEntity.builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.description, existAdminProductionEntity.getDescription())
 				.set(adminProductionEntity.visible, "Y")
-				.set(adminProductionEntity.updateTime, currentTime)
+				.set(adminProductionEntity.updateTime, new Date())
 				.set(adminProductionEntity.updater, 1)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
 
-		commonImageEntity.setTypeName("production");
-		commonImageEntity.setTypeIdx(existAdminProductionEntity.getIdx());
+		commonImageEntity.builder()
+				.typeName("production")
+				.typeIdx(existAdminProductionEntity.getIdx())
+				.build();
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 		productionMap.put("typeName", "portfolio");
@@ -215,19 +220,19 @@ public class ProductionRepository {
 	 * @param existAdminProductionEntity
 	 * @throws Exception
 	 */
-	public Integer deleteProduction(AdminProductionEntity existAdminProductionEntity) throws Exception {
+	public Long deleteProduction(AdminProductionEntity existAdminProductionEntity) throws Exception {
 		JPAUpdateClause update = new JPAUpdateClause(em, adminProductionEntity);
 
 		Date currentTime = new Date();
 
 		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
 
-		update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
+		long result = update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.visible, "N")
 				.set(adminProductionEntity.updateTime, currentTime)
 				.set(adminProductionEntity.updater, 1)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
 
-		return 1;
+		return result;
 	}
 }

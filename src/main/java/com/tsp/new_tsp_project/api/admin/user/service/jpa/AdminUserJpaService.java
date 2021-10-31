@@ -124,8 +124,6 @@ public class AdminUserJpaService {
 		// 패스워드 인코딩
 		String password = passwordEncoder.encode(adminUserEntity.getPassword());
 
-		Date currentTime = new Date();
-
 		AdminUserEntity encodeUserEntity = AdminUserEntity.builder()
 				.userId(adminUserEntity.getUserId())
 				.password(password)
@@ -133,9 +131,9 @@ public class AdminUserJpaService {
 				.name(adminUserEntity.getName())
 				.visible("Y")
 				.creator(1)
-				.createTime(currentTime)
+				.createTime(new Date())
 				.updater(1)
-				.updateTime(currentTime)
+				.updateTime(new Date())
 				.build();
 
 		return this.userRepository.insertAdminUser(encodeUserEntity);

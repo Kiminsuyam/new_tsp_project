@@ -155,7 +155,7 @@ public class AdminPortFolioJpaService {
 	 * @throws Exception
 	 */
 	@Transactional
-	public Integer deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
+	public Long deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
 		return portFolioRepository.deletePortFolio(portFolioMap);
 	}
 }

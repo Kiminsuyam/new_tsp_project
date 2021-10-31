@@ -145,7 +145,6 @@ public class PortFolioRepository {
 	 */
 	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity existAdminPortFolioEntity) throws Exception {
 
-
 		//모델 상세 조회
 		AdminPortFolioEntity findPortFolio = queryFactory.selectFrom(adminPortFolioEntity)
 				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx()))
@@ -182,9 +181,10 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	 public Integer insertPortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
-		 Date date = new Date();
-		 existAdminPortFolioEntity.builder().createTime(date).creator(1).build();
+		 existAdminPortFolioEntity.builder().createTime(new Date()).creator(1).build();
 		 em.persist(adminPortFolioEntity);
+		 em.flush();
+		 em.clear();
 
 		 commonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
 
@@ -214,21 +214,21 @@ public class PortFolioRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
-		Date currentTime = new Date();
-
-		existAdminPortFolioEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminPortFolioEntity.builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminPortFolioEntity.title, existAdminPortFolioEntity.getTitle())
 				.set(adminPortFolioEntity.description, existAdminPortFolioEntity.getDescription())
 				.set(adminPortFolioEntity.hashTag, existAdminPortFolioEntity.getHashTag())
 				.set(adminPortFolioEntity.videoUrl, existAdminPortFolioEntity.getVideoUrl())
 				.set(adminPortFolioEntity.visible, "Y")
-				.set(adminPortFolioEntity.updateTime, currentTime)
+				.set(adminPortFolioEntity.updateTime, new Date())
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx())).execute();
 
-		commonImageEntity.setTypeName("portfolio");
-		commonImageEntity.setTypeIdx(existAdminPortFolioEntity.getIdx());
+		commonImageEntity.builder()
+				.typeName("portfolio")
+				.typeIdx(existAdminPortFolioEntity.getIdx())
+				.build();
 
 		portFolioMap.put("typeName", "portfolio");
 		if("Y".equals(imageRepository.updateMultipleFile(commonImageEntity, files, portFolioMap))) {
@@ -252,19 +252,17 @@ public class PortFolioRepository {
 	 */
 	@Modifying
 	@Transactional
-	public Integer deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
+	public Long deletePortFolio(Map<String, Object> portFolioMap) throws Exception {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
-		Date currentTime = new Date();
-
 		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
 
-		update.set(adminPortFolioEntity.visible, "N")
-				.set(adminPortFolioEntity.updateTime, currentTime)
+		long result = update.set(adminPortFolioEntity.visible, "N")
+				.set(adminPortFolioEntity.updateTime, new Date())
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.in(deleteIdx)).execute();
 
-		return 1;
+		return result;
 	}
 }

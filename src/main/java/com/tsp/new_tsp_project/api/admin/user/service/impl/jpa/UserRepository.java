@@ -98,17 +98,15 @@ public class UserRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param adminUserEntity
+	 * @param existAdminUserEntity
 	 * @throws Exception
 	 */
 	public Integer insertUserToken(AdminUserEntity existAdminUserEntity) throws Exception {
 		JPAUpdateClause update = new JPAUpdateClause(em, adminUserEntity);
 
-		Date currentTime = new Date();
-
 		update.set(adminUserEntity.userToken, existAdminUserEntity.getUserToken())
 				.set(adminUserEntity.updater, 1)
-				.set(adminUserEntity.updateTime, currentTime)
+				.set(adminUserEntity.updateTime, new Date())
 				.where(adminUserEntity.userId.eq(existAdminUserEntity.getUserId())).execute();
 
 		return existAdminUserEntity.getIdx();
@@ -130,6 +128,8 @@ public class UserRepository {
 
 		//회원 등록
 		em.persist(adminUserEntity);
+		em.flush();
+		em.clear();
 
 		//회원 등록된 IDX
 		AdminUserEntity newAdminUserEntity = em.find(AdminUserEntity.class, adminUserEntity.getIdx());

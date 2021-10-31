@@ -7,7 +7,6 @@ import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -190,11 +189,15 @@ public class ModelRepository {
 							   CommonImageEntity commonImageEntity,
 							   MultipartFile[] files) throws Exception {
 
-		Date date = new Date();
-		adminModelEntity.builder().createTime(date).creator(1).build();
+		adminModelEntity.builder().createTime(new Date()).creator(1).build();
 		em.persist(adminModelEntity);
+		em.flush();
+		em.clear();
 
-		commonImageEntity.builder().typeName("model").typeIdx(adminModelEntity.getIdx()).build();
+		commonImageEntity.builder()
+				.typeName("model")
+				.typeIdx(adminModelEntity.getIdx())
+				.build();
 
 		imageRepository.uploadImageFile(commonImageEntity, files);
 
@@ -222,9 +225,7 @@ public class ModelRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
-		Date currentTime = new Date ();
-
-		existAdminModelEntity.builder().updateTime(currentTime).updater(1).build();
+		existAdminModelEntity.builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminModelEntity.modelKorName, existAdminModelEntity.getModelKorName())
 				.set(adminModelEntity.categoryCd, existAdminModelEntity.getCategoryCd())
@@ -238,8 +239,10 @@ public class ModelRepository {
 				.set(adminModelEntity.updater, 1)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
 
-		commonImageEntity.setTypeName("model");
-		commonImageEntity.setTypeIdx(existAdminModelEntity.getIdx());
+		commonImageEntity.builder()
+				.typeName("model")
+				.typeIdx(existAdminModelEntity.getIdx())
+				.build();
 
 		modelMap.put("typeName", "model");
 
@@ -262,19 +265,17 @@ public class ModelRepository {
 	 * @param existAdminModelEntity
 	 * @throws Exception
 	 */
-	public Integer deleteModel(AdminModelEntity existAdminModelEntity) throws Exception {
+	public Long deleteModel(AdminModelEntity existAdminModelEntity) throws Exception {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
-		Date currentTime = new Date ();
+		existAdminModelEntity.builder().updateTime(new Date ()).updater(1).build();
 
-		existAdminModelEntity.builder().updateTime(currentTime).updater(1).build();
-
-		update.set(adminModelEntity.visible, "N")
+		long result = update.set(adminModelEntity.visible, "N")
 				.set(adminModelEntity.updateTime, existAdminModelEntity.getUpdateTime())
 				.set(adminModelEntity.updater, 1)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
 
-		return 1;
+		return result;
 	}
 }

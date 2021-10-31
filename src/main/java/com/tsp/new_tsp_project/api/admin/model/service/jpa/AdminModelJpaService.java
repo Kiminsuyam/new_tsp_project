@@ -151,7 +151,7 @@ public class AdminModelJpaService {
 	 * @throws Exception
 	 */
 	@Transactional
-	public Integer deleteModel(AdminModelEntity adminModelEntity) throws Exception {
+	public Long deleteModel(AdminModelEntity adminModelEntity) throws Exception {
 		return this.modelRepository.deleteModel(adminModelEntity);
 	}
 }

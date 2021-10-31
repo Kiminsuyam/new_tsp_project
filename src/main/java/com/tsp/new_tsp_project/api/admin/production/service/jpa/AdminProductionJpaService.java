@@ -139,7 +139,7 @@ public class AdminProductionJpaService {
 	 * @param adminProductionEntity
 	 * @throws Exception
 	 */
-	public Integer deleteProduction(AdminProductionEntity adminProductionEntity) throws Exception {
+	public Long deleteProduction(AdminProductionEntity adminProductionEntity) throws Exception {
 		return this.productionRepository.deleteProduction(adminProductionEntity);
 	}
 }

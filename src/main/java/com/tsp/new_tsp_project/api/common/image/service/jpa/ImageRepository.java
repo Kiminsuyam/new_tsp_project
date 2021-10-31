@@ -1,9 +1,7 @@
 package com.tsp.new_tsp_project.api.common.image.service.jpa;
 
-import com.querydsl.jpa.impl.JPAInsertClause;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +15,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.commonImageEntity;
 
 @Slf4j
 @Repository
@@ -54,7 +54,7 @@ public class ImageRepository {
 		return rtnStr;
 	}
 
-	public String updateMultipleFile(CommonImageEntity commonImageEntity,
+	public String updateMultipleFile(CommonImageEntity existCommonImageEntity,
 									 MultipartFile[] files, ConcurrentHashMap<String, Object> commandMap) throws Exception {
 
 		// 파일 확장자
@@ -76,15 +76,16 @@ public class ImageRepository {
 
 		int fileCnt = 0;
 
-		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
-		JPAUpdateClause update = new JPAUpdateClause(em, qCommonImageEntity);
-		JPAInsertClause insert = new JPAInsertClause(em, qCommonImageEntity);
+		JPAUpdateClause update = new JPAUpdateClause(em, commonImageEntity);
 
 		try {
 			for(int i = 0; i < arrayState.length; i++) {
 				if("U".equals(arrayState[i])) {
 					if(files[fileCnt] != null) {
-						ext = files[fileCnt].getOriginalFilename().substring(files[fileCnt].getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
+						ext = files[fileCnt].getOriginalFilename()
+								.substring(files[fileCnt].getOriginalFilename().lastIndexOf(".") + 1)
+								.toLowerCase();
+
 						fileId = currentDate();
 						fileMask = fileId + '.' + ext;
 						fileSize = files[fileCnt].getSize();
@@ -103,14 +104,16 @@ public class ImageRepository {
 						Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
 						if (i == 0) {
-							commonImageEntity.setFileNum(0);
-							commonImageEntity.setVisible("N");
-							commonImageEntity.setImageType("main");// 파일Mask
+							existCommonImageEntity.builder()
+									.fileNum(0)
+									.visible("N")
+									.imageType("main")
+									.build();
 
-							Long result = update.set(qCommonImageEntity.visible, "N")
-									.where(qCommonImageEntity.typeIdx.eq(commonImageEntity.getIdx()),
-											qCommonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
-											qCommonImageEntity.imageType.eq("main")).execute();
+							Long result = update.set(commonImageEntity.visible, "N")
+											.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
+													commonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
+													commonImageEntity.imageType.eq("main")).execute();
 
 							if (result > 0) {
 								em.detach(commonImageEntity);
@@ -119,48 +122,41 @@ public class ImageRepository {
 							String query = "select COALESCE(max(m.fileNum),0)+1 from CommonImageEntity m where m.typeIdx = :type_idx and m.visible = :visible";
 
 							Integer size = StringUtil.getInt(em.createQuery(query, Integer.class)
-									.setParameter("type_idx", commonImageEntity.getTypeIdx())
+									.setParameter("type_idx", existCommonImageEntity.getTypeIdx())
 									.setParameter("visible", "Y").getSingleResult(), 0);
 
-							commonImageEntity.setFileNum(size);
-							commonImageEntity.setImageType("sub" + size);// 파일Mask
+							existCommonImageEntity.builder()
+									.fileNum(size)
+									.imageType("sub" + size)
+									.build();
 						}
 
-						commonImageEntity.setFileName(files[fileCnt].getOriginalFilename());                   // 파일명
-						commonImageEntity.setFileSize(fileSize);  // 파일Size
-						commonImageEntity.setFileMask(fileMask);
-						commonImageEntity.setFilePath(uploadPath + fileMask);
-
+						existCommonImageEntity.builder().fileName(files[fileCnt].getOriginalFilename())
+										.fileSize(fileSize)
+										.fileMask(fileMask)
+										.filePath(uploadPath + fileMask)
+										.build();
 
 						em.createNativeQuery("INSERT INTO tsp_image (type_idx, type_name, file_num, file_name, file_size, file_mask, file_path, image_type, visible)" +
 										"VALUES(?,?,?,?,?,?,?,?,?)")
-								.setParameter(1, commonImageEntity.getTypeIdx())
-								.setParameter(2, commonImageEntity.getTypeName())
-								.setParameter(3, commonImageEntity.getFileNum())
-								.setParameter(4, commonImageEntity.getFileName())
-								.setParameter(5, commonImageEntity.getFileSize())
-								.setParameter(6, commonImageEntity.getFileMask())
-								.setParameter(7, commonImageEntity.getFilePath())
-								.setParameter(8, commonImageEntity.getImageType())
+								.setParameter(1, existCommonImageEntity.getTypeIdx())
+								.setParameter(2, existCommonImageEntity.getTypeName())
+								.setParameter(3, existCommonImageEntity.getFileNum())
+								.setParameter(4, existCommonImageEntity.getFileName())
+								.setParameter(5, existCommonImageEntity.getFileSize())
+								.setParameter(6, existCommonImageEntity.getFileMask())
+								.setParameter(7, existCommonImageEntity.getFilePath())
+								.setParameter(8, existCommonImageEntity.getImageType())
 								.setParameter(9, "Y").executeUpdate();
-
-//						insert.columns(qCommonImageEntity.typeIdx,qCommonImageEntity.typeName, qCommonImageEntity.fileNum, qCommonImageEntity.fileName,
-//										qCommonImageEntity.fileSize, qCommonImageEntity.fileMask, qCommonImageEntity.filePath, qCommonImageEntity.imageType,
-//										qCommonImageEntity.visible).values(commonImageEntity.getTypeIdx(),commonImageEntity.getTypeName(), commonImageEntity.getFileNum(),
-//										commonImageEntity.getFileName(),commonImageEntity.getFileSize(),commonImageEntity.getFileMask(),commonImageEntity.getFilePath(),
-//										commonImageEntity.getImageType(), "Y").execute();
-
-
-//						em.persist(commonImageEntity);
 
 						fileCnt++;
 					}
 				} else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
-					commonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i],0));
-					Integer result = em.createQuery("update CommonImageEntity m set m.visible = : visible where m.idx = : idx and m.typeName = : typeName")
-							.setParameter("visible", "N")
-							.setParameter("idx", commonImageEntity.getIdx())
-							.setParameter("typeName", StringUtil.getString(commandMap.get("typeName"),"")).executeUpdate();
+					existCommonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i],0));
+					Long result = update.set(commonImageEntity.visible, "N")
+									.where(commonImageEntity.idx.eq(existCommonImageEntity.getIdx()),
+											commonImageEntity.typeName.eq(existCommonImageEntity.getTypeName()))
+									.execute();
 
 					if(result > 0) {
 						em.detach(commonImageEntity);
@@ -194,18 +190,13 @@ public class ImageRepository {
 		}
 
 		if(files != null) {
-//			Integer result = em.createQuery("update CommonImageEntity m set m.visible = : visible where m.typeIdx = : typeIdx and m.typeName = : typeName")
-//					.setParameter("visible", "N")
-//					.setParameter("typeIdx", commonImageEntity.getTypeIdx())
-//					.setParameter("typeName", "model").executeUpdate();
-//
-//			if(result > 0) {
-//				em.detach(commonImageEntity);
-//			}
 
 			for (MultipartFile file : files) {
 				try {
-					ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+					ext = file.getOriginalFilename()
+							.substring(file.getOriginalFilename().lastIndexOf(".")+1)
+							.toLowerCase();
+
 					fileId = currentDate();
 					fileMask = fileId + '.' + ext;
 					fileSize = file.getSize();
@@ -219,9 +210,9 @@ public class ImageRepository {
 					}
 
 					if(mainCnt == 0) {
-						commonImageEntity.setImageType("main");
+						commonImageEntity.builder().imageType("main").build();
 					} else {
-						commonImageEntity.setImageType("sub"+mainCnt);
+						commonImageEntity.builder().imageType("sub" + mainCnt);
 					}
 
 					String filePath = uploadPath + fileMask;
@@ -229,14 +220,18 @@ public class ImageRepository {
 
 					Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-					commonImageEntity.setFileNum(mainCnt);
-					commonImageEntity.setFileName(file.getOriginalFilename());                   // 파일명
-					commonImageEntity.setFileSize(fileSize);  // 파일Size
-					commonImageEntity.setFileMask(fileMask);                                        // 파일Mask
-					commonImageEntity.setVisible("Y");
-					commonImageEntity.setFilePath(uploadPath + fileMask);
+					commonImageEntity.builder()
+								.fileNum(mainCnt)
+								.fileName(file.getOriginalFilename())
+								.fileSize(fileSize)
+								.fileMask(fileMask)
+								.visible("Y")
+								.filePath(uploadPath + fileMask)
+								.build();
 
 					em.persist(commonImageEntity);
+					em.flush();
+					em.clear();
 					mainCnt++;
 
 				} catch (Exception e) {
