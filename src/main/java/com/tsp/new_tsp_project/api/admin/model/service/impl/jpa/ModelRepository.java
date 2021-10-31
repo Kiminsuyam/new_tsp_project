@@ -30,6 +30,7 @@ import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntit
 public class ModelRepository {
 
 	private final ImageRepository imageRepository;
+	private final JPAQueryFactory queryFactory;
 	private final EntityManager em;
 
 	private BooleanExpression searchModel(Map<String, Object> modelMap) {
@@ -69,8 +70,6 @@ public class ModelRepository {
 	 */
 	public Long findModelsCount(Map<String, Object> modelMap) throws Exception {
 
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
 		return queryFactory.selectFrom(adminModelEntity)
 				.where(searchModel(modelMap))
 				.fetchCount();
@@ -90,8 +89,6 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public List<AdminModelDTO> findModelsList(Map<String, Object> modelMap) throws Exception{
-
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		List<AdminModelEntity> modelList = queryFactory
 				.selectFrom(adminModelEntity)
@@ -149,22 +146,19 @@ public class ModelRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOneModel(AdminModelEntity existAdminModelEntity) throws Exception {
-		QCommonImageEntity qCommonImageEntity = commonImageEntity;
-
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminModelEntity findModel = jpaQueryFactory
+		AdminModelEntity findModel = queryFactory
 				.selectFrom(adminModelEntity)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx()))
 				.fetchOne();
 
 		//모델 이미지 조회
-		List<CommonImageEntity> modelImageList = jpaQueryFactory
-				.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(existAdminModelEntity.getIdx()),
-						qCommonImageEntity.visible.eq("Y"),
-						qCommonImageEntity.typeName.eq("model")).fetch();
+		List<CommonImageEntity> modelImageList = queryFactory
+				.selectFrom(commonImageEntity)
+				.where(commonImageEntity.typeIdx.eq(existAdminModelEntity.getIdx()),
+						commonImageEntity.visible.eq("Y"),
+						commonImageEntity.typeName.eq("model")).fetch();
 
 		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 

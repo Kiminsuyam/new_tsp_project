@@ -7,7 +7,6 @@ import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +24,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity.adminPortFolioEntity;
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class PortFolioRepository {
+
+	private final JPAQueryFactory queryFactory;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
@@ -65,7 +67,6 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	public Long findPortFolioCount(Map<String, Object> portFolioMap) throws Exception {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		return queryFactory.selectFrom(adminPortFolioEntity)
 				.where(searchPortFolio(portFolioMap))
@@ -85,7 +86,6 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	public List<AdminPortFolioDTO> findPortFolioList(Map<String, Object> portFolioMap) throws Exception {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		List<AdminPortFolioEntity> portFolioList = queryFactory
 				.selectFrom(adminPortFolioEntity)
@@ -117,21 +117,19 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOnePortFolio(AdminPortFolioEntity existAdminPortFolioEntity) throws Exception {
-		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
 
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminPortFolioEntity findPortFolio = jpaQueryFactory.selectFrom(adminPortFolioEntity)
+		AdminPortFolioEntity findPortFolio = queryFactory.selectFrom(adminPortFolioEntity)
 				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx()))
 				.fetchOne();
 
 		//포트폴리오 이미지 조회
-		List<CommonImageEntity> portFolioImageList = jpaQueryFactory
-				.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(existAdminPortFolioEntity.getIdx()),
-						qCommonImageEntity.visible.eq("Y"),
-						qCommonImageEntity.typeName.eq("portfolio")).fetch();
+		List<CommonImageEntity> portFolioImageList = queryFactory
+				.selectFrom(commonImageEntity)
+				.where(commonImageEntity.typeIdx.eq(existAdminPortFolioEntity.getIdx()),
+						commonImageEntity.visible.eq("Y"),
+						commonImageEntity.typeName.eq("portfolio")).fetch();
 
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 

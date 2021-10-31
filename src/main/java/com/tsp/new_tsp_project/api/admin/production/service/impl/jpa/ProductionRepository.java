@@ -7,7 +7,6 @@ import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper
 import com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO;
 import com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +20,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity.*;
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
 @Repository
 @RequiredArgsConstructor
 public class ProductionRepository {
+
+	private final JPAQueryFactory queryFactory;
 	private final EntityManager em;
 	private final ImageRepository imageRepository;
 
@@ -60,7 +62,6 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public Long findProductionCount(Map<String, Object> productionMap) throws Exception {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		return queryFactory.selectFrom(adminProductionEntity)
 				.where(searchProduction(productionMap))
@@ -80,7 +81,6 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public List<AdminProductionDTO> findProductionList(Map<String, Object> productionMap) throws Exception {
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
 		List<AdminProductionEntity> productionList = queryFactory
 				.selectFrom(adminProductionEntity)
@@ -113,20 +113,17 @@ public class ProductionRepository {
 	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> findOneProduction(AdminProductionEntity existAdminProductionEntity) throws Exception {
-		QCommonImageEntity qCommonImageEntity = QCommonImageEntity.commonImageEntity;
-
-		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminProductionEntity findOneProduction = jpaQueryFactory.selectFrom(adminProductionEntity)
+		AdminProductionEntity findOneProduction = queryFactory.selectFrom(adminProductionEntity)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx()))
 				.fetchOne();
 
 		//포트폴리오 이미지 조회
-		List<CommonImageEntity> productionImageList = jpaQueryFactory.selectFrom(qCommonImageEntity)
-				.where(qCommonImageEntity.typeIdx.eq(existAdminProductionEntity.getIdx()),
-						qCommonImageEntity.visible.eq("Y"),
-						qCommonImageEntity.typeName.eq("production")).fetch();
+		List<CommonImageEntity> productionImageList = queryFactory.selectFrom(commonImageEntity)
+				.where(commonImageEntity.typeIdx.eq(existAdminProductionEntity.getIdx()),
+						commonImageEntity.visible.eq("Y"),
+						commonImageEntity.typeName.eq("production")).fetch();
 
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
