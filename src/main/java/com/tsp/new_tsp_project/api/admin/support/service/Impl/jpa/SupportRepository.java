@@ -14,11 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_project.api.admin.support.domain.entity.QAdminSupportEntity.*;
+
 @Repository
 @RequiredArgsConstructor
 public class SupportRepository {
 
-	private final QAdminSupportEntity qAdminSupportEntity = QAdminSupportEntity.adminSupportEntity;
 	private final EntityManager em;
 
 	private BooleanExpression searchSupport(Map<String, Object> supportMap) {
@@ -29,12 +30,12 @@ public class SupportRepository {
 			return null;
 		} else {
 			if ("0".equals(searchType)) {
-				return qAdminSupportEntity.supportName.contains(searchKeyword)
-						.or(qAdminSupportEntity.supportMessage.contains(searchKeyword));
+				return adminSupportEntity.supportName.contains(searchKeyword)
+						.or(adminSupportEntity.supportMessage.contains(searchKeyword));
 			} else if ("1".equals(searchType)) {
-				return qAdminSupportEntity.supportName.contains(searchKeyword);
+				return adminSupportEntity.supportName.contains(searchKeyword);
 			} else {
-				return qAdminSupportEntity.supportMessage.contains(searchKeyword);
+				return adminSupportEntity.supportMessage.contains(searchKeyword);
 			}
 		}
 	}
@@ -54,7 +55,7 @@ public class SupportRepository {
 	public Long findSupportModelCount(Map<String, Object> supportMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		return queryFactory.selectFrom(qAdminSupportEntity)
+		return queryFactory.selectFrom(adminSupportEntity)
 				.where(searchSupport(supportMap))
 				.fetchCount();
 	}
@@ -74,9 +75,9 @@ public class SupportRepository {
 	public List<AdminSupportDTO> findSupportModelList(Map<String, Object> supportMap) throws Exception {
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-		List<AdminSupportEntity> supportList = queryFactory.selectFrom(qAdminSupportEntity)
+		List<AdminSupportEntity> supportList = queryFactory.selectFrom(adminSupportEntity)
 				.where(searchSupport(supportMap))
-				.orderBy(qAdminSupportEntity.idx.desc())
+				.orderBy(adminSupportEntity.idx.desc())
 				.offset(StringUtil.getInt(supportMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(supportMap.get("size"),0))
 				.fetch();
@@ -99,16 +100,16 @@ public class SupportRepository {
 	 * 5. 작성일       : 2021. 09. 26.
 	 * </pre>
 	 *
-	 * @param adminSupportEntity
+	 * @param existAdminSupportEntity
 	 * @throws Exception
 	 */
-	public Map<String, Object> findOneSupportModel(AdminSupportEntity adminSupportEntity) throws Exception {
+	public Map<String, Object> findOneSupportModel(AdminSupportEntity existAdminSupportEntity) throws Exception {
 
 		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 
 		//모델 상세 조회
-		AdminSupportEntity findOneSupportModel = jpaQueryFactory.selectFrom(qAdminSupportEntity)
-				.where(qAdminSupportEntity.idx.eq(adminSupportEntity.getIdx()))
+		AdminSupportEntity findOneSupportModel = jpaQueryFactory.selectFrom(adminSupportEntity)
+				.where(adminSupportEntity.idx.eq(existAdminSupportEntity.getIdx()))
 				.fetchOne();
 
 		Map<String, Object> supportMap = new HashMap<>();
