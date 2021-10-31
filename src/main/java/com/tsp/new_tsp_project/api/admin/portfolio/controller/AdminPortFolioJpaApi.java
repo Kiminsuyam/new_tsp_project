@@ -4,6 +4,7 @@ import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.jpa.AdminPortFolioJpaService;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -129,6 +130,10 @@ public class AdminPortFolioJpaApi {
 	@GetMapping(value = "/common")
 	public ConcurrentHashMap<String, Object> portFolioCommonCode() throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
+
+		CommonCodeEntity portFolioCodeEntity = CommonCodeEntity.builder().cmmType("portFolio").build();
+
+		portFolioMap.put("portFolioCmmCode",this.adminPortFolioJpaService.portFolioCommonCode(portFolioCodeEntity));
 
 		return portFolioMap;
 	}

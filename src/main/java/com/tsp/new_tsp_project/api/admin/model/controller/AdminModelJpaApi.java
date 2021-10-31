@@ -5,8 +5,8 @@ import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.model.service.jpa.AdminModelJpaService;
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
 import com.tsp.new_tsp_project.api.common.SearchCommon;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
 import com.tsp.new_tsp_project.common.paging.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -142,7 +141,7 @@ public class AdminModelJpaApi {
 	public ConcurrentHashMap<String, Object> modelCommonCode() throws Exception {
 		ConcurrentHashMap<String, Object> modelCmmCode = new ConcurrentHashMap<>();
 
-		ModelCodeEntity modelCodeEntity = ModelCodeEntity.builder().cmmType("model").build();
+		CommonCodeEntity modelCodeEntity = CommonCodeEntity.builder().cmmType("model").build();
 
 		modelCmmCode.put("modelCmmCode",this.adminModelJpaService.modelCommonCode(modelCodeEntity));
 

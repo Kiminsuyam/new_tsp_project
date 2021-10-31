@@ -3,9 +3,8 @@ package com.tsp.new_tsp_project.api.admin.model.service.jpa;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelRepository;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.NewCodeEntity;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +85,7 @@ public class AdminModelJpaService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public ConcurrentHashMap<String, Object> modelCommonCode(ModelCodeEntity modelCodeEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> modelCommonCode(CommonCodeEntity modelCodeEntity) throws Exception {
 		return modelRepository.modelCommonCode(modelCodeEntity);
 	}
 

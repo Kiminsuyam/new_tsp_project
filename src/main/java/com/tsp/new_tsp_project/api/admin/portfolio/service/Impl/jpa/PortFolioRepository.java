@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.service.impl.jpa.ModelImageMapper;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity.adminPortFolioEntity;
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity.commonCodeEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
 @Slf4j
@@ -102,6 +104,31 @@ public class PortFolioRepository {
 		}
 
 		return portFolioDtoList;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : modelCommonCode
+	 * 2. ClassName  : ModelRepository.java
+	 * 3. Comment    : 관리자 모델 공통 코드 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 08.
+	 * </pre>
+	 *
+	 * @param existPortFolioEntity
+	 * @throws Exception
+	 */
+	public ConcurrentHashMap<String, Object> portFolioCommonCode(CommonCodeEntity existPortFolioEntity) throws Exception {
+		ConcurrentHashMap<String, Object> modelCommonMap = new ConcurrentHashMap<>();
+
+		List<CommonCodeEntity> codeEntityList = queryFactory
+				.selectFrom(commonCodeEntity)
+				.where(commonCodeEntity.cmmType.eq(existPortFolioEntity.getCmmType()))
+				.fetch();
+
+		modelCommonMap.put("codeEntityList", codeEntityList);
+
+		return modelCommonMap;
 	}
 
 	/**

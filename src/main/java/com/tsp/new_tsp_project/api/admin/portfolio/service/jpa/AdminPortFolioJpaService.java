@@ -3,6 +3,7 @@ package com.tsp.new_tsp_project.api.admin.portfolio.service.jpa;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.service.Impl.jpa.PortFolioRepository;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
 import com.tsp.new_tsp_project.exception.ApiExceptionType;
 import com.tsp.new_tsp_project.exception.TspException;
@@ -54,6 +55,22 @@ public class AdminPortFolioJpaService {
 	@Transactional(readOnly = true)
 	public List<AdminPortFolioDTO> findPortFolioList(Map<String, Object> portFolioMap) throws Exception {
 		return portFolioRepository.findPortFolioList(portFolioMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : portFolioCommonCode
+	 * 2. ClassName  : AdminPortFolioJpaService.java
+	 * 3. Comment    : 관리자 포트폴리오 공통 코드 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 09. 22.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public ConcurrentHashMap<String, Object> portFolioCommonCode(CommonCodeEntity modelCodeEntity) throws Exception {
+		return portFolioRepository.portFolioCommonCode(modelCodeEntity);
 	}
 
 	/**

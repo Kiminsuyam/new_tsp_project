@@ -5,9 +5,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO;
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.CommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.ModelCodeEntity;
-import com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity;
+import com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity;
 import com.tsp.new_tsp_project.api.common.image.service.jpa.ImageRepository;
 import com.tsp.new_tsp_project.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity.adminModelEntity;
+import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity.commonCodeEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
 @Slf4j
@@ -117,16 +118,16 @@ public class ModelRepository {
 	 * 5. 작성일       : 2021. 09. 08.
 	 * </pre>
 	 *
-	 * @param modelCodeEntity
+	 * @param existModelCodeEntity
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> modelCommonCode(ModelCodeEntity modelCodeEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> modelCommonCode(CommonCodeEntity existModelCodeEntity) throws Exception {
 		ConcurrentHashMap<String, Object> modelCommonMap = new ConcurrentHashMap<>();
 
-		String query = "select m from ModelCodeEntity m where m.cmmType = :cmmType";
-
-		List<ModelCodeEntity> codeEntityList = em.createQuery(query, ModelCodeEntity.class)
-				.setParameter("cmmType", modelCodeEntity.getCmmType()).getResultList();
+		List<CommonCodeEntity> codeEntityList = queryFactory
+				.selectFrom(commonCodeEntity)
+				.where(commonCodeEntity.cmmType.eq(existModelCodeEntity.getCmmType()))
+				.fetch();
 
 		modelCommonMap.put("codeEntityList", codeEntityList);
 

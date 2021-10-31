@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "tsp_cmm_code")
 @Getter
 @Setter
-public class ModelCodeEntity {
+public class CommonCodeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idx")
