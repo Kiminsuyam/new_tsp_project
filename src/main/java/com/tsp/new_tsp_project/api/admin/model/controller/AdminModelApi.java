@@ -60,6 +60,7 @@ public class AdminModelApi {
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
 
+		ConcurrentHashMap resultMap = new ConcurrentHashMap();
 		// 페이징 및 검색
 		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
@@ -73,15 +74,15 @@ public class AdminModelApi {
 		}
 
 		// 리스트 수
-		modelMap.put("pageSize", page.getSize());
+		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		modelMap.put("perPageListCnt", Math.ceil((modelListCnt - 1) / page.getSize() + 1));
+		resultMap.put("perPageListCnt", Math.ceil((modelListCnt - 1) / page.getSize() + 1));
 		// 전체 아이템 수
-		modelMap.put("modelListTotalCnt", modelListCnt);
+		resultMap.put("modelListTotalCnt", modelListCnt);
 
-		modelMap.put("modelList", modelList);
+		resultMap.put("modelList", modelList);
 
-		return modelMap;
+		return resultMap;
 	}
 
 	/**

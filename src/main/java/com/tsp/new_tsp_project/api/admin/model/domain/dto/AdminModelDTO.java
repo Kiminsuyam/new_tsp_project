@@ -1,13 +1,10 @@
 package com.tsp.new_tsp_project.api.admin.model.domain.dto;
 
 import com.tsp.new_tsp_project.api.common.domain.dto.NewCommonDTO;
-import com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Getter
 @Setter
