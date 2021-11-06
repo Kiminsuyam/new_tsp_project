@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_project.api.admin.support.domain.entity;
 
-import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
