@@ -241,8 +241,9 @@ public class AdminModelApi {
 	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		CommonImageDTO commonImageDTO = new CommonImageDTO();
-		commonImageDTO.setIdx(idx);
+		CommonImageDTO commonImageDTO = CommonImageDTO.builder()
+				.idx(idx)
+				.build();
 
 		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
 			result = "Y";
