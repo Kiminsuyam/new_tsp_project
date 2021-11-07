@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.production.domain.dto.AdminProductionDTO.*;
+
 @Slf4j
 @RequestMapping(value = "/api/production")
 @RestController
@@ -101,7 +103,7 @@ public class AdminProductionApi {
 	public ConcurrentHashMap getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> productionMap;
 
-		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().idx(idx).build();
+		AdminProductionDTO adminProductionDTO = builder().idx(idx).build();
 
 		productionMap = this.adminProductionApiService.getProductionInfo(adminProductionDTO);
 
@@ -198,7 +200,7 @@ public class AdminProductionApi {
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().visible("N").idx(idx).build();
+		AdminProductionDTO adminProductionDTO = builder().visible("N").idx(idx).build();
 
 		if(this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
 			result = "Y";

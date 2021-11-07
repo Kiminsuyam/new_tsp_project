@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -103,7 +105,7 @@ public class AdminPortFolioJpaApi {
 	public ConcurrentHashMap getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap;
 
-		AdminPortFolioEntity adminPortFolioEntity = AdminPortFolioEntity.builder().idx(idx).build();
+		AdminPortFolioEntity adminPortFolioEntity = builder().idx(idx).build();
 
 		portFolioMap = this.adminPortFolioJpaService.findOnePortFolio(adminPortFolioEntity);
 

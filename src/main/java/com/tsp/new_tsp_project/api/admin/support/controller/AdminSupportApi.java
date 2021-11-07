@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.support.domain.dto.AdminSupportDTO.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -96,8 +98,7 @@ public class AdminSupportApi {
 	public ConcurrentHashMap getSupportModelInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
 
-		AdminSupportDTO adminSupportDTO = new AdminSupportDTO();
-		adminSupportDTO.setIdx(idx);
+		AdminSupportDTO adminSupportDTO = builder().idx(idx).build();
 
 		supportMap.put("supportModelInfo", this.adminSupportService.getSupportModelInfo(adminSupportDTO));
 

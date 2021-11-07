@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO.builder;
+
 @Slf4j
 @RequestMapping(value = "/api/model")
 @RestController
@@ -110,9 +112,7 @@ public class AdminModelApi {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;
 
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder()
-				.idx(idx)
-				.categoryCd(categoryCd).build();
+		AdminModelDTO adminModelDTO = AdminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 
@@ -241,9 +241,7 @@ public class AdminModelApi {
 	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		CommonImageDTO commonImageDTO = CommonImageDTO.builder()
-				.idx(idx)
-				.build();
+		CommonImageDTO commonImageDTO = builder().idx(idx).build();
 
 		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
 			result = "Y";

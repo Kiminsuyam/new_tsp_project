@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -100,7 +102,7 @@ public class AdminProductionJpaApi {
 	public ConcurrentHashMap getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> productionMap;
 
-		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().idx(idx).build();
+		AdminProductionEntity adminProductionEntity = builder().idx(idx).build();
 
 		productionMap = this.adminProductionJpaService.findOneProduction(adminProductionEntity);
 
@@ -200,7 +202,7 @@ public class AdminProductionJpaApi {
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().visible("N").idx(idx).build();
+		AdminProductionEntity adminProductionEntity = builder().visible("N").idx(idx).build();
 
 		if(this.adminProductionJpaService.deleteProduction(adminProductionEntity) > 0) {
 			result = "Y";

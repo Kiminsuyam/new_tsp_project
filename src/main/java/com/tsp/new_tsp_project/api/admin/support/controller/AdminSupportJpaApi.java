@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.support.domain.entity.AdminSupportEntity.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -99,7 +101,7 @@ public class AdminSupportJpaApi {
 	public ConcurrentHashMap<String, Object> findOneSupportModel(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> supportMap = new ConcurrentHashMap<>();
 
-		AdminSupportEntity adminSupportEntity = AdminSupportEntity.builder().idx(idx).build();
+		AdminSupportEntity adminSupportEntity = builder().idx(idx).build();
 
 		supportMap.put("supportModelInfo", this.adminSupportJpaService.findOneSupportModel(adminSupportEntity));
 

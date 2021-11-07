@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -111,9 +113,7 @@ public class AdminModelJpaApi {
 
 		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
-		AdminModelEntity adminModelEntity = AdminModelEntity.builder()
-				.idx(idx)
-				.categoryCd(categoryCd).build();
+		AdminModelEntity adminModelEntity = builder().idx(idx).categoryCd(categoryCd).build();
 
 		modelMap.put("modelMap", this.adminModelJpaService.findOneModel(adminModelEntity));
 
@@ -262,7 +262,7 @@ public class AdminModelJpaApi {
 	public String deleteModel (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminModelEntity adminModelEntity = AdminModelEntity.builder().visible("N").idx(idx).build();
+		AdminModelEntity adminModelEntity = builder().visible("N").idx(idx).build();
 
 		if(this.adminModelJpaService.deleteModel(adminModelEntity) > 0) {
 			result = "Y";

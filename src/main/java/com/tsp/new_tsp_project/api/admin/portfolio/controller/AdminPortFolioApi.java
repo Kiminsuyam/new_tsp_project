@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.portfolio.domain.dto.AdminPortFolioDTO.*;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -101,7 +103,7 @@ public class AdminPortFolioApi {
 	public ConcurrentHashMap getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> portFolioMap;
 
-		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder().idx(idx).build();
+		AdminPortFolioDTO adminPortFolioDTO = builder().idx(idx).build();
 
 		portFolioMap = this.adminPortFolioApiService.getPortFolioInfo(adminPortFolioDTO);
 
@@ -207,7 +209,7 @@ public class AdminPortFolioApi {
 	})
 	@DeleteMapping(value = "/{idx}")
 	public String deletePortFolio(@PathVariable(value = "idx") Integer idx) throws Exception {
-		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder().idx(idx).build();
+		AdminPortFolioDTO adminPortFolioDTO = builder().idx(idx).build();
 
 		String result = "N";
 
@@ -245,22 +247,13 @@ public class AdminPortFolioApi {
 		Map<String, Object> portFolioMap = new HashMap<>();
 		String result = "N";
 
-		if("All".equals(type)) {
-			portFolioMap.put("type", "All");
-			if(this.adminPortFolioApiService.deleteAllPortFolio(portFolioMap) > 0) {
-				result = "Y";
-			} else {
-				result = "N";
-			}
-		} else {
-			String [] arrayIdx = deleteIdx.split(",");
-			portFolioMap.put("arrayIdx", arrayIdx);
+		String [] arrayIdx = deleteIdx.split(",");
+		portFolioMap.put("arrayIdx", arrayIdx);
 
-			if(this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
-				result = "Y";
-			} else {
-				result = "N";
-			}
+		if(this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
+			result = "Y";
+		} else {
+			result = "N";
 		}
 
 		return result;

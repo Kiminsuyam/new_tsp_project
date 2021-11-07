@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity.*;
+
 @Slf4j
 @RequestMapping(value = "/api/jpa-auth")
 @RestController
@@ -100,7 +102,7 @@ public class AdminUserJpaApi {
 										HttpServletResponse response,
 										BindingResult bindingResult) throws Exception {
 
-		AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+		AdminUserEntity adminUserEntity = builder()
 						.userId(authenticationRequest.getUserId())
 						.password(authenticationRequest.getPassword())
 						.build();
