@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.tsp.new_tsp_project.api.common.domain.dto.CommonImageDTO.builder;
+import static com.tsp.new_tsp_project.api.admin.model.domain.dto.AdminModelDTO.*;
 
 @Slf4j
 @RequestMapping(value = "/api/model")
@@ -112,7 +112,7 @@ public class AdminModelApi {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, Object> modelMap;
 
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
+		AdminModelDTO adminModelDTO = builder().idx(idx).categoryCd(categoryCd).build();
 
 		modelMap = this.adminModelApiService.getModelInfo(adminModelDTO);
 
@@ -241,7 +241,7 @@ public class AdminModelApi {
 	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		CommonImageDTO commonImageDTO = builder().idx(idx).build();
+		CommonImageDTO commonImageDTO = CommonImageDTO.builder().idx(idx).build();
 
 		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
 			result = "Y";
@@ -273,7 +273,7 @@ public class AdminModelApi {
 	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
+		AdminModelDTO adminModelDTO = builder().visible("N").idx(idx).build();
 
 		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
 			result = "Y";

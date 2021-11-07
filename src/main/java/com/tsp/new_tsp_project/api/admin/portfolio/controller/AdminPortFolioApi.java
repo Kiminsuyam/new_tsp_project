@@ -230,7 +230,6 @@ public class AdminPortFolioApi {
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 28.
 	 * </pre>
-	 * @param type
 	 * @param request
 	 * @throws Exception
 	 */
@@ -240,9 +239,8 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@DeleteMapping("/delete-{type}-portfolio")
-	public String deleteAllPortFolio(@PathVariable("type") String type,
-									 String deleteIdx,
+	@DeleteMapping("/delete-portfolio")
+	public String deleteAllPortFolio(String deleteIdx,
 									 HttpServletRequest request) throws Exception {
 		Map<String, Object> portFolioMap = new HashMap<>();
 		String result = "N";
