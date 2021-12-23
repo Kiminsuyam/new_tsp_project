@@ -20,6 +20,7 @@
 		, file_mask
 		, file_path
 		, image_type
+		, visible
 		, reg_date)
 		VALUES ( #{typeIdx}
 		       , #{typeName}
@@ -29,6 +30,7 @@
 			   , #{fileMask}
 			   , #{filePath}
 			   , #{imageType}
+			   , #{visible}
 			   , now())
 	</insert>
 

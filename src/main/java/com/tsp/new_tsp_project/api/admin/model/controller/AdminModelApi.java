@@ -206,7 +206,7 @@ public class AdminModelApi {
 		modelMap.put("arrayState", arrayState);
 		modelMap.put("arrayIdx", arrayIdx);
 
-		adminModelDTO.builder().idx(idx).categoryCd(categoryCd).build();
+		builder().idx(idx).categoryCd(categoryCd).build();
 
 		String result = "N";
 
@@ -273,7 +273,7 @@ public class AdminModelApi {
 	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
 		String result = "Y";
 
-		AdminModelDTO adminModelDTO = builder().visible("N").idx(idx).build();
+		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
 
 		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
 			result = "Y";

@@ -106,7 +106,10 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
-				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("model");
+				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, fileName, "insert"))) {
 					num = 1;
 				} else {
@@ -143,7 +146,10 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {
-				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("model");
+				commonImageDTO.setTypeIdx(adminModelDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("model").typeIdx(adminModelDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.updateMultipleFile(commonImageDTO, fileName, modelMap))) {
 					num = 1;
 				} else {

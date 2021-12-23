@@ -101,7 +101,10 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 		try {
 			if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
-				commonImageDTO.builder().typeName("portfolio").typeIdx(adminPortFolioDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("portfolio");
+				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("portfolio").typeIdx(adminPortFolioDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, "insert"))) {
 					num = 1;
 				} else {
@@ -138,7 +141,10 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 
 		try {
 			if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {
-				commonImageDTO.builder().typeName("portfolio").typeIdx(adminPortFolioDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("portfolio");
+				commonImageDTO.setTypeIdx(adminPortFolioDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("portfolio").typeIdx(adminPortFolioDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.updateMultipleFile(commonImageDTO, files, portFolioMap))) {
 					num = 1;
 				} else {

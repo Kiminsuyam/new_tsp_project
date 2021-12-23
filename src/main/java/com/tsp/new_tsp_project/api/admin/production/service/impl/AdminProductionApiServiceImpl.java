@@ -100,7 +100,10 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 
 		try {
 			if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
-				commonImageDTO.builder().typeName("production").typeIdx(adminProductionDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("production");
+				commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("production").typeIdx(adminProductionDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, "insert"))) {
 					num = 1;
 				} else {
@@ -135,7 +138,10 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 
 		try {
 			if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {
-				commonImageDTO.builder().typeName("production").typeIdx(adminProductionDTO.getIdx()).visible("Y").build();
+				commonImageDTO.setTypeName("production");
+				commonImageDTO.setTypeIdx(adminProductionDTO.getIdx());
+				commonImageDTO.setVisible("Y");
+//				commonImageDTO.builder().typeName("production").typeIdx(adminProductionDTO.getIdx()).visible("Y").build();
 				if("Y".equals(this.imageService.uploadImageFile(commonImageDTO, files, "update"))) {
 					num = 1;
 				} else {
