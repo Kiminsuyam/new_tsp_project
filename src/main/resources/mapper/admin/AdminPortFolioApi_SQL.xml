@@ -92,6 +92,7 @@
 		FROM tsp_portfolio tp LEFT OUTER JOIN tsp_cmm_code tcc
 		  ON tp.category_cd = tcc.category_cd
 		  WHERE tp.visible = 'Y'
+		  AND tcc.cmm_type = 'portfolio'
 		  AND tp.idx = #{idx}
 	</select>
 

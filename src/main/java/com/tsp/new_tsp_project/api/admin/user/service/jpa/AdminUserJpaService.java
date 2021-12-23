@@ -116,13 +116,17 @@ public class AdminUserJpaService {
 	@Transactional
 	public Integer insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
 
-		String userId = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("userId"),"");
-
-		if(userId.equals(adminUserEntity.getUserId())) {
-			throw new TspException(ApiExceptionType.ID_EXIST);
-		}
+//		String userId = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("userId"),"");
+//
+//		if("".equals(userId)) {
+//			if(userId.equals(adminUserEntity.getUserId())) {
+//				throw new TspException(ApiExceptionType.ID_EXIST);
+//			}
+//		}
 		// 패스워드 인코딩
 		String password = passwordEncoder.encode(adminUserEntity.getPassword());
+
+		log.info("===password={}", password);
 
 		AdminUserEntity encodeUserEntity = AdminUserEntity.builder()
 				.userId(adminUserEntity.getUserId())

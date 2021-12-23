@@ -75,7 +75,7 @@ public class UserRepository {
 					.fetchOne();
 
 			if(NewAdminUserEntity == null) {
-				return null;
+			 	return null;
 			}
 
 			userMap.put("userId", NewAdminUserEntity.getUserId());

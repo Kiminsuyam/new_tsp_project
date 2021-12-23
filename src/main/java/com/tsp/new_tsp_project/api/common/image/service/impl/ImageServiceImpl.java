@@ -143,6 +143,7 @@ public class ImageServiceImpl implements ImageService {
                     commonImageDTO.setFileSize(fileSize);  // 파일Size
                     commonImageDTO.setFileMask(fileMask);                                        // 파일Mask
                     commonImageDTO.setFilePath(uploadPath + fileMask);
+                    commonImageDTO.setVisible("Y");
 
                     // 이미지 정보 insert
                     if(imageMapper.addImageFile(commonImageDTO)>0) {
