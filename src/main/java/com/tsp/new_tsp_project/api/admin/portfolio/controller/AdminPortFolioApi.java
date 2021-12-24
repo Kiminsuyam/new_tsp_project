@@ -65,7 +65,7 @@ public class AdminPortFolioApi {
 
 		List<AdminPortFolioDTO> portFolioList = new ArrayList<>();
 
-		if(portFolioCnt > 0) {
+		if (portFolioCnt > 0) {
 			portFolioList = this.adminPortFolioApiService.getPortFolioList(searchMap);
 		}
 
@@ -134,9 +134,9 @@ public class AdminPortFolioApi {
 	public String insertPortFolio(@Valid AdminPortFolioDTO adminPortFolioDTO,
 								  CommonImageDTO commonImageDTO,
 								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
-		String result = "N";
+		String result;
 
-		if(this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
+		if (this.adminPortFolioApiService.insertPortFolio(adminPortFolioDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -172,15 +172,15 @@ public class AdminPortFolioApi {
 
 		Map<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		String [] arrayState = request.getParameter("imageState").split(",");
-		String [] arrayIdx = request.getParameter("idxState").split(",");
+		String[] arrayState = request.getParameter("imageState").split(",");
+		String[] arrayIdx = request.getParameter("idxState").split(",");
 
 		portFolioMap.put("arrayState", arrayState);
 		portFolioMap.put("arrayIdx", arrayIdx);
 
-		String result = "N";
+		String result;
 
-		if(this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files, portFolioMap) > 0) {
+		if (this.adminPortFolioApiService.updatePortFolio(adminPortFolioDTO, commonImageDTO, files, portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -211,9 +211,9 @@ public class AdminPortFolioApi {
 	public String deletePortFolio(@PathVariable(value = "idx") Integer idx) throws Exception {
 		AdminPortFolioDTO adminPortFolioDTO = builder().idx(idx).build();
 
-		String result = "N";
+		String result;
 
-		if(this.adminPortFolioApiService.deletePortFolio(adminPortFolioDTO) > 0) {
+		if (this.adminPortFolioApiService.deletePortFolio(adminPortFolioDTO) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -230,7 +230,7 @@ public class AdminPortFolioApi {
 	 * 4. 작성자       : CHO
 	 * 5. 작성일       : 2021. 09. 28.
 	 * </pre>
-	 * @param request
+	 * @param deleteIdx
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "포트폴리오 전체 삭제", notes = "포트폴리오를 전체 삭제한다.")
@@ -240,15 +240,14 @@ public class AdminPortFolioApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@DeleteMapping("/delete-portfolio")
-	public String deleteAllPortFolio(String deleteIdx,
-									 HttpServletRequest request) throws Exception {
+	public String deleteAllPortFolio(String deleteIdx) throws Exception {
 		Map<String, Object> portFolioMap = new HashMap<>();
-		String result = "N";
+		String result;
 
-		String [] arrayIdx = deleteIdx.split(",");
+		String[] arrayIdx = deleteIdx.split(",");
 		portFolioMap.put("arrayIdx", arrayIdx);
 
-		if(this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
+		if (this.adminPortFolioApiService.deletePartPortFolio(portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

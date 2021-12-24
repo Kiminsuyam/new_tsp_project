@@ -96,7 +96,7 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 	public Integer insertProduction(AdminProductionDTO adminProductionDTO,
 									CommonImageDTO commonImageDTO,
 									MultipartFile[] files) throws Exception {
-		int num = 0;
+		int num;
 
 		try {
 			if(this.adminProductionMapper.insertProduction(adminProductionDTO) > 0) {
@@ -134,7 +134,7 @@ public class AdminProductionApiServiceImpl implements AdminProductionApiService 
 	public Integer updateProduction(AdminProductionDTO adminProductionDTO,
 									CommonImageDTO commonImageDTO,
 									MultipartFile[] files) throws Exception {
-		int num = 0;
+		int num;
 
 		try {
 			if(this.adminProductionMapper.updateProduction(adminProductionDTO) > 0) {

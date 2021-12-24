@@ -102,7 +102,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 	public Integer insertModel(AdminModelDTO adminModelDTO,
 							  CommonImageDTO commonImageDTO,
 							  MultipartFile[] fileName) throws Exception {
-		Integer num = 0;
+		int num;
 
 		try {
 			if(this.adminModelMapper.insertModel(adminModelDTO) > 0) {
@@ -142,7 +142,7 @@ public class AdminModelApiServiceImpl implements AdminModelApiService {
 							   CommonImageDTO commonImageDTO,
 							   MultipartFile[] fileName,
 							   Map<String, Object> modelMap) throws Exception {
-		Integer num = 0;
+		int num;
 
 		try {
 			if(this.adminModelMapper.updateModel(adminModelDTO) > 0) {

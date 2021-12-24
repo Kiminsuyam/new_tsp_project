@@ -25,13 +25,9 @@ public class MyUserDetailsService implements UserDetailsService {
 			securityUser = adminUserMapper.getUserId(id);
 
 			// 아이디 일치하는지 확인
-			if (!"".equals(securityUser)) {
-				return new User(securityUser.getUsername(),
-						securityUser.getPassword(),
-						AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
-			} else {
-				throw new UsernameNotFoundException("admin not found with userid : " + id);
-			}
+			return new User(securityUser.getUsername(),
+					securityUser.getPassword(),
+					AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -10,23 +10,23 @@ import java.util.Map;
 @Service
 public interface ImageService {
 
-    /**
-     * <pre>
-     * 1. MethodName : uploadImageFile
-     * 2. ClassName  : ImageService.java
-     * 3. Comment    : 이미지 파일 업로드
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2021. 06. 02.
-     * </pre>
-     *
-     * @param commonImageDTO
-     * @param files
-     * @return
-     * @throws Exception
-     */
-    String uploadImageFile(CommonImageDTO commonImageDTO,
-                           MultipartFile[] files,
-                           String flag) throws Exception;
+	/**
+	 * <pre>
+	 * 1. MethodName : uploadImageFile
+	 * 2. ClassName  : ImageService.java
+	 * 3. Comment    : 이미지 파일 업로드
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2021. 06. 02.
+	 * </pre>
+	 *
+	 * @param commonImageDTO
+	 * @param files
+	 * @return
+	 * @throws Exception
+	 */
+	String uploadImageFile(CommonImageDTO commonImageDTO,
+						   MultipartFile[] files,
+						   String flag) throws Exception;
 
-    String updateMultipleFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception;
+	String updateMultipleFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception;
 }

@@ -14,7 +14,7 @@ public class SupportMapperImpl implements SupportMapper {
 			return null;
 		}
 
-		AdminSupportDTO adminSupportDTO = AdminSupportDTO.builder()
+		return AdminSupportDTO.builder()
 				.rnum(entity.getRnum())
 				.idx(entity.getIdx())
 				.supportName(entity.getSupportName())
@@ -26,8 +26,6 @@ public class SupportMapperImpl implements SupportMapper {
 				.visible(entity.getVisible())
 				.supportTime(entity.getSupportTime())
 				.build();
-
-		return adminSupportDTO;
 	}
 
 	@Override
@@ -36,7 +34,7 @@ public class SupportMapperImpl implements SupportMapper {
 			return null;
 		}
 
-		AdminSupportEntity adminSupportEntity = AdminSupportEntity.builder()
+		return AdminSupportEntity.builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.supportName(dto.getSupportName())
@@ -48,8 +46,6 @@ public class SupportMapperImpl implements SupportMapper {
 				.supportTime(dto.getSupportTime())
 				.visible(dto.getVisible())
 				.build();
-
-		return adminSupportEntity;
 	}
 
 	@Override

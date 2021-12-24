@@ -122,7 +122,7 @@ public class AdminModelJpaService {
 	public Integer updateModel(AdminModelEntity adminModelEntity, CommonImageEntity commonImageEntity,
 							   MultipartFile[] files, ConcurrentHashMap<String, Object> modelMap) throws Exception {
 
-		Integer num = 0;
+		int num;
 
 		try {
 			if(this.modelRepository.updateModel(adminModelEntity, commonImageEntity, files, modelMap) > 0) {

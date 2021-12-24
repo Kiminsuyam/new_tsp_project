@@ -126,7 +126,7 @@ public class AdminPortFolioJpaService {
 	public Integer updatePortFolio(AdminPortFolioEntity adminPortFolioEntity,
 								   CommonImageEntity commonImageEntity,
 								   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
-		Integer num = 0;
+		int num;
 
 		try {
 			if(this.portFolioRepository.updatePortFolio(adminPortFolioEntity, commonImageEntity, files, portFolioMap) > 0) {

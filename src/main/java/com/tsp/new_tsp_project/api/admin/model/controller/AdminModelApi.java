@@ -150,7 +150,7 @@ public class AdminModelApi {
 							  HttpServletRequest request,
 							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
 
-		String result = "N";
+		String result;
 
 		searchCommon.giveAuth(request, newCommonDTO);
 

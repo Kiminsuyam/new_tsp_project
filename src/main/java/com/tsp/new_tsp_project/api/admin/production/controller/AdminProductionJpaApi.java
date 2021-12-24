@@ -64,7 +64,7 @@ public class AdminProductionJpaApi {
 
 		List<AdminProductionDTO> productionList = new ArrayList<>();
 
-		if(productionCnt > 0) {
+		if (productionCnt > 0) {
 			productionList = this.adminProductionJpaService.findProductionList(searchMap);
 		}
 
@@ -129,12 +129,12 @@ public class AdminProductionJpaApi {
 	})
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertProduction(@Valid AdminProductionEntity adminProductionEntity,
-									CommonImageEntity commonImageEntity,
-									@RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+								   CommonImageEntity commonImageEntity,
+								   @RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 
-		String result = "N";
+		String result;
 
-		if(this.adminProductionJpaService.insertProduction(adminProductionEntity, commonImageEntity, files) > 0) {
+		if (this.adminProductionJpaService.insertProduction(adminProductionEntity, commonImageEntity, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -166,12 +166,12 @@ public class AdminProductionJpaApi {
 	public String updateProduction(@PathVariable("idx") Integer idx,
 								   @Valid AdminProductionEntity adminProductionEntity,
 								   CommonImageEntity commonImageEntity,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-		String result = "N";
+								   @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+		String result;
 
 		builder().idx(idx).build();
 
-		if(this.adminProductionJpaService.updateProduction(adminProductionEntity, commonImageEntity, files) > 0) {
+		if (this.adminProductionJpaService.updateProduction(adminProductionEntity, commonImageEntity, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -199,12 +199,12 @@ public class AdminProductionJpaApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@DeleteMapping(value = "/{idx}")
-	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
-		String result = "N";
+	public String deleteProduction(@PathVariable("idx") Integer idx) throws Exception {
+		String result;
 
-		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().visible("N").idx(idx).build();
+		AdminProductionEntity adminProductionEntity = builder().visible("N").idx(idx).build();
 
-		if(this.adminProductionJpaService.deleteProduction(adminProductionEntity) > 0) {
+		if (this.adminProductionJpaService.deleteProduction(adminProductionEntity) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

@@ -24,17 +24,13 @@ public class SupportRepository {
 		String searchType = StringUtil.getString(supportMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(supportMap.get("searchKeyword"),"");
 
-		if (supportMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminSupportEntity.supportName.contains(searchKeyword)
+					.or(adminSupportEntity.supportMessage.contains(searchKeyword));
+		} else if ("1".equals(searchType)) {
+			return adminSupportEntity.supportName.contains(searchKeyword);
 		} else {
-			if ("0".equals(searchType)) {
-				return adminSupportEntity.supportName.contains(searchKeyword)
-						.or(adminSupportEntity.supportMessage.contains(searchKeyword));
-			} else if ("1".equals(searchType)) {
-				return adminSupportEntity.supportName.contains(searchKeyword);
-			} else {
-				return adminSupportEntity.supportMessage.contains(searchKeyword);
-			}
+			return adminSupportEntity.supportMessage.contains(searchKeyword);
 		}
 	}
 

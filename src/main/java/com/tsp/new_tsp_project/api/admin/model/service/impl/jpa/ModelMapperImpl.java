@@ -16,7 +16,7 @@ public class ModelMapperImpl implements ModelMapper {
 			return null;
 		}
 
-		AdminModelDTO adminModelDTO = AdminModelDTO.builder().idx(entity.getIdx())
+		return AdminModelDTO.builder().idx(entity.getIdx())
 				.rnum(entity.getRnum())
 				.categoryCd(entity.getCategoryCd())
 				.modelKorName(entity.getModelKorName())
@@ -32,9 +32,6 @@ public class ModelMapperImpl implements ModelMapper {
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
 				.build();
-
-
-		return adminModelDTO;
 	}
 
 	@Override
@@ -44,7 +41,7 @@ public class ModelMapperImpl implements ModelMapper {
 			return null;
 		}
 
-		AdminModelEntity adminModelEntity = AdminModelEntity.builder()
+		return AdminModelEntity.builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.categoryCd(dto.getCategoryCd())
@@ -61,8 +58,6 @@ public class ModelMapperImpl implements ModelMapper {
 				.updater(dto.getUpdater())
 				.updateTime(dto.getUpdateTime())
 				.build();
-
-		return adminModelEntity;
 	}
 
 	@Override

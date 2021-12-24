@@ -14,7 +14,7 @@ public class ModelImageMapperImpl implements ModelImageMapper{
 			return null;
 		}
 
-		CommonImageDTO commonImageDTO = CommonImageDTO.builder()
+		return CommonImageDTO.builder()
 				.idx(entity.getIdx())
 				.typeIdx(entity.getTypeIdx())
 				.typeName(entity.getTypeName())
@@ -27,9 +27,6 @@ public class ModelImageMapperImpl implements ModelImageMapper{
 				.visible(entity.getVisible())
 				.regDate(entity.getRegDate())
 				.build();
-
-
-		return commonImageDTO;
 	}
 
 	@Override
@@ -38,7 +35,7 @@ public class ModelImageMapperImpl implements ModelImageMapper{
 			return null;
 		}
 
-		CommonImageEntity commonImageEntity = CommonImageEntity.builder()
+		return CommonImageEntity.builder()
 				.idx(dto.getIdx())
 				.typeIdx(dto.getTypeIdx())
 				.typeName(dto.getTypeName())
@@ -50,8 +47,6 @@ public class ModelImageMapperImpl implements ModelImageMapper{
 				.imageType(dto.getImageType())
 				.regDate(dto.getRegDate())
 				.build();
-
-		return commonImageEntity;
 	}
 
 	@Override

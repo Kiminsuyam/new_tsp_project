@@ -101,9 +101,9 @@ public class AdminUserJpaApi {
 										BindingResult bindingResult) throws Exception {
 
 		AdminUserEntity adminUserEntity = builder()
-						.userId(authenticationRequest.getUserId())
-						.password(authenticationRequest.getPassword())
-						.build();
+				.userId(authenticationRequest.getUserId())
+				.password(authenticationRequest.getPassword())
+				.build();
 
 		String resultValue = adminUserJpaService.adminLogin(adminUserEntity, request, bindingResult);
 
@@ -145,9 +145,9 @@ public class AdminUserJpaApi {
 	})
 	@PostMapping
 	public String insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
-		String result = "N";
+		String result;
 
-		if(this.adminUserJpaService.insertAdminUser(adminUserEntity) > 0) {
+		if (this.adminUserJpaService.insertAdminUser(adminUserEntity) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

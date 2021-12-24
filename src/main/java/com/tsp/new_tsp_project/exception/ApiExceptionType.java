@@ -12,7 +12,7 @@ public enum ApiExceptionType implements BaseExceptionType {
 	ERROR_PORTFOLIO("ERROR_PORTFOLIO", 500, "포트폴리오 등록 에러"),
 	ERROR_MODEL("ERROR_MODEL", 500, "모델 등록 에러"),
 	NOT_NULL("NOT_NULL", 400, "필수값 누락"),
-	ID_EXIST("ID_EXIST",400,"같은 아이디 존재");
+	ID_EXIST("ID_EXIST", 400, "같은 아이디 존재");
 
 	private String errorCode;
 	private int httpStatus;

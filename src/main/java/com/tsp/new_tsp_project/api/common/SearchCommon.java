@@ -44,9 +44,9 @@ public class SearchCommon {
 		page.setSize(pageSize);
 
 		// 검색 조건
-		searchMap.put("searchType", StringUtil.getString(paramMap.get("searchType"),""));
+		searchMap.put("searchType", StringUtil.getString(paramMap.get("searchType"), ""));
 		searchMap.put("searchKeyword", StringUtil.getString(paramMap.get("searchKeyword"), ""));
-		searchMap.put("jpaStartPage", StringUtil.getInt(page.getStartPage(),0));
+		searchMap.put("jpaStartPage", StringUtil.getInt(page.getStartPage(), 0));
 		searchMap.put("startPage", pageCnt);
 		searchMap.put("size", pageSize);
 
@@ -70,8 +70,8 @@ public class SearchCommon {
 		// creator, updater 공통 DTO
 
 		// JWT token 값 존재 시 유저 인증 값 부여
-		if(request.getHeader("Authorization") != null) {
-			String userSeq = adminUserMapper.selectAdminSeq(StringUtil.getString(request.getHeader("Authorization"),""));
+		if (request.getHeader("Authorization") != null) {
+			String userSeq = adminUserMapper.selectAdminSeq(StringUtil.getString(request.getHeader("Authorization"), ""));
 			newCommonDTO.setCreator(StringUtil.getInt(userSeq, 0));
 			newCommonDTO.setUpdater(StringUtil.getInt(userSeq, 0));
 		}

@@ -14,7 +14,7 @@ public class ProductionMapperImpl implements ProductionMapper {
 			return null;
 		}
 
-		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder()
+		return AdminProductionDTO.builder()
 				.rnum(entity.getRnum())
 				.idx(entity.getIdx())
 				.title(entity.getTitle())
@@ -25,9 +25,6 @@ public class ProductionMapperImpl implements ProductionMapper {
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
 				.build();
-
-
-		return adminProductionDTO;
 	}
 
 	@Override
@@ -36,7 +33,7 @@ public class ProductionMapperImpl implements ProductionMapper {
 			return null;
 		}
 
-		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder()
+		return AdminProductionEntity.builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.title(dto.getTitle())
@@ -47,8 +44,6 @@ public class ProductionMapperImpl implements ProductionMapper {
 				.updater(dto.getUpdater())
 				.updateTime(dto.getUpdateTime())
 				.build();
-
-		return adminProductionEntity;
 	}
 
 	@Override

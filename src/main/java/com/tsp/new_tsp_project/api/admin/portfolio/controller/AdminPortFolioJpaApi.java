@@ -67,7 +67,7 @@ public class AdminPortFolioJpaApi {
 
 		List<AdminPortFolioDTO> portFolioList = new ArrayList<>();
 
-		if(portFolioCnt > 0) {
+		if (portFolioCnt > 0) {
 			portFolioList = this.adminPortFolioJpaService.findPortFolioList(searchMap);
 		}
 
@@ -135,7 +135,7 @@ public class AdminPortFolioJpaApi {
 
 		CommonCodeEntity portFolioCodeEntity = CommonCodeEntity.builder().cmmType("portFolio").build();
 
-		portFolioMap.put("portFolioCmmCode",this.adminPortFolioJpaService.portFolioCommonCode(portFolioCodeEntity));
+		portFolioMap.put("portFolioCmmCode", this.adminPortFolioJpaService.portFolioCommonCode(portFolioCodeEntity));
 
 		return portFolioMap;
 	}
@@ -164,9 +164,9 @@ public class AdminPortFolioJpaApi {
 	public String insertPortFolio(@Valid AdminPortFolioEntity adminPortFolioEntity,
 								  CommonImageEntity commonImageEntity,
 								  @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
-		String result = "N";
+		String result;
 
-		if(this.adminPortFolioJpaService.insertPortFolio(adminPortFolioEntity, commonImageEntity, files) > 0) {
+		if (this.adminPortFolioJpaService.insertPortFolio(adminPortFolioEntity, commonImageEntity, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -202,15 +202,15 @@ public class AdminPortFolioJpaApi {
 
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		String [] arrayState = request.getParameter("imageState").split(",");
-		String [] arrayIdx = request.getParameter("idxState").split(",");
+		String[] arrayState = request.getParameter("imageState").split(",");
+		String[] arrayIdx = request.getParameter("idxState").split(",");
 
 		portFolioMap.put("arrayState", arrayState);
 		portFolioMap.put("arrayIdx", arrayIdx);
 
 		String result = "N";
 
-		if(this.adminPortFolioJpaService.updatePortFolio(adminPortFolioEntity, commonImageEntity, files, portFolioMap) > 0) {
+		if (this.adminPortFolioJpaService.updatePortFolio(adminPortFolioEntity, commonImageEntity, files, portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -241,11 +241,11 @@ public class AdminPortFolioJpaApi {
 	public String deleteAllPortFolio(Long[] deleteIdx,
 									 HttpServletRequest request) throws Exception {
 		Map<String, Object> portFolioMap = new HashMap<>();
-		String result = "N";
+		String result;
 
 		portFolioMap.put("deleteIdx", deleteIdx);
 
-		if(this.adminPortFolioJpaService.deletePortFolio(portFolioMap) > 0) {
+		if (this.adminPortFolioJpaService.deletePortFolio(portFolioMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

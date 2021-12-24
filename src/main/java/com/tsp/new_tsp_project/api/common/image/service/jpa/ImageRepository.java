@@ -50,7 +50,7 @@ public class ImageRepository {
 		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-		String rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
+		String rtnStr = sdfCurrent.format(ts.getTime());
 
 		return rtnStr;
 	}
@@ -59,13 +59,13 @@ public class ImageRepository {
 									 MultipartFile[] files, ConcurrentHashMap<String, Object> commandMap) throws Exception {
 
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
 		String [] arrayState = (String []) commandMap.get("arrayState");
 		String [] arrayIdx = (String []) commandMap.get("arrayIdx");

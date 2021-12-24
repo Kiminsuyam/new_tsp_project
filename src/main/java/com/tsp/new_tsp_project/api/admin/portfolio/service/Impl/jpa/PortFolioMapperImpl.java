@@ -14,7 +14,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 			return null;
 		}
 
-		AdminPortFolioDTO adminPortFolioDTO = AdminPortFolioDTO.builder()
+		return AdminPortFolioDTO.builder()
 				.rnum(entity.getRnum())
 				.idx(entity.getIdx())
 				.categoryCd(entity.getCategoryCd())
@@ -28,9 +28,6 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
 				.build();
-
-
-		return adminPortFolioDTO;
 	}
 
 	@Override
@@ -40,7 +37,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 			return null;
 		}
 
-		AdminPortFolioEntity adminPortFolioEntity = AdminPortFolioEntity.builder()
+		return AdminPortFolioEntity.builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.categoryCd(dto.getCategoryCd())
@@ -54,8 +51,6 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 				.updater(dto.getUpdater())
 				.updateTime(dto.getUpdateTime())
 				.build();
-
-		return adminPortFolioEntity;
 	}
 
 	@Override

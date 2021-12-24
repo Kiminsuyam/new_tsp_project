@@ -97,7 +97,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 								   CommonImageDTO commonImageDTO,
 								   MultipartFile[] files) throws Exception {
 
-		int num = 0;
+		int num;
 
 		try {
 			if(this.adminPortFolioMapper.insertPortFolio(adminPortFolioDTO) > 0) {
@@ -137,7 +137,7 @@ public class AdminPortFolioApiServiceImpl implements AdminPortFolioApiService {
 								   MultipartFile[] files,
 								   Map<String, Object> portFolioMap) throws Exception {
 
-		int num = 0;
+		int num;
 
 		try {
 			if(this.adminPortFolioMapper.updatePortFolio(adminPortFolioDTO) > 0) {

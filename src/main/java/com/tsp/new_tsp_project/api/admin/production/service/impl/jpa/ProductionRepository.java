@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.production.domain.entity.AdminProductionEntity.builder;
 import static com.tsp.new_tsp_project.api.admin.production.domain.entity.QAdminProductionEntity.*;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
 
@@ -35,17 +36,13 @@ public class ProductionRepository {
 		String searchType = StringUtil.getString(productionMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(productionMap.get("searchKeyword"),"");
 
-		if (productionMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminProductionEntity.title.contains(searchKeyword)
+					.or(adminProductionEntity.description.contains(searchKeyword));
+		} else if ("1".equals(searchType)) {
+			return adminProductionEntity.title.contains(searchKeyword);
 		} else {
-			if ("0".equals(searchType)) {
-				return adminProductionEntity.title.contains(searchKeyword)
-						.or(adminProductionEntity.description.contains(searchKeyword));
-			} else if ("1".equals(searchType)) {
-				return adminProductionEntity.title.contains(searchKeyword);
-			} else {
-				return adminProductionEntity.description.contains(searchKeyword);
-			}
+			return adminProductionEntity.description.contains(searchKeyword);
 		}
 	}
 
@@ -151,12 +148,12 @@ public class ProductionRepository {
 									CommonImageEntity commonImageEntity,
 									MultipartFile[] files) throws Exception {
 
-		adminProductionEntity.builder().createTime(new Date()).creator(1).build();
+		builder().createTime(new Date()).creator(1).build();
 		em.persist(adminProductionEntity);
 		em.flush();
 		em.clear();
 
-		commonImageEntity.builder()
+		CommonImageEntity.builder()
 				.typeName("production")
 				.typeIdx(adminProductionEntity.getIdx())
 				.build();
@@ -186,7 +183,7 @@ public class ProductionRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminProductionEntity);
 
-		existAdminProductionEntity.builder().updateTime(new Date()).updater(1).build();
+		builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.description, existAdminProductionEntity.getDescription())
@@ -195,7 +192,7 @@ public class ProductionRepository {
 				.set(adminProductionEntity.updater, 1)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
 
-		commonImageEntity.builder()
+		CommonImageEntity.builder()
 				.typeName("production")
 				.typeIdx(existAdminProductionEntity.getIdx())
 				.build();
@@ -225,7 +222,7 @@ public class ProductionRepository {
 
 		Date currentTime = new Date();
 
-		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
+		builder().updateTime(currentTime).updater(1).build();
 
 		long result = update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.visible, "N")

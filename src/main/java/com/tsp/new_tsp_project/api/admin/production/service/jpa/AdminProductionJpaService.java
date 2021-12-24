@@ -111,7 +111,7 @@ public class AdminProductionJpaService {
 									CommonImageEntity commonImageEntity,
 									MultipartFile[] files) throws Exception {
 
-		Integer num = 0;
+		int num;
 
 		try {
 			if(this.productionRepository.updateProduction(adminProductionEntity, commonImageEntity, files) > 0) {

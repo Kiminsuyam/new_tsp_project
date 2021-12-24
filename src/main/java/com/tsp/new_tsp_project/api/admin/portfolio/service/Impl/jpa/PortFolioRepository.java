@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity.builder;
 import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity.adminPortFolioEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity.commonCodeEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
@@ -41,17 +42,13 @@ public class PortFolioRepository {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 
-		if (modelMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminPortFolioEntity.title.contains(searchKeyword)
+					.or(adminPortFolioEntity.description.contains(searchKeyword));
+		} else if ("1".equals(searchType)) {
+			return adminPortFolioEntity.title.contains(searchKeyword);
 		} else {
-			if ("0".equals(searchType)) {
-				return adminPortFolioEntity.title.contains(searchKeyword)
-						.or(adminPortFolioEntity.description.contains(searchKeyword));
-			} else if ("1".equals(searchType)) {
-				return adminPortFolioEntity.title.contains(searchKeyword);
-			} else {
-				return adminPortFolioEntity.description.contains(searchKeyword);
-			}
+			return adminPortFolioEntity.description.contains(searchKeyword);
 		}
 	}
 
@@ -181,12 +178,12 @@ public class PortFolioRepository {
 	 * @throws Exception
 	 */
 	 public Integer insertPortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
-		 existAdminPortFolioEntity.builder().createTime(new Date()).creator(1).build();
+		 builder().createTime(new Date()).creator(1).build();
 		 em.persist(adminPortFolioEntity);
 		 em.flush();
 		 em.clear();
 
-		 commonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
+		 CommonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
 
 		 imageRepository.uploadImageFile(commonImageEntity, files);
 
@@ -214,7 +211,7 @@ public class PortFolioRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
-		existAdminPortFolioEntity.builder().updateTime(new Date()).updater(1).build();
+		builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminPortFolioEntity.title, existAdminPortFolioEntity.getTitle())
 				.set(adminPortFolioEntity.description, existAdminPortFolioEntity.getDescription())
@@ -225,7 +222,7 @@ public class PortFolioRepository {
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx())).execute();
 
-		commonImageEntity.builder()
+		CommonImageEntity.builder()
 				.typeName("portfolio")
 				.typeIdx(existAdminPortFolioEntity.getIdx())
 				.build();
@@ -258,11 +255,9 @@ public class PortFolioRepository {
 
 		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
 
-		long result = update.set(adminPortFolioEntity.visible, "N")
+		return update.set(adminPortFolioEntity.visible, "N")
 				.set(adminPortFolioEntity.updateTime, new Date())
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.in(deleteIdx)).execute();
-
-		return result;
 	}
 }

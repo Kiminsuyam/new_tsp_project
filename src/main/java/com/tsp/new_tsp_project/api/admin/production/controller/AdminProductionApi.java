@@ -65,7 +65,7 @@ public class AdminProductionApi {
 
 		List<AdminProductionDTO> productionList = new ArrayList<>();
 
-		if(productionCnt > 0) {
+		if (productionCnt > 0) {
 			productionList = this.adminProductionApiService.getProductionList(searchMap);
 		}
 
@@ -131,10 +131,10 @@ public class AdminProductionApi {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String insertProduction(@Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-		String result = "N";
+								   @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+		String result;
 
-		if(this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+		if (this.adminProductionApiService.insertProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -164,12 +164,12 @@ public class AdminProductionApi {
 	public String updateProduction(@PathVariable("idx") Integer idx,
 								   @Valid AdminProductionDTO adminProductionDTO,
 								   CommonImageDTO commonImageDTO,
-								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
-		String result = "N";
+								   @RequestParam(value = "imageFiles", required = false) MultipartFile[] files) throws Exception {
+		String result;
 
 		builder().idx(idx).build();
 
-		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
+		if (this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -197,12 +197,12 @@ public class AdminProductionApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@DeleteMapping(value = "/{idx}")
-	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
-		String result = "N";
+	public String deleteProduction(@PathVariable("idx") Integer idx) throws Exception {
+		String result;
 
-		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().visible("N").idx(idx).build();
+		AdminProductionDTO adminProductionDTO = builder().visible("N").idx(idx).build();
 
-		if(this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
+		if (this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

@@ -72,7 +72,7 @@ public class AdminModelJpaApi {
 
 		List<AdminModelDTO> modelList = new ArrayList<>();
 
-		if(modelListCnt > 0) {
+		if (modelListCnt > 0) {
 			modelList = this.adminModelJpaService.findModelsList(modelMap);
 		}
 
@@ -143,7 +143,7 @@ public class AdminModelJpaApi {
 
 		CommonCodeEntity modelCodeEntity = CommonCodeEntity.builder().cmmType("model").build();
 
-		modelCmmCode.put("modelCmmCode",this.adminModelJpaService.modelCommonCode(modelCodeEntity));
+		modelCmmCode.put("modelCmmCode", this.adminModelJpaService.modelCommonCode(modelCodeEntity));
 
 		return modelCmmCode;
 	}
@@ -175,13 +175,13 @@ public class AdminModelJpaApi {
 							  CommonImageEntity commonImageEntity,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
+							  @RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 
-		String result = "N";
+		String result;
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelJpaService.insertModel(adminModelEntity, commonImageEntity, files) > 0){
+		if (this.adminModelJpaService.insertModel(adminModelEntity, commonImageEntity, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -221,23 +221,21 @@ public class AdminModelJpaApi {
 							   CommonImageEntity commonImageEntity,
 							   NewCommonDTO newCommonDTO,
 							   HttpServletRequest request,
-							   @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
+							   @RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
 		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
-		String [] arrayState = request.getParameter("imageState").split(",");
-		String [] arrayIdx = request.getParameter("idxState").split(",");
+		String[] arrayState = request.getParameter("imageState").split(",");
+		String[] arrayIdx = request.getParameter("idxState").split(",");
 
 		modelMap.put("arrayState", arrayState);
 		modelMap.put("arrayIdx", arrayIdx);
 
 		builder().idx(idx).categoryCd(categoryCd).build();
 
-		Integer result = this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, files, modelMap);
-
-		return result;
+		return this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, files, modelMap);
 	}
 
 	/**
@@ -259,12 +257,12 @@ public class AdminModelJpaApi {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@DeleteMapping(value = "/{idx}")
-	public String deleteModel (@PathVariable("idx") Integer idx) throws Exception {
-		String result = "N";
+	public String deleteModel(@PathVariable("idx") Integer idx) throws Exception {
+		String result;
 
 		AdminModelEntity adminModelEntity = AdminModelEntity.builder().visible("N").idx(idx).build();
 
-		if(this.adminModelJpaService.deleteModel(adminModelEntity) > 0) {
+		if (this.adminModelJpaService.deleteModel(adminModelEntity) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
