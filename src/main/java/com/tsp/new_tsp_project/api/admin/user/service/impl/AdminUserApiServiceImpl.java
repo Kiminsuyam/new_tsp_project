@@ -43,7 +43,7 @@ public class AdminUserApiServiceImpl implements AdminUserApiService {
 	 */
 	public String adminLogin(@Validated AdminUserDTO adminUserDTO, HttpServletRequest request, BindingResult bindingResult) throws Exception {
 
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			return "redirect:/login";
 		}
 

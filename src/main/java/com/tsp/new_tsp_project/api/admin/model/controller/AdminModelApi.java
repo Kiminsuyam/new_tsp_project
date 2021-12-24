@@ -71,7 +71,7 @@ public class AdminModelApi {
 
 		List<AdminModelDTO> modelList = new ArrayList<>();
 
-		if(modelListCnt > 0) {
+		if (modelListCnt > 0) {
 			modelList = this.adminModelApiService.getModelList(modelMap);
 		}
 
@@ -148,13 +148,13 @@ public class AdminModelApi {
 							  CommonImageDTO commonImageDTO,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
+							  @RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 
 		String result;
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
-		if(this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, files) > 0){
+		if (this.adminModelApiService.insertModel(adminModelDTO, commonImageDTO, files) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -194,14 +194,14 @@ public class AdminModelApi {
 							  CommonImageDTO commonImageDTO,
 							  NewCommonDTO newCommonDTO,
 							  HttpServletRequest request,
-							  @RequestParam(name="imageFiles", required = false) MultipartFile[] files) throws Exception{
+							  @RequestParam(name = "imageFiles", required = false) MultipartFile[] files) throws Exception {
 
 		searchCommon.giveAuth(request, newCommonDTO);
 
 		Map<String, Object> modelMap = new ConcurrentHashMap<>();
 
-		String [] arrayState = request.getParameter("imageState").split(",");
-		String [] arrayIdx = request.getParameter("idxState").split(",");
+		String[] arrayState = request.getParameter("imageState").split(",");
+		String[] arrayIdx = request.getParameter("idxState").split(",");
 
 		modelMap.put("arrayState", arrayState);
 		modelMap.put("arrayIdx", arrayIdx);
@@ -210,7 +210,7 @@ public class AdminModelApi {
 
 		String result = "N";
 
-		if(this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, files, modelMap) > 0){
+		if (this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, files, modelMap) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -243,7 +243,7 @@ public class AdminModelApi {
 
 		CommonImageDTO commonImageDTO = CommonImageDTO.builder().idx(idx).build();
 
-		if(this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
+		if (this.adminModelApiService.deleteModelImage(commonImageDTO) > 0) {
 			result = "Y";
 		} else {
 			result = "N";
@@ -275,7 +275,7 @@ public class AdminModelApi {
 
 		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
 
-		if(this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
+		if (this.adminModelApiService.deleteModel(adminModelDTO) > 0) {
 			result = "Y";
 		} else {
 			result = "N";

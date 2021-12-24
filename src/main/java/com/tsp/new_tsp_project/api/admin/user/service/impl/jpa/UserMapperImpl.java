@@ -10,11 +10,11 @@ public class UserMapperImpl implements UserMapper {
 
 	@Override
 	public AdminUserDTO toDto(AdminUserEntity entity) {
-		if(entity == null) {
+		if (entity == null) {
 			return null;
 		}
 
-		AdminUserDTO adminUserDTO = AdminUserDTO.builder()
+		return AdminUserDTO.builder()
 				.idx(entity.getIdx())
 				.userId(entity.getUserId())
 				.password(entity.getPassword())
@@ -26,17 +26,15 @@ public class UserMapperImpl implements UserMapper {
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
 				.build();
-
-		return adminUserDTO;
 	}
 
 	@Override
 	public AdminUserEntity toEntity(AdminUserDTO dto) {
-		if(dto == null) {
+		if (dto == null) {
 			return null;
 		}
 
-		AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+		return AdminUserEntity.builder()
 				.idx(dto.getIdx())
 				.userId(dto.getUserId())
 				.password(dto.getPassword())
@@ -48,18 +46,16 @@ public class UserMapperImpl implements UserMapper {
 				.updater(dto.getUpdater())
 				.updateTime(dto.getUpdateTime())
 				.build();
-
-		return adminUserEntity;
 	}
 
 	@Override
 	public List<AdminUserDTO> toDtoList(List<AdminUserEntity> entityList) {
-		if(entityList == null) {
+		if (entityList == null) {
 			return null;
 		}
 
 		List<AdminUserDTO> list = new ArrayList<>(entityList.size());
-		for(AdminUserEntity adminUserEntity : entityList) {
+		for (AdminUserEntity adminUserEntity : entityList) {
 			list.add(toDto(adminUserEntity));
 		}
 
@@ -68,12 +64,12 @@ public class UserMapperImpl implements UserMapper {
 
 	@Override
 	public List<AdminUserEntity> toEntityList(List<AdminUserDTO> dtoList) {
-		if(dtoList == null) {
+		if (dtoList == null) {
 			return null;
 		}
 
 		List<AdminUserEntity> list = new ArrayList<>(dtoList.size());
-		for(AdminUserDTO adminUserDTO : dtoList) {
+		for (AdminUserDTO adminUserDTO : dtoList) {
 			list.add(toEntity(adminUserDTO));
 		}
 

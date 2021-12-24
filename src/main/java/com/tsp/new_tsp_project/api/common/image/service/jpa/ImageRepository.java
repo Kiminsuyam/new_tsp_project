@@ -50,9 +50,7 @@ public class ImageRepository {
 		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-		String rtnStr = sdfCurrent.format(ts.getTime());
-
-		return rtnStr;
+		return sdfCurrent.format(ts.getTime());
 	}
 
 	public String updateMultipleFile(CommonImageEntity existCommonImageEntity,
@@ -107,7 +105,7 @@ public class ImageRepository {
 						if (i == 0) {
 							builder().fileNum(0).visible("N").imageType("main").build();
 
-							Long result = update.set(commonImageEntity.visible, "N")
+							long result = update.set(commonImageEntity.visible, "N")
 											.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
 													commonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
 													commonImageEntity.imageType.eq("main")).execute();
@@ -122,10 +120,7 @@ public class ImageRepository {
 									.setParameter("type_idx", existCommonImageEntity.getTypeIdx())
 									.setParameter("visible", "Y").getSingleResult(), 0);
 
-							builder()
-									.fileNum(size)
-									.imageType("sub" + size)
-									.build();
+							builder().fileNum(size).imageType("sub" + size).build();
 						}
 
 						builder().fileName(files[fileCnt].getOriginalFilename())
@@ -150,7 +145,7 @@ public class ImageRepository {
 					}
 				} else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
 					existCommonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i],0));
-					Long result = update.set(commonImageEntity.visible, "N")
+					long result = update.set(commonImageEntity.visible, "N")
 									.where(commonImageEntity.idx.eq(existCommonImageEntity.getIdx()),
 											commonImageEntity.typeName.eq(existCommonImageEntity.getTypeName()))
 									.execute();
@@ -171,13 +166,13 @@ public class ImageRepository {
 								MultipartFile[] files) throws Exception {
 
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
 		int mainCnt = 0;
 
@@ -209,7 +204,7 @@ public class ImageRepository {
 					if(mainCnt == 0) {
 						builder().imageType("main").build();
 					} else {
-						builder().imageType("sub" + mainCnt);
+						builder().imageType("sub" + mainCnt).build();
 					}
 
 					String filePath = uploadPath + fileMask;
@@ -217,14 +212,13 @@ public class ImageRepository {
 
 					Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-					builder()
-								.fileNum(mainCnt)
-								.fileName(file.getOriginalFilename())
-								.fileSize(fileSize)
-								.fileMask(fileMask)
-								.visible("Y")
-								.filePath(uploadPath + fileMask)
-								.build();
+					builder().fileNum(mainCnt)
+							 .fileName(file.getOriginalFilename())
+							 .fileSize(fileSize)
+							 .fileMask(fileMask)
+							 .visible("Y")
+							 .filePath(uploadPath + fileMask)
+							 .build();
 
 					em.persist(commonImageEntity);
 					em.flush();

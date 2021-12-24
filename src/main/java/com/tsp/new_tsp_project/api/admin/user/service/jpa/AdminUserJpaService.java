@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity.builder;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -63,15 +65,15 @@ public class AdminUserJpaService {
 	@Transactional(readOnly = true)
 	public String adminLogin(@Validated AdminUserEntity adminUserEntity, HttpServletRequest request, BindingResult bindingResult) throws Exception {
 
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			return "redirect:/login";
 		}
 
-		String password = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("password"),"");
+		String password = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("password"), "");
 
 		final String db_pw = StringUtils.nullStrToStr(password);
 
-		String result = "";
+		String result;
 
 		if (passwordEncoder.matches(adminUserEntity.getPassword(), db_pw)) {
 			result = "Y";
@@ -126,9 +128,7 @@ public class AdminUserJpaService {
 		// 패스워드 인코딩
 		String password = passwordEncoder.encode(adminUserEntity.getPassword());
 
-		log.info("===password={}", password);
-
-		AdminUserEntity encodeUserEntity = AdminUserEntity.builder()
+		AdminUserEntity encodeUserEntity = builder()
 				.userId(adminUserEntity.getUserId())
 				.password(password)
 				.email(adminUserEntity.getEmail())

@@ -99,10 +99,7 @@ public class ModelRepository {
 			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
-		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
-
-
-		return modelDtoList;
+		return ModelMapper.INSTANCE.toDtoList(modelList);
 	}
 
 	/**
@@ -268,11 +265,9 @@ public class ModelRepository {
 
 		builder().updateTime(new Date ()).updater(1).build();
 
-		long result = update.set(adminModelEntity.visible, "N")
+		return update.set(adminModelEntity.visible, "N")
 				.set(adminModelEntity.updateTime, existAdminModelEntity.getUpdateTime())
 				.set(adminModelEntity.updater, 1)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
-
-		return result;
 	}
 }

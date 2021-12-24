@@ -224,12 +224,10 @@ public class ProductionRepository {
 
 		builder().updateTime(currentTime).updater(1).build();
 
-		long result = update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
+		return update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.visible, "N")
 				.set(adminProductionEntity.updateTime, currentTime)
 				.set(adminProductionEntity.updater, 1)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
-
-		return result;
 	}
 }

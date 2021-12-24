@@ -40,14 +40,14 @@ public class UserRepository {
 		List<AdminUserEntity> userList = queryFactory.selectFrom(adminUserEntity)
 				.where(adminUserEntity.visible.eq("Y"))
 				.orderBy(adminUserEntity.idx.desc())
-				.offset(StringUtil.getInt(userMap.get("jpaStartPage"),0))
-				.limit(StringUtil.getInt(userMap.get("size"),0))
+				.offset(StringUtil.getInt(userMap.get("jpaStartPage"), 0))
+				.limit(StringUtil.getInt(userMap.get("size"), 0))
 				.fetch();
 
 		List<AdminUserDTO> userDtoList = UserMapper.INSTANCE.toDtoList(userList);
 
-		for(int i = 0; i < userDtoList.size(); i++) {
-			userDtoList.get(i).setRnum(StringUtil.getInt(userMap.get("startPage"),1)*(StringUtil.getInt(userMap.get("size"),1))-(2-i));
+		for (int i = 0; i < userDtoList.size(); i++) {
+			userDtoList.get(i).setRnum(StringUtil.getInt(userMap.get("startPage"), 1) * (StringUtil.getInt(userMap.get("size"), 1)) - (2 - i));
 		}
 
 		return userDtoList;
@@ -74,8 +74,8 @@ public class UserRepository {
 					.where(adminUserEntity.visible.eq("Y"), adminUserEntity.userId.eq(existAdminUserEntity.getUserId()))
 					.fetchOne();
 
-			if(NewAdminUserEntity == null) {
-			 	return null;
+			if (NewAdminUserEntity == null) {
+				return null;
 			}
 
 			userMap.put("userId", NewAdminUserEntity.getUserId());
