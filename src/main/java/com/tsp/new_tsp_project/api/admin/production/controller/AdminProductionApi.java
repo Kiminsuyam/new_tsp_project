@@ -167,7 +167,7 @@ public class AdminProductionApi {
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
-		adminProductionDTO.builder().idx(idx).build();
+		builder().idx(idx).build();
 
 		if(this.adminProductionApiService.updateProduction(adminProductionDTO, commonImageDTO, files) > 0) {
 			result = "Y";
@@ -200,7 +200,7 @@ public class AdminProductionApi {
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminProductionDTO adminProductionDTO = builder().visible("N").idx(idx).build();
+		AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder().visible("N").idx(idx).build();
 
 		if(this.adminProductionApiService.deleteProduction(adminProductionDTO) > 0) {
 			result = "Y";

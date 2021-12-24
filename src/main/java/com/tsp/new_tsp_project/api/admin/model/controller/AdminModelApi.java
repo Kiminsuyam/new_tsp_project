@@ -64,7 +64,7 @@ public class AdminModelApi {
 
 		ConcurrentHashMap resultMap = new ConcurrentHashMap();
 		// 페이징 및 검색
-		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
+		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
 		Integer modelListCnt = this.adminModelApiService.getModelListCnt(modelMap);

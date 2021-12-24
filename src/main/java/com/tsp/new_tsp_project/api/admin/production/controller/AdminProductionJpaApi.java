@@ -169,7 +169,7 @@ public class AdminProductionJpaApi {
 								   @RequestParam(value="imageFiles", required=false) MultipartFile[] files) throws Exception {
 		String result = "N";
 
-		adminProductionEntity.builder().idx(idx).build();
+		builder().idx(idx).build();
 
 		if(this.adminProductionJpaService.updateProduction(adminProductionEntity, commonImageEntity, files) > 0) {
 			result = "Y";
@@ -202,7 +202,7 @@ public class AdminProductionJpaApi {
 	public String deleteProduction (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminProductionEntity adminProductionEntity = builder().visible("N").idx(idx).build();
+		AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().visible("N").idx(idx).build();
 
 		if(this.adminProductionJpaService.deleteProduction(adminProductionEntity) > 0) {
 			result = "Y";

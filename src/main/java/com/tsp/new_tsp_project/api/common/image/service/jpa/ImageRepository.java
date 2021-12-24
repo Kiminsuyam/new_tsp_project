@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity.builder;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.commonImageEntity;
 
 @Slf4j
@@ -70,7 +71,7 @@ public class ImageRepository {
 		String [] arrayIdx = (String []) commandMap.get("arrayIdx");
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
@@ -104,11 +105,7 @@ public class ImageRepository {
 						Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
 						if (i == 0) {
-							existCommonImageEntity.builder()
-									.fileNum(0)
-									.visible("N")
-									.imageType("main")
-									.build();
+							builder().fileNum(0).visible("N").imageType("main").build();
 
 							Long result = update.set(commonImageEntity.visible, "N")
 											.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
@@ -125,13 +122,13 @@ public class ImageRepository {
 									.setParameter("type_idx", existCommonImageEntity.getTypeIdx())
 									.setParameter("visible", "Y").getSingleResult(), 0);
 
-							existCommonImageEntity.builder()
+							builder()
 									.fileNum(size)
 									.imageType("sub" + size)
 									.build();
 						}
 
-						existCommonImageEntity.builder().fileName(files[fileCnt].getOriginalFilename())
+						builder().fileName(files[fileCnt].getOriginalFilename())
 										.fileSize(fileSize)
 										.fileMask(fileMask)
 										.filePath(uploadPath + fileMask)
@@ -185,7 +182,7 @@ public class ImageRepository {
 		int mainCnt = 0;
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
@@ -210,9 +207,9 @@ public class ImageRepository {
 					}
 
 					if(mainCnt == 0) {
-						commonImageEntity.builder().imageType("main").build();
+						builder().imageType("main").build();
 					} else {
-						commonImageEntity.builder().imageType("sub" + mainCnt);
+						builder().imageType("sub" + mainCnt);
 					}
 
 					String filePath = uploadPath + fileMask;
@@ -220,7 +217,7 @@ public class ImageRepository {
 
 					Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-					commonImageEntity.builder()
+					builder()
 								.fileNum(mainCnt)
 								.fileName(file.getOriginalFilename())
 								.fileSize(fileSize)

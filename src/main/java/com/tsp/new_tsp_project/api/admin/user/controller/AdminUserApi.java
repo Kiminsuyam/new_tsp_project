@@ -67,11 +67,9 @@ public class AdminUserApi {
 	@PostMapping(value = "/users")
 	public List<AdminUserDTO> getUserList(@RequestParam ConcurrentHashMap<String, Object> paramMap, Page page) throws Exception {
 		// 페이징 및 검색
-		ConcurrentHashMap userMap = searchCommon.searchCommon(page, paramMap);
+		ConcurrentHashMap<String, Object> userMap = searchCommon.searchCommon(page, paramMap);
 
-		List<AdminUserDTO> userInfoList = this.adminUserApiService.getUserList(userMap);
-
-		return userInfoList;
+		return this.adminUserApiService.getUserList(userMap);
 	}
 
 	/**

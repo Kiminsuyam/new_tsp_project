@@ -65,7 +65,7 @@ public class AdminModelJpaApi {
 										  Page page) throws Exception {
 
 		// 페이징 및 검색
-		ConcurrentHashMap modelMap = searchCommon.searchCommon(page, paramMap);
+		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
 		Long modelListCnt = this.adminModelJpaService.findModelsCount(modelMap);
@@ -233,7 +233,7 @@ public class AdminModelJpaApi {
 		modelMap.put("arrayState", arrayState);
 		modelMap.put("arrayIdx", arrayIdx);
 
-		adminModelEntity.builder().idx(idx).categoryCd(categoryCd).build();
+		builder().idx(idx).categoryCd(categoryCd).build();
 
 		Integer result = this.adminModelJpaService.updateModel(adminModelEntity, commonImageEntity, files, modelMap);
 
@@ -262,7 +262,7 @@ public class AdminModelJpaApi {
 	public String deleteModel (@PathVariable("idx") Integer idx) throws Exception {
 		String result = "N";
 
-		AdminModelEntity adminModelEntity = builder().visible("N").idx(idx).build();
+		AdminModelEntity adminModelEntity = AdminModelEntity.builder().visible("N").idx(idx).build();
 
 		if(this.adminModelJpaService.deleteModel(adminModelEntity) > 0) {
 			result = "Y";

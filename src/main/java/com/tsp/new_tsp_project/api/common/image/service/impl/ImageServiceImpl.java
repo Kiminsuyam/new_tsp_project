@@ -133,11 +133,6 @@ public class ImageServiceImpl implements ImageService {
 
                     Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-                    log.info("fileName={}", file.getOriginalFilename());
-                    log.info("fileSize={}", fileSize);
-                    log.info("fileMask={}", fileMask);
-                    log.info("filePath={}", uploadPath+fileMask);
-                    log.info("modelIdx={}", commonImageDTO.getTypeIdx());
                     commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
                     commonImageDTO.setFileName(file.getOriginalFilename());                   // 파일명
                     commonImageDTO.setFileSize(fileSize);  // 파일Size
@@ -177,7 +172,7 @@ public class ImageServiceImpl implements ImageService {
         String [] arrayIdx = (String []) modelMap.get("arrayIdx");
 
         File dir = new File(uploadPath);
-        if (dir.exists() == false) {
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
@@ -205,11 +200,6 @@ public class ImageServiceImpl implements ImageService {
 
                         Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-                        log.info("fileName={}", files[fileCnt].getOriginalFilename());
-                        log.info("fileSize={}", fileSize);
-                        log.info("fileMask={}", fileMask);
-                        log.info("filePath={}", uploadPath+fileMask);
-                        log.info("modelIdx={}", commonImageDTO.getTypeIdx());
                         if(i == 0) {
                             commonImageDTO.setFileNum(0);
                             commonImageDTO.setVisible("N");

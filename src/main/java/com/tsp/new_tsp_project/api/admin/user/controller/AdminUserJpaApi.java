@@ -70,11 +70,9 @@ public class AdminUserJpaApi {
 	public List<AdminUserDTO> findUserList(@RequestParam(required = false) Map<String, Object> paramMap,
 										   Page page) throws Exception {
 		// 페이징 및 검색
-		ConcurrentHashMap userMap = searchCommon.searchCommon(page, paramMap);
+		ConcurrentHashMap<String, Object> userMap = searchCommon.searchCommon(page, paramMap);
 
-		List<AdminUserDTO> userInfoList = this.adminUserJpaService.findUserList(userMap);
-
-		return userInfoList;
+		return this.adminUserJpaService.findUserList(userMap);
 	}
 
 	/**
