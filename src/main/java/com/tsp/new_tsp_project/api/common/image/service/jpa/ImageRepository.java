@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.tsp.new_tsp_project.api.common.domain.entity.CommonImageEntity.builder;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.commonImageEntity;
 
 @Slf4j
@@ -50,26 +49,28 @@ public class ImageRepository {
 		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-		return sdfCurrent.format(ts.getTime());
+		String rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
+
+		return rtnStr;
 	}
 
 	public String updateMultipleFile(CommonImageEntity existCommonImageEntity,
 									 MultipartFile[] files, ConcurrentHashMap<String, Object> commandMap) throws Exception {
 
 		// 파일 확장자
-		String ext;
+		String ext = "";
 		// 파일명
-		String fileId;
+		String fileId = "";
 		// 파일 Mask
-		String fileMask;
+		String fileMask = "";
 		// 파일 크기
-		long fileSize;
+		long fileSize = 0;
 
 		String [] arrayState = (String []) commandMap.get("arrayState");
 		String [] arrayIdx = (String []) commandMap.get("arrayIdx");
 
 		File dir = new File(uploadPath);
-		if (!dir.exists()) {
+		if (dir.exists() == false) {
 			dir.mkdirs();
 		}
 
@@ -103,12 +104,16 @@ public class ImageRepository {
 						Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
 						if (i == 0) {
-							builder().fileNum(0).visible("N").imageType("main").build();
+							existCommonImageEntity.builder()
+									.fileNum(0)
+									.visible("N")
+									.imageType("main")
+									.build();
 
-							long result = update.set(commonImageEntity.visible, "N")
-											.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
-													commonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
-													commonImageEntity.imageType.eq("main")).execute();
+							Long result = update.set(commonImageEntity.visible, "N")
+									.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
+											commonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
+											commonImageEntity.imageType.eq("main")).execute();
 
 							if (result > 0) {
 								em.detach(commonImageEntity);
@@ -120,14 +125,17 @@ public class ImageRepository {
 									.setParameter("type_idx", existCommonImageEntity.getTypeIdx())
 									.setParameter("visible", "Y").getSingleResult(), 0);
 
-							builder().fileNum(size).imageType("sub" + size).build();
+							existCommonImageEntity.builder()
+									.fileNum(size)
+									.imageType("sub" + size)
+									.build();
 						}
 
-						builder().fileName(files[fileCnt].getOriginalFilename())
-										.fileSize(fileSize)
-										.fileMask(fileMask)
-										.filePath(uploadPath + fileMask)
-										.build();
+						existCommonImageEntity.builder().fileName(files[fileCnt].getOriginalFilename())
+								.fileSize(fileSize)
+								.fileMask(fileMask)
+								.filePath(uploadPath + fileMask)
+								.build();
 
 						em.createNativeQuery("INSERT INTO tsp_image (type_idx, type_name, file_num, file_name, file_size, file_mask, file_path, image_type, visible)" +
 										"VALUES(?,?,?,?,?,?,?,?,?)")
@@ -145,10 +153,10 @@ public class ImageRepository {
 					}
 				} else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
 					existCommonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i],0));
-					long result = update.set(commonImageEntity.visible, "N")
-									.where(commonImageEntity.idx.eq(existCommonImageEntity.getIdx()),
-											commonImageEntity.typeName.eq(existCommonImageEntity.getTypeName()))
-									.execute();
+					Long result = update.set(commonImageEntity.visible, "N")
+							.where(commonImageEntity.idx.eq(existCommonImageEntity.getIdx()),
+									commonImageEntity.typeName.eq(existCommonImageEntity.getTypeName()))
+							.execute();
 
 					if(result > 0) {
 						em.detach(commonImageEntity);
@@ -166,18 +174,18 @@ public class ImageRepository {
 								MultipartFile[] files) throws Exception {
 
 		// 파일 확장자
-		String ext;
+		String ext = "";
 		// 파일명
-		String fileId;
+		String fileId = "";
 		// 파일 Mask
-		String fileMask;
+		String fileMask = "";
 		// 파일 크기
-		long fileSize;
+		long fileSize = 0;
 
 		int mainCnt = 0;
 
 		File dir = new File(uploadPath);
-		if (!dir.exists()) {
+		if (dir.exists() == false) {
 			dir.mkdirs();
 		}
 
@@ -202,9 +210,9 @@ public class ImageRepository {
 					}
 
 					if(mainCnt == 0) {
-						builder().imageType("main").build();
+						commonImageEntity.builder().imageType("main").build();
 					} else {
-						builder().imageType("sub" + mainCnt).build();
+						commonImageEntity.builder().imageType("sub" + mainCnt);
 					}
 
 					String filePath = uploadPath + fileMask;
@@ -212,13 +220,14 @@ public class ImageRepository {
 
 					Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-					builder().fileNum(mainCnt)
-							 .fileName(file.getOriginalFilename())
-							 .fileSize(fileSize)
-							 .fileMask(fileMask)
-							 .visible("Y")
-							 .filePath(uploadPath + fileMask)
-							 .build();
+					commonImageEntity.builder()
+							.fileNum(mainCnt)
+							.fileName(file.getOriginalFilename())
+							.fileSize(fileSize)
+							.fileMask(fileMask)
+							.visible("Y")
+							.filePath(uploadPath + fileMask)
+							.build();
 
 					em.persist(commonImageEntity);
 					em.flush();

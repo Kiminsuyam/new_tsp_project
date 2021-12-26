@@ -20,7 +20,6 @@ import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity.builder;
 import static com.tsp.new_tsp_project.api.admin.model.domain.entity.QAdminModelEntity.adminModelEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity.commonCodeEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
@@ -39,17 +38,21 @@ public class ModelRepository {
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 		Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"),0);
 
-		if ("0".equals(searchType)) {
-			return adminModelEntity.modelKorName.contains(searchKeyword)
-					.or(adminModelEntity.modelEngName.contains(searchKeyword)
-					.or(adminModelEntity.modelDescription.contains(searchKeyword)))
-					.and(adminModelEntity.categoryCd.eq(categoryCd));
-		} else if ("1".equals(searchType)) {
-			return adminModelEntity.modelKorName.contains(searchKeyword)
-					.or(adminModelEntity.modelEngName.contains(searchKeyword))
-					.and(adminModelEntity.categoryCd.eq(categoryCd));
+		if (modelMap == null) {
+			return null;
 		} else {
-			return adminModelEntity.modelDescription.contains(searchKeyword).and(adminModelEntity.categoryCd.eq(categoryCd));
+			if ("0".equals(searchType)) {
+				return adminModelEntity.modelKorName.contains(searchKeyword)
+						.or(adminModelEntity.modelEngName.contains(searchKeyword)
+								.or(adminModelEntity.modelDescription.contains(searchKeyword)))
+						.and(adminModelEntity.categoryCd.eq(categoryCd));
+			} else if ("1".equals(searchType)) {
+				return adminModelEntity.modelKorName.contains(searchKeyword)
+						.or(adminModelEntity.modelEngName.contains(searchKeyword))
+						.and(adminModelEntity.categoryCd.eq(categoryCd));
+			} else {
+				return adminModelEntity.modelDescription.contains(searchKeyword).and(adminModelEntity.categoryCd.eq(categoryCd));
+			}
 		}
 	}
 
@@ -99,7 +102,10 @@ public class ModelRepository {
 			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
-		return ModelMapper.INSTANCE.toDtoList(modelList);
+		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
+
+
+		return modelDtoList;
 	}
 
 	/**
@@ -183,12 +189,12 @@ public class ModelRepository {
 							   CommonImageEntity commonImageEntity,
 							   MultipartFile[] files) throws Exception {
 
-		builder().createTime(new Date()).creator(1).build();
+		adminModelEntity.builder().createTime(new Date()).creator(1).build();
 		em.persist(adminModelEntity);
 		em.flush();
 		em.clear();
 
-		CommonImageEntity.builder()
+		commonImageEntity.builder()
 				.typeName("model")
 				.typeIdx(adminModelEntity.getIdx())
 				.build();
@@ -219,7 +225,7 @@ public class ModelRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
-		builder().updateTime(new Date()).updater(1).build();
+		existAdminModelEntity.builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminModelEntity.modelKorName, existAdminModelEntity.getModelKorName())
 				.set(adminModelEntity.categoryCd, existAdminModelEntity.getCategoryCd())
@@ -233,7 +239,7 @@ public class ModelRepository {
 				.set(adminModelEntity.updater, 1)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
 
-		CommonImageEntity.builder()
+		commonImageEntity.builder()
 				.typeName("model")
 				.typeIdx(existAdminModelEntity.getIdx())
 				.build();
@@ -263,11 +269,13 @@ public class ModelRepository {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminModelEntity);
 
-		builder().updateTime(new Date ()).updater(1).build();
+		existAdminModelEntity.builder().updateTime(new Date ()).updater(1).build();
 
-		return update.set(adminModelEntity.visible, "N")
+		long result = update.set(adminModelEntity.visible, "N")
 				.set(adminModelEntity.updateTime, existAdminModelEntity.getUpdateTime())
 				.set(adminModelEntity.updater, 1)
 				.where(adminModelEntity.idx.eq(existAdminModelEntity.getIdx())).execute();
+
+		return result;
 	}
 }

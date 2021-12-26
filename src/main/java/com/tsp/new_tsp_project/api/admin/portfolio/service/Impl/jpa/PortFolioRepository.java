@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity.builder;
 import static com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.QAdminPortFolioEntity.adminPortFolioEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonCodeEntity.commonCodeEntity;
 import static com.tsp.new_tsp_project.api.common.domain.entity.QCommonImageEntity.*;
@@ -42,13 +41,17 @@ public class PortFolioRepository {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 
-		if ("0".equals(searchType)) {
-			return adminPortFolioEntity.title.contains(searchKeyword)
-					.or(adminPortFolioEntity.description.contains(searchKeyword));
-		} else if ("1".equals(searchType)) {
-			return adminPortFolioEntity.title.contains(searchKeyword);
+		if (modelMap == null) {
+			return null;
 		} else {
-			return adminPortFolioEntity.description.contains(searchKeyword);
+			if ("0".equals(searchType)) {
+				return adminPortFolioEntity.title.contains(searchKeyword)
+						.or(adminPortFolioEntity.description.contains(searchKeyword));
+			} else if ("1".equals(searchType)) {
+				return adminPortFolioEntity.title.contains(searchKeyword);
+			} else {
+				return adminPortFolioEntity.description.contains(searchKeyword);
+			}
 		}
 	}
 
@@ -177,18 +180,18 @@ public class PortFolioRepository {
 	 * @param files
 	 * @throws Exception
 	 */
-	 public Integer insertPortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
-		 builder().createTime(new Date()).creator(1).build();
-		 em.persist(adminPortFolioEntity);
-		 em.flush();
-		 em.clear();
+	public Integer insertPortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity, MultipartFile[] files) throws Exception {
+		existAdminPortFolioEntity.builder().createTime(new Date()).creator(1).build();
+		em.persist(adminPortFolioEntity);
+		em.flush();
+		em.clear();
 
-		 CommonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
+		commonImageEntity.builder().typeName("portfolio").typeIdx(existAdminPortFolioEntity.getIdx()).build();
 
-		 imageRepository.uploadImageFile(commonImageEntity, files);
+		imageRepository.uploadImageFile(commonImageEntity, files);
 
-		 return existAdminPortFolioEntity.getIdx();
-	 }
+		return existAdminPortFolioEntity.getIdx();
+	}
 
 	/**
 	 * <pre>
@@ -207,11 +210,11 @@ public class PortFolioRepository {
 	@Modifying
 	@Transactional
 	public Integer updatePortFolio(AdminPortFolioEntity existAdminPortFolioEntity, CommonImageEntity commonImageEntity,
-							   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
+								   MultipartFile[] files, ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
 
 		JPAUpdateClause update = new JPAUpdateClause(em, adminPortFolioEntity);
 
-		builder().updateTime(new Date()).updater(1).build();
+		existAdminPortFolioEntity.builder().updateTime(new Date()).updater(1).build();
 
 		update.set(adminPortFolioEntity.title, existAdminPortFolioEntity.getTitle())
 				.set(adminPortFolioEntity.description, existAdminPortFolioEntity.getDescription())
@@ -222,7 +225,7 @@ public class PortFolioRepository {
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.eq(existAdminPortFolioEntity.getIdx())).execute();
 
-		CommonImageEntity.builder()
+		commonImageEntity.builder()
 				.typeName("portfolio")
 				.typeIdx(existAdminPortFolioEntity.getIdx())
 				.build();
@@ -255,9 +258,11 @@ public class PortFolioRepository {
 
 		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
 
-		return update.set(adminPortFolioEntity.visible, "N")
+		long result = update.set(adminPortFolioEntity.visible, "N")
 				.set(adminPortFolioEntity.updateTime, new Date())
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.in(deleteIdx)).execute();
+
+		return result;
 	}
 }

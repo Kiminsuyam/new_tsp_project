@@ -21,8 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_project.api.admin.user.entity.AdminUserEntity.builder;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -65,15 +63,15 @@ public class AdminUserJpaService {
 	@Transactional(readOnly = true)
 	public String adminLogin(@Validated AdminUserEntity adminUserEntity, HttpServletRequest request, BindingResult bindingResult) throws Exception {
 
-		if (bindingResult.hasErrors()) {
+		if(bindingResult.hasErrors()) {
 			return "redirect:/login";
 		}
 
-		String password = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("password"), "");
+		String password = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("password"),"");
 
 		final String db_pw = StringUtils.nullStrToStr(password);
 
-		String result;
+		String result = "";
 
 		if (passwordEncoder.matches(adminUserEntity.getPassword(), db_pw)) {
 			result = "Y";
@@ -118,17 +116,15 @@ public class AdminUserJpaService {
 	@Transactional
 	public Integer insertAdminUser(AdminUserEntity adminUserEntity) throws Exception {
 
-//		String userId = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("userId"),"");
-//
-//		if("".equals(userId)) {
-//			if(userId.equals(adminUserEntity.getUserId())) {
-//				throw new TspException(ApiExceptionType.ID_EXIST);
-//			}
-//		}
+		String userId = StringUtil.getString(this.userRepository.adminLogin(adminUserEntity).get("userId"),"");
+
+		if(userId.equals(adminUserEntity.getUserId())) {
+			throw new TspException(ApiExceptionType.ID_EXIST);
+		}
 		// 패스워드 인코딩
 		String password = passwordEncoder.encode(adminUserEntity.getPassword());
 
-		AdminUserEntity encodeUserEntity = builder()
+		AdminUserEntity encodeUserEntity = AdminUserEntity.builder()
 				.userId(adminUserEntity.getUserId())
 				.password(password)
 				.email(adminUserEntity.getEmail())
