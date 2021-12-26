@@ -16,7 +16,7 @@
 	<description>new_tsp_project</description>
 	<properties>
 		<start-class>com.tsp.new_tsp_project.SpringbootApplication</start-class>
-		<java.version>1.8</java.version>
+		<java.version>1.11</java.version>
 		<repackage.classifier/>
 		<spring-native.version>0.10.3</spring-native.version>
 	</properties>
