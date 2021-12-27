@@ -38,21 +38,17 @@ public class ModelRepository {
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 		Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"),0);
 
-		if (modelMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminModelEntity.modelKorName.contains(searchKeyword)
+					.or(adminModelEntity.modelEngName.contains(searchKeyword)
+							.or(adminModelEntity.modelDescription.contains(searchKeyword)))
+					.and(adminModelEntity.categoryCd.eq(categoryCd));
+		} else if ("1".equals(searchType)) {
+			return adminModelEntity.modelKorName.contains(searchKeyword)
+					.or(adminModelEntity.modelEngName.contains(searchKeyword))
+					.and(adminModelEntity.categoryCd.eq(categoryCd));
 		} else {
-			if ("0".equals(searchType)) {
-				return adminModelEntity.modelKorName.contains(searchKeyword)
-						.or(adminModelEntity.modelEngName.contains(searchKeyword)
-								.or(adminModelEntity.modelDescription.contains(searchKeyword)))
-						.and(adminModelEntity.categoryCd.eq(categoryCd));
-			} else if ("1".equals(searchType)) {
-				return adminModelEntity.modelKorName.contains(searchKeyword)
-						.or(adminModelEntity.modelEngName.contains(searchKeyword))
-						.and(adminModelEntity.categoryCd.eq(categoryCd));
-			} else {
-				return adminModelEntity.modelDescription.contains(searchKeyword).and(adminModelEntity.categoryCd.eq(categoryCd));
-			}
+			return adminModelEntity.modelDescription.contains(searchKeyword).and(adminModelEntity.categoryCd.eq(categoryCd));
 		}
 	}
 
@@ -102,10 +98,7 @@ public class ModelRepository {
 			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
 		}
 
-		List<AdminModelDTO> modelDtoList = ModelMapper.INSTANCE.toDtoList(modelList);
-
-
-		return modelDtoList;
+		return ModelMapper.INSTANCE.toDtoList(modelList);
 	}
 
 	/**

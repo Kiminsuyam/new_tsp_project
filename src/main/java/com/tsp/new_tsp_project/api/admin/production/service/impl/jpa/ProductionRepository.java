@@ -35,17 +35,13 @@ public class ProductionRepository {
 		String searchType = StringUtil.getString(productionMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(productionMap.get("searchKeyword"),"");
 
-		if (productionMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminProductionEntity.title.contains(searchKeyword)
+					.or(adminProductionEntity.description.contains(searchKeyword));
+		} else if ("1".equals(searchType)) {
+			return adminProductionEntity.title.contains(searchKeyword);
 		} else {
-			if ("0".equals(searchType)) {
-				return adminProductionEntity.title.contains(searchKeyword)
-						.or(adminProductionEntity.description.contains(searchKeyword));
-			} else if ("1".equals(searchType)) {
-				return adminProductionEntity.title.contains(searchKeyword);
-			} else {
-				return adminProductionEntity.description.contains(searchKeyword);
-			}
+			return adminProductionEntity.description.contains(searchKeyword);
 		}
 	}
 
@@ -227,12 +223,10 @@ public class ProductionRepository {
 
 		existAdminProductionEntity.builder().updateTime(currentTime).updater(1).build();
 
-		long result = update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
+		return update.set(adminProductionEntity.title, existAdminProductionEntity.getTitle())
 				.set(adminProductionEntity.visible, "N")
 				.set(adminProductionEntity.updateTime, currentTime)
 				.set(adminProductionEntity.updater, 1)
 				.where(adminProductionEntity.idx.eq(existAdminProductionEntity.getIdx())).execute();
-
-		return result;
 	}
 }

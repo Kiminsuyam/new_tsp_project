@@ -41,17 +41,13 @@ public class PortFolioRepository {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 
-		if (modelMap == null) {
-			return null;
+		if ("0".equals(searchType)) {
+			return adminPortFolioEntity.title.contains(searchKeyword)
+					.or(adminPortFolioEntity.description.contains(searchKeyword));
+		} else if ("1".equals(searchType)) {
+			return adminPortFolioEntity.title.contains(searchKeyword);
 		} else {
-			if ("0".equals(searchType)) {
-				return adminPortFolioEntity.title.contains(searchKeyword)
-						.or(adminPortFolioEntity.description.contains(searchKeyword));
-			} else if ("1".equals(searchType)) {
-				return adminPortFolioEntity.title.contains(searchKeyword);
-			} else {
-				return adminPortFolioEntity.description.contains(searchKeyword);
-			}
+			return adminPortFolioEntity.description.contains(searchKeyword);
 		}
 	}
 
@@ -258,11 +254,9 @@ public class PortFolioRepository {
 
 		Long[] deleteIdx = (Long[]) portFolioMap.get("deleteIdx");
 
-		long result = update.set(adminPortFolioEntity.visible, "N")
+		return update.set(adminPortFolioEntity.visible, "N")
 				.set(adminPortFolioEntity.updateTime, new Date())
 				.set(adminPortFolioEntity.updater, 1)
 				.where(adminPortFolioEntity.idx.in(deleteIdx)).execute();
-
-		return result;
 	}
 }
