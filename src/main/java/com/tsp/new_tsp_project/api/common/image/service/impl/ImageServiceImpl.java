@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -47,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
 
 		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
+		rtnStr = sdfCurrent.format(ts.getTime());
 
 		return rtnStr;
 	}
@@ -71,24 +70,24 @@ public class ImageServiceImpl implements ImageService {
 								  String flag) throws Exception {
 
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
 		int mainCnt = 0;
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
-		if(files != null) {
-			if("update".equals(flag)) {
-				if("production".equals(commonImageDTO.getTypeName())) {
+		if (files != null) {
+			if ("update".equals(flag)) {
+				if ("production".equals(commonImageDTO.getTypeName())) {
 					commonImageDTO.setImageType("main");
 					commonImageDTO.setTypeIdx(commonImageDTO.getIdx());
 					imageMapper.deleteImageFile(commonImageDTO);
@@ -96,34 +95,34 @@ public class ImageServiceImpl implements ImageService {
 			}
 			for (MultipartFile file : files) {
 				try {
-					ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+					ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
 					fileId = currentDate();
 					fileMask = fileId + '.' + ext;
 					fileSize = file.getSize();
 
-					if(!new File(uploadPath).exists()) {
+					if (!new File(uploadPath).exists()) {
 						try {
 							new File(uploadPath).mkdir();
-						}catch(Exception e) {
+						} catch (Exception e) {
 							e.getStackTrace();
 						}
 					}
 
-					if("insert".equals(flag)) {
-						if(mainCnt == 0) {
+					if ("insert".equals(flag)) {
+						if (mainCnt == 0) {
 							commonImageDTO.setImageType("main");
 						} else {
-							commonImageDTO.setImageType("sub"+mainCnt);
+							commonImageDTO.setImageType("sub" + mainCnt);
 						}
 					} else {
-						if("production".equals(commonImageDTO.getTypeName())) {
+						if ("production".equals(commonImageDTO.getTypeName())) {
 							commonImageDTO.setImageType("main");
 						} else {
-							if(imageMapper.selectSubCnt(commonImageDTO) == 1) {
+							if (imageMapper.selectSubCnt(commonImageDTO) == 1) {
 								commonImageDTO.setImageType("main");
 							} else {
-								commonImageDTO.setImageType("sub"+StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
-								commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
+								commonImageDTO.setImageType("sub" + StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO), 0));
+								commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO), 0));
 							}
 						}
 					}
@@ -133,12 +132,7 @@ public class ImageServiceImpl implements ImageService {
 
 					Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-					log.info("fileName={}", file.getOriginalFilename());
-					log.info("fileSize={}", fileSize);
-					log.info("fileMask={}", fileMask);
-					log.info("filePath={}", uploadPath+fileMask);
-					log.info("modelIdx={}", commonImageDTO.getTypeIdx());
-					commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
+					commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO), 0));
 					commonImageDTO.setFileName(file.getOriginalFilename());                   // 파일명
 					commonImageDTO.setFileSize(fileSize);  // 파일Size
 					commonImageDTO.setFileMask(fileMask);                                        // 파일Mask
@@ -146,7 +140,7 @@ public class ImageServiceImpl implements ImageService {
 					commonImageDTO.setVisible("Y");
 
 					// 이미지 정보 insert
-					if(imageMapper.addImageFile(commonImageDTO)>0) {
+					if (imageMapper.addImageFile(commonImageDTO) > 0) {
 						mainCnt++;
 					}
 
@@ -163,39 +157,37 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public String updateMultipleFile(CommonImageDTO commonImageDTO, MultipartFile[] files, Map<String, Object> modelMap) throws Exception {
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
-		int mainCnt = 0;
-
-		String [] arrayState = (String []) modelMap.get("arrayState");
-		String [] arrayIdx = (String []) modelMap.get("arrayIdx");
+		String[] arrayState = (String[]) modelMap.get("arrayState");
+		String[] arrayIdx = (String[]) modelMap.get("arrayIdx");
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
 		int fileCnt = 0;
 
 		try {
-			for(int i = 0; i < arrayState.length; i++) {
-				if("U".equals(arrayState[i])) {
-					if(files[fileCnt] != null) {
-						ext = files[fileCnt].getOriginalFilename().substring(files[fileCnt].getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+			for (int i = 0; i < arrayState.length; i++) {
+				if ("U".equals(arrayState[i])) {
+					if (files[fileCnt] != null) {
+						ext = files[fileCnt].getOriginalFilename().substring(files[fileCnt].getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
 						fileId = currentDate();
 						fileMask = fileId + '.' + ext;
 						fileSize = files[fileCnt].getSize();
 
-						if(!new File(uploadPath).exists()) {
+						if (!new File(uploadPath).exists()) {
 							try {
 								new File(uploadPath).mkdir();
-							}catch(Exception e) {
+							} catch (Exception e) {
 								e.getStackTrace();
 							}
 						}
@@ -205,19 +197,14 @@ public class ImageServiceImpl implements ImageService {
 
 						Runtime.getRuntime().exec("chmod -R 755 " + filePath);
 
-						log.info("fileName={}", files[fileCnt].getOriginalFilename());
-						log.info("fileSize={}", fileSize);
-						log.info("fileMask={}", fileMask);
-						log.info("filePath={}", uploadPath+fileMask);
-						log.info("modelIdx={}", commonImageDTO.getTypeIdx());
-						if(i == 0) {
+						if (i == 0) {
 							commonImageDTO.setFileNum(0);
 							commonImageDTO.setVisible("N");
 							commonImageDTO.setImageType("main");// 파일Mask
 							imageMapper.deleteImageFile(commonImageDTO);
 						} else {
-							commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));
-							commonImageDTO.setImageType("sub"+StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO),0));// 파일Mask
+							commonImageDTO.setFileNum(StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO), 0));
+							commonImageDTO.setImageType("sub" + StringUtil.getInt(imageMapper.selectSubCnt(commonImageDTO), 0));// 파일Mask
 						}
 						commonImageDTO.setFileName(files[fileCnt].getOriginalFilename());                   // 파일명
 						commonImageDTO.setFileSize(fileSize);  // 파일Size
@@ -225,13 +212,12 @@ public class ImageServiceImpl implements ImageService {
 						commonImageDTO.setFilePath(uploadPath + fileMask);
 
 						// 이미지 정보 insert
-						if(imageMapper.addImageFile(commonImageDTO)>0) {
-							mainCnt++;
+						if (imageMapper.addImageFile(commonImageDTO) > 0) {
 						}
 					}
 					fileCnt++;
-				} else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
-					commonImageDTO.setIdx(StringUtil.getInt(arrayIdx[i],0));
+				} else if ("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
+					commonImageDTO.setIdx(StringUtil.getInt(arrayIdx[i], 0));
 					imageMapper.deleteImageFile(commonImageDTO);
 				}
 			}

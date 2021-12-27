@@ -49,28 +49,26 @@ public class ImageRepository {
 		SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-		String rtnStr = sdfCurrent.format(Long.valueOf(ts.getTime()));
-
-		return rtnStr;
+		return sdfCurrent.format(ts.getTime());
 	}
 
 	public String updateMultipleFile(CommonImageEntity existCommonImageEntity,
 									 MultipartFile[] files, ConcurrentHashMap<String, Object> commandMap) throws Exception {
 
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
-		String [] arrayState = (String []) commandMap.get("arrayState");
-		String [] arrayIdx = (String []) commandMap.get("arrayIdx");
+		String[] arrayState = (String[]) commandMap.get("arrayState");
+		String[] arrayIdx = (String[]) commandMap.get("arrayIdx");
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
@@ -79,9 +77,9 @@ public class ImageRepository {
 		JPAUpdateClause update = new JPAUpdateClause(em, commonImageEntity);
 
 		try {
-			for(int i = 0; i < arrayState.length; i++) {
-				if("U".equals(arrayState[i])) {
-					if(files[fileCnt] != null) {
+			for (int i = 0; i < arrayState.length; i++) {
+				if ("U".equals(arrayState[i])) {
+					if (files[fileCnt] != null) {
 						ext = files[fileCnt].getOriginalFilename()
 								.substring(files[fileCnt].getOriginalFilename().lastIndexOf(".") + 1)
 								.toLowerCase();
@@ -110,7 +108,7 @@ public class ImageRepository {
 									.imageType("main")
 									.build();
 
-							Long result = update.set(commonImageEntity.visible, "N")
+							long result = update.set(commonImageEntity.visible, "N")
 									.where(commonImageEntity.typeIdx.eq(existCommonImageEntity.getIdx()),
 											commonImageEntity.typeName.eq(StringUtil.getString(commandMap.get("typeName"), "")),
 											commonImageEntity.imageType.eq("main")).execute();
@@ -151,14 +149,14 @@ public class ImageRepository {
 
 						fileCnt++;
 					}
-				} else if("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
-					existCommonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i],0));
-					Long result = update.set(commonImageEntity.visible, "N")
+				} else if ("D".equals(arrayState[i]) || "H".equals(arrayState[i])) {
+					existCommonImageEntity.setIdx(StringUtil.getInt(arrayIdx[i], 0));
+					long result = update.set(commonImageEntity.visible, "N")
 							.where(commonImageEntity.idx.eq(existCommonImageEntity.getIdx()),
 									commonImageEntity.typeName.eq(existCommonImageEntity.getTypeName()))
 							.execute();
 
-					if(result > 0) {
+					if (result > 0) {
 						em.detach(commonImageEntity);
 					}
 				}
@@ -174,42 +172,42 @@ public class ImageRepository {
 								MultipartFile[] files) throws Exception {
 
 		// 파일 확장자
-		String ext = "";
+		String ext;
 		// 파일명
-		String fileId = "";
+		String fileId;
 		// 파일 Mask
-		String fileMask = "";
+		String fileMask;
 		// 파일 크기
-		long fileSize = 0;
+		long fileSize;
 
 		int mainCnt = 0;
 
 		File dir = new File(uploadPath);
-		if (dir.exists() == false) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 
-		if(files != null) {
+		if (files != null) {
 
 			for (MultipartFile file : files) {
 				try {
 					ext = file.getOriginalFilename()
-							.substring(file.getOriginalFilename().lastIndexOf(".")+1)
+							.substring(file.getOriginalFilename().lastIndexOf(".") + 1)
 							.toLowerCase();
 
 					fileId = currentDate();
 					fileMask = fileId + '.' + ext;
 					fileSize = file.getSize();
 
-					if(!new File(uploadPath).exists()) {
+					if (!new File(uploadPath).exists()) {
 						try {
 							new File(uploadPath).mkdir();
-						}catch(Exception e) {
+						} catch (Exception e) {
 							e.getStackTrace();
 						}
 					}
 
-					if(mainCnt == 0) {
+					if (mainCnt == 0) {
 						commonImageEntity.builder().imageType("main").build();
 					} else {
 						commonImageEntity.builder().imageType("sub" + mainCnt);

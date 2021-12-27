@@ -208,7 +208,7 @@ public class AdminModelApi {
 
 		builder().idx(idx).categoryCd(categoryCd).build();
 
-		String result = "N";
+		String result;
 
 		if (this.adminModelApiService.updateModel(adminModelDTO, commonImageDTO, files, modelMap) > 0) {
 			result = "Y";
@@ -239,7 +239,7 @@ public class AdminModelApi {
 	})
 	@DeleteMapping("/image/{idx}")
 	public String deleteModelImage(@PathVariable(value = "idx") Integer idx) throws Exception {
-		String result = "Y";
+		String result;
 
 		CommonImageDTO commonImageDTO = CommonImageDTO.builder().idx(idx).build();
 
@@ -271,7 +271,7 @@ public class AdminModelApi {
 	})
 	@DeleteMapping("/{idx}")
 	public String deleteModel(@PathVariable(value = "idx") Integer idx) throws Exception {
-		String result = "Y";
+		String result;
 
 		AdminModelDTO adminModelDTO = AdminModelDTO.builder().visible("N").idx(idx).build();
 
