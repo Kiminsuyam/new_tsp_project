@@ -2,6 +2,7 @@ package com.tsp.new_tsp_project.api.common.domain.entity;
 
 import com.tsp.new_tsp_project.api.admin.model.domain.entity.AdminModelEntity;
 import com.tsp.new_tsp_project.api.admin.portfolio.domain.entity.AdminPortFolioEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +15,13 @@ import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "tsp_cmm_code")
 @SuperBuilder
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 public class NewCodeEntity extends NewCommonMappedClass {
 
 	@Id

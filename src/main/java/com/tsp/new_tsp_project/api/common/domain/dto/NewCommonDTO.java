@@ -14,6 +14,7 @@ import java.util.Date;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class NewCommonDTO {
 

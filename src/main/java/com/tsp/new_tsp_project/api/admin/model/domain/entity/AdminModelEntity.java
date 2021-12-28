@@ -15,6 +15,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tsp_model")
 public class AdminModelEntity extends NewCommonMappedClass {

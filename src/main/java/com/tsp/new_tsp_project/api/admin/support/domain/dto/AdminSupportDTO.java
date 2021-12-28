@@ -3,6 +3,7 @@ package com.tsp.new_tsp_project.api.admin.support.domain.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class AdminSupportDTO {
 

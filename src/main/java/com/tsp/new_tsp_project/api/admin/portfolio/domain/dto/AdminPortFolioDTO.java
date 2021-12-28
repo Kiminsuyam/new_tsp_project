@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
 @ApiModel
 public class AdminPortFolioDTO extends NewCommonDTO {

@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class AdminProductionDTO extends NewCommonDTO {
 

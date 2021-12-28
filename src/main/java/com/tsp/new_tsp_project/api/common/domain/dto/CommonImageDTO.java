@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiModel
 public class CommonImageDTO {
 	@ApiModelProperty(value = "파일 IDX", required = true, hidden = true)

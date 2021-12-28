@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_project.api.common.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,12 +8,13 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tsp_cmm_code")
-@Getter
-@Setter
 public class CommonCodeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
