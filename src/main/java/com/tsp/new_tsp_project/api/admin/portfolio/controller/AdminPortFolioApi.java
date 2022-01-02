@@ -42,8 +42,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : getPortFolioList
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 리스트 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 10.
 	 * </pre>
 	 *
 	 * @param page
@@ -86,8 +86,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : getPortFolioInfo
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 상세 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 10.
 	 * </pre>
 	 *
 	 * @param idx
@@ -115,8 +115,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : insertPortFolio
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 등록
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 11.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -149,8 +149,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : updatePortFolio
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 수정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 13.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -194,8 +194,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : deletePortFolio
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 28.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 14.
 	 * </pre>
 	 *
 	 * @param idx
@@ -227,8 +227,8 @@ public class AdminPortFolioApi {
 	 * 1. MethodName : deleteAllPortFolio
 	 * 2. ClassName  : AdminPortFolio.java
 	 * 3. Comment    : 관리자 포트폴리오 전체 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 28.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 16.
 	 * </pre>
 	 * @param deleteIdx
 	 * @throws Exception

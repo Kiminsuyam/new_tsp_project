@@ -15,8 +15,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : getPortFolioCnt
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 리스트 수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 10.
 	 * </pre>
 	 *
 	 * @param searchMap
@@ -29,8 +29,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : getPortFolioList
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 리스트 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 10.
 	 * </pre>
 	 *
 	 * @param searchMap
@@ -43,8 +43,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : getPortFolioInfo
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 상세 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 10.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -57,8 +57,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : insertPortFolio
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 등록
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 11.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -71,8 +71,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : updatePortFolio
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 수정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 13.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -85,8 +85,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : getImageList
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 이미지 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 08.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 11.
 	 * </pre>
 	 *
 	 * @param commonImageDTO
@@ -99,8 +99,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : deletePortFolio
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 14.
 	 * </pre>
 	 *
 	 * @param adminPortFolioDTO
@@ -113,8 +113,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : deleteAllPortFolio
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 전체 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 28.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 16.
 	 * </pre>
 	 *
 	 * @throws Exception
@@ -126,8 +126,8 @@ public interface AdminPortFolioMapper {
 	 * 1. MethodName : deletePartPortFolio
 	 * 2. ClassName  : AdminPortFolioMapper.java
 	 * 3. Comment    : 관리자 포트폴리오 부분 삭제
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 28.
+	 * 4. 작성자       : Kim-in-su
+	 * 5. 작성일       : 2021. 11. 17.
 	 * </pre>
 	 * @param portFolioMap
 	 * @throws Exception

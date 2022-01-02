@@ -29,7 +29,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 리스트 갯수 조회
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 5. 작성일       : 2021. 11. 22.
 	 * </pre>
 	 *
 	 * @param searchMap
@@ -46,7 +46,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 리스트 조회
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 5. 작성일       : 2021. 11. 22.
 	 * </pre>
 	 *
 	 * @param portFolioMap
@@ -63,7 +63,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 공통 코드 조회
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 5. 작성일       : 2021. 11. 26.
 	 * </pre>
 	 *
 	 * @throws Exception
@@ -79,7 +79,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 상세 조회
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 5. 작성일       : 2021. 11. 23.
 	 * </pre>
 	 *
 	 * @param adminPortFolioEntity
@@ -96,7 +96,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 등록
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 22.
+	 * 5. 작성일       : 2021. 11. 27.
 	 * </pre>
 	 *
 	 * @param adminPortFolioEntity
@@ -113,7 +113,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 모델 수정
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 10. 06
+	 * 5. 작성일       : 2021. 11. 29
 	 * </pre>
 	 *
 	 * @param adminPortFolioEntity
@@ -148,7 +148,7 @@ public class AdminPortFolioJpaService {
 	 * 2. ClassName  : AdminPortFolioJpaService.java
 	 * 3. Comment    : 관리자 포트폴리오 삭제
 	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2021. 09. 28.
+	 * 5. 작성일       : 2021. 12. 01.
 	 * </pre>
 	 *
 	 * @param portFolioMap
